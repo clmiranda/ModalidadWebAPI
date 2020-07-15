@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200509165219_Initial.cs" />
+    <Compile Remove="Migrations\20200509165219_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200511191309_Second.cs" />
+    <Compile Remove="Migrations\20200511191309_Second.Designer.cs" />
+    <Compile Remove="Migrations\20200511192615_Second.cs" />
+    <Compile Remove="Migrations\20200511192615_Second.Designer.cs" />
+    <Compile Remove="Migrations\20200511195843_Second.cs" />
+    <Compile Remove="Migrations\20200511195843_Second.Designer.cs" />
+    <Compile Remove="Migrations\20200526194428_fourth.cs" />
+    <Compile Remove="Migrations\20200526194428_fourth.Designer.cs" />
+    <Compile Remove="Migrations\20200526195733_Fifth.cs" />
+    <Compile Remove="Migrations\20200526195733_Fifth.Designer.cs" />
+    <Compile Remove="Migrations\20200526200334_Fourth.cs" />
+    <Compile Remove="Migrations\20200526200334_Fourth.Designer.cs" />
+    <Compile Remove="Migrations\20200530150050_Sixth.cs" />
+    <Compile Remove="Migrations\20200530150050_Sixth.Designer.cs" />
+    <Compile Remove="Migrations\20200625214203_eighth.cs" />
+    <Compile Remove="Migrations\20200625214203_eighth.Designer.cs" />
+    <Compile Remove="Migrations\20200625214251_Eighth.cs" />
+    <Compile Remove="Migrations\20200625214251_Eighth.Designer.cs" />
+    <Compile Remove="Migrations\20200630005236_Eighth.cs" />
+    <Compile Remove="Migrations\20200630005236_Eighth.Designer.cs" />
+    <Compile Remove="Migrations\20200703203546_Eighth.cs" />
+    <Compile Remove="Migrations\20200703203546_Eighth.Designer.cs" />
+    <Compile Remove="Migrations\20200708212832_Eighth.cs" />
+    <Compile Remove="Migrations\20200708212832_Eighth.Designer.cs" />
+    <Compile Remove="Migrations\20200708213445_Eighth.cs" />
+    <Compile Remove="Migrations\20200708213445_Eighth.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\webapi.core\webapi.core.csproj" />
+  </ItemGroup>
+
+</Project>
