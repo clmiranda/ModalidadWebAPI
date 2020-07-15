@@ -1,0 +1,9 @@
+C:\Users\Usuario\source\repos\spatwebapi\webapi.core\bin\Debug\netcoreapp3.1\webapi.core.deps.json
+C:\Users\Usuario\source\repos\spatwebapi\webapi.core\bin\Debug\netcoreapp3.1\webapi.core.dll
+C:\Users\Usuario\source\repos\spatwebapi\webapi.core\bin\Debug\netcoreapp3.1\webapi.core.pdb
+C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.AssemblyInfoInputs.cache
+C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.AssemblyInfo.cs
+C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.dll
+C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.pdb
+C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.csprojAssemblyReference.cache
