@@ -11,5 +11,7 @@ namespace webapi.data.Repositories.Interf
         ContratoAdopcion GetContratoByIdMascota(int id);
         void ModifyStateMascota(int id);
         void AprobarAdopcion(ContratoAdopcion contrato);
+        void RechazarAdopcion(ContratoAdopcion contrato);
+        void CancelarAdopcion(ContratoAdopcion contrato);
     }
 }

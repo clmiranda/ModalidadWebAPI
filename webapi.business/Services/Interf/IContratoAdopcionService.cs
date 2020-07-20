@@ -14,7 +14,9 @@ namespace webapi.business.Services.Interf
         Task<bool> UpdateContratoAdopcion(ContratoAdopcion contrato);
         int GetLast();
         ContratoAdopcion GetContratoByIdMascota(int id);
-        void ModifyStateMascota(int id);
+        void ContratoEstadoMascota(Mascota mascota);
         Task<bool> AprobarAdopcion(ContratoAdopcion contrato);
+        Task<bool> RechazarAdopcion(ContratoAdopcion contrato);
+        Task<bool> CancelarAdopcion(ContratoAdopcion contrato);
     }
 }

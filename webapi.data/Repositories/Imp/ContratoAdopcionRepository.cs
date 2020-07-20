@@ -26,5 +26,17 @@ namespace webapi.data.Repositories.Imp
             contrato.Estado = "Aprobado";
             Update(contrato);
         }
+
+        public void RechazarAdopcion(ContratoAdopcion contrato)
+        {
+            contrato.Estado = "Rechazado";
+            Update(contrato);
+        }
+
+        public void CancelarAdopcion(ContratoAdopcion contrato)
+        {
+            contrato.Estado = "Cancelado";
+            Update(contrato);
+        }
     }
 }

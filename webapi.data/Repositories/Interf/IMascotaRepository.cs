@@ -14,5 +14,9 @@ namespace webapi.data.Repositories.Interf
         Task<Foto> GetFoto(int id);
         int GetIdLastMascota();
         public Task<bool> SaveAll();
+        void ContratoEstadoMascota(Mascota mascota);
+        void AprobarAdopcion(Mascota mascota);
+        void RechazarAdopcion(Mascota mascota);
+        void CancelarAdopcion(Mascota mascota);
     }
 }

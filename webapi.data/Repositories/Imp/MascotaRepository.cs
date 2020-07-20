@@ -12,7 +12,6 @@ namespace webapi.data.Repositories.Imp
     public class MascotaRepository : Repository<Mascota>, IMascotaRepository
     {
         public MascotaRepository(BDSpatContext context) : base(context) { }
-
         public IEnumerable<Foto> GetAllFotosMascota(int id)
         {
             var listaFotos = context.Foto.Where(x=>x.MascotaId==id).ToList();
@@ -20,7 +19,7 @@ namespace webapi.data.Repositories.Imp
         }
         public IEnumerable<Mascota> GetAllMascotaAdopcion()
         {
-            var listaAdopcion = context.Mascota.Where(x => x.EstadoSituacion.Equals("Adopcion")).ToList();
+            var listaAdopcion = context.Mascota.Where(x => x.EstadoSituacion.Equals("En Adopcion")).ToList();
             return listaAdopcion;
         }
         public async Task<Foto> GetFoto(int id)
@@ -42,5 +41,28 @@ namespace webapi.data.Repositories.Imp
         }
         public async Task<bool> SaveAll()
         { return await context.SaveChangesAsync() > 0; }
+        public void AprobarAdopcion(Mascota mascota)
+        {
+            mascota.EstadoSituacion = "Adoptada";
+            Update(mascota);
+        }
+
+        public void RechazarAdopcion(Mascota mascota)
+        {
+            mascota.EstadoSituacion = "En Adopcion";
+            Update(mascota);
+        }
+
+        public void CancelarAdopcion(Mascota mascota)
+        {
+            mascota.EstadoSituacion = "Registrado";
+            Update(mascota);
+        }
+
+        public void ContratoEstadoMascota(Mascota mascota)
+        {
+            mascota.EstadoSituacion = "Adopcion en Proceso";
+            Update(mascota);
+        }
     }
 }
