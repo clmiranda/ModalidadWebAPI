@@ -19,9 +19,19 @@ namespace webapi.business.Services.Imp
         {
             return await _unitOfWork.SeguimientoRepository.GetById(id);
         }
+        public async Task<Seguimiento> GetByIdContrato(int id)
+        {
+            return await _unitOfWork.SeguimientoRepository.GetByIdContrato(id);
+        }
         public async Task<bool> CreateSeguimiento(Seguimiento seguimiento)
         {
              _unitOfWork.SeguimientoRepository.Insert(seguimiento);
+            return await _unitOfWork.SaveAll();
+        }
+
+        public async Task<bool> DeleteSeguimiento(Seguimiento seguimiento)
+        {
+            _unitOfWork.SeguimientoRepository.Delete(seguimiento);
             return await _unitOfWork.SaveAll();
         }
     }

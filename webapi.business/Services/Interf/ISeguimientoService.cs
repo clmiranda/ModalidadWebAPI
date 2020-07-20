@@ -9,6 +9,8 @@ namespace webapi.business.Services.Interf
     public interface ISeguimientoService
     {
         Task<Seguimiento> GetById(int id);
+        Task<Seguimiento> GetByIdContrato(int id);
         Task<bool> CreateSeguimiento(Seguimiento seguimiento);
+        Task<bool> DeleteSeguimiento(Seguimiento seguimiento);
     }
 }
