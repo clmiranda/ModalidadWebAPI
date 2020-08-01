@@ -36,8 +36,8 @@ namespace spatwebapi.Controllers
             return modelo;
         }
         [HttpGet("GetAllAdopcionesPendientes")]
-        public IEnumerable<ContratoAdopcionReturnDto> GetAllAdopcionesPendientes() {
-            var resul = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>( _contratoAdopcionService.GetAllAdopcionesPendientes());
+        public async Task<IEnumerable<ContratoAdopcionReturnDto>> GetAllAdopcionesPendientes() {
+            var resul = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>(await _contratoAdopcionService.GetAllAdopcionesPendientes());
             return resul;
         }
         [HttpGet("GetContratoByIdMascota/{id}")]

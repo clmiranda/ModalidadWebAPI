@@ -26,10 +26,10 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAllMascotas")]
-        public async Task<IEnumerable<MascotaForDetailedDto>> GetAllMascotas()
+        public IEnumerable<MascotaForReturn> GetAllMascotas()
         {
-            var lista = await _mascotaService.GetAllMascotas();
-            var resul = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
+            var lista = _mascotaService.GetAllMascotas();
+            var resul = _mapper.Map<IEnumerable<MascotaForReturn>>(lista);
             return resul;
         }
 
@@ -42,11 +42,11 @@ namespace spatwebapi.Controllers
             return resul;
         }
         [HttpGet("GetMascotaAdopcion/{id}")]
-        public async Task<MascotaForDetailedAdopcionDto> GetMascotaAdopcion(int id)
+        public async Task<MascotaForReturn> GetMascotaAdopcion(int id)
         {
             var obj = await _mascotaService.GetMascotaById(id);
             if (obj == null) return null;
-            var resul = _mapper.Map<MascotaForDetailedAdopcionDto>(obj);
+            var resul = _mapper.Map<MascotaForReturn>(obj);
             return resul;
         }
         [HttpGet("GetMascotaByIdCaso/{id}")]

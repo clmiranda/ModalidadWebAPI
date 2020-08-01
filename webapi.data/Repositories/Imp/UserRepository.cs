@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using webapi.core.Models;
@@ -101,13 +102,14 @@ namespace webapi.data.Repositories.Imp
         public void Update(User u)
         {
             if (u == null) throw new ArgumentNullException("entity");
+            _context.Users.Update(u);
         }
 
         public void Delete(int id)
         {
-            var u = _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var u = _context.Users.FirstOrDefault(x => x.Id == id);
             if (u != null)
-                _context.Remove(u);
+                _context.Users.Remove(u);
             throw new ArgumentNullException("Id no encontrado.");
         }
         public async Task<bool> SaveAll()
@@ -125,8 +127,7 @@ namespace webapi.data.Repositories.Imp
         {
             var u = _context.Foto.FirstOrDefaultAsync(x => x.Id == id);
             if (u != null)
-                _context.Remove(u);
-            throw new ArgumentNullException("Id no encontrado.");
+                _context.Foto.Remove(u.Result);
         }
     }
 }

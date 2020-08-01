@@ -8,7 +8,7 @@ namespace webapi.business.Services.Interf
 {
     public interface IMascotaService
     {
-        Task<IEnumerable<Mascota>> GetAllMascotas();
+        IEnumerable<Mascota> GetAllMascotas();
         IEnumerable<Mascota> GetAllMascotaAdopcion();
         Task<Mascota> GetMascotaById(int id);
         int GetIdLastMascota();

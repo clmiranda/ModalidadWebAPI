@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using webapi.business.Dtos.Denuncias;
+using webapi.business.Dtos.Mascotas;
 
 namespace webapi.business.Dtos.CasosMascota
 {
@@ -12,7 +13,8 @@ namespace webapi.business.Dtos.CasosMascota
         public string Descripcion { get; set; }
         public DateTime FechaRescate { get; set; }
         public string Estado { get; set; }
-        public int IdDenuncia { get; set; }
+        public int DenunciaId { get; set; }
+        public virtual MascotaForDetailedDto Mascota { get; set; }
         //public virtual DenunciaForDetailedDto Denuncia { get; set; }
         //public virtual ICollection<Mascota> Mascotas { get; set; }
     }

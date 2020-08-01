@@ -9,7 +9,7 @@ namespace webapi.business.Services.Interf
     public interface IContratoAdopcionService
     {
         Task<ContratoAdopcion> GetById(int id);
-        IEnumerable<ContratoAdopcion> GetAllAdopcionesPendientes();
+        Task<IEnumerable<ContratoAdopcion>> GetAllAdopcionesPendientes();
         Task<bool> CreateContratoAdopcion(ContratoAdopcion contrato);
         Task<bool> UpdateContratoAdopcion(ContratoAdopcion contrato);
         int GetLast();

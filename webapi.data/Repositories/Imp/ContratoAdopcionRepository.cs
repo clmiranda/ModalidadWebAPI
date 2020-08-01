@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
 
@@ -10,8 +12,8 @@ namespace webapi.data.Repositories.Imp
     public class ContratoAdopcionRepository : Repository<ContratoAdopcion>, IContratoAdopcionRepository
     {
         public ContratoAdopcionRepository(BDSpatContext context) : base(context) { }
-        public IEnumerable<ContratoAdopcion> GetAllAdopcionesPendientes() {
-            return context.ContratoAdopcion.Where(x=>x.Estado.Equals("En Proceso")).ToList();
+        public async Task<IEnumerable<ContratoAdopcion>> GetAllAdopcionesPendientes() {
+            return await context.ContratoAdopcion.Where(x=>x.Estado.Equals("En Proceso")).ToListAsync();
         }
         public ContratoAdopcion GetContratoByIdMascota(int id)
         {

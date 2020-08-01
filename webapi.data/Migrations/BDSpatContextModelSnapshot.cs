@@ -199,6 +199,9 @@ namespace webapi.data.Migrations
                     b.Property<DateTime>("FechaAdopcion")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("FechaSolicitudAdopcion")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("MascotaId")
                         .HasColumnType("int");
 
@@ -227,6 +230,28 @@ namespace webapi.data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ContratoAdopcion");
+                });
+
+            modelBuilder.Entity("webapi.core.Models.ContratoRechazo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ContratoAdopcionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RazonRechazo")
+                        .HasColumnType("nvarchar(300)")
+                        .HasMaxLength(300);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContratoAdopcionId")
+                        .IsUnique();
+
+                    b.ToTable("ContratoRechazo");
                 });
 
             modelBuilder.Entity("webapi.core.Models.Denuncia", b =>
@@ -275,14 +300,9 @@ namespace webapi.data.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MascotaId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Foto");
                 });
@@ -378,7 +398,7 @@ namespace webapi.data.Migrations
                     b.Property<int?>("SeguimientoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -615,15 +635,20 @@ namespace webapi.data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("webapi.core.Models.ContratoRechazo", b =>
+                {
+                    b.HasOne("webapi.core.Models.ContratoAdopcion", "ContratoAdopcion")
+                        .WithOne("ContratoRechazo")
+                        .HasForeignKey("webapi.core.Models.ContratoRechazo", "ContratoAdopcionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("webapi.core.Models.Foto", b =>
                 {
                     b.HasOne("webapi.core.Models.Mascota", "Mascota")
                         .WithMany("Fotos")
                         .HasForeignKey("MascotaId");
-
-                    b.HasOne("webapi.core.Models.User", "User")
-                        .WithMany("Fotos")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("webapi.core.Models.Mascota", b =>
@@ -643,9 +668,7 @@ namespace webapi.data.Migrations
 
                     b.HasOne("webapi.core.Models.User", "User")
                         .WithMany("ReporteSeguimientos")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("webapi.core.Models.Seguimiento", b =>
