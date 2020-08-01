@@ -19,8 +19,8 @@ namespace webapi.business.Services.Imp
         {
             return await _unitOfWork.ContratoAdopcionRepository.GetById(id);
         }
-        public IEnumerable<ContratoAdopcion> GetAllAdopcionesPendientes() {
-            return _unitOfWork.ContratoAdopcionRepository.GetAllAdopcionesPendientes();
+        public async Task<IEnumerable<ContratoAdopcion>> GetAllAdopcionesPendientes() {
+            return await _unitOfWork.ContratoAdopcionRepository.GetAllAdopcionesPendientes();
         }
         public async Task<bool> CreateContratoAdopcion(ContratoAdopcion contrato)
         {

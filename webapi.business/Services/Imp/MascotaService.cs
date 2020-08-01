@@ -33,9 +33,9 @@ namespace webapi.business.Services.Imp
             return _unitOfWork.MascotaRepository.GetAllMascotaAdopcion();
         }
 
-        public Task<IEnumerable<Mascota>> GetAllMascotas()
+        public IEnumerable<Mascota> GetAllMascotas()
         {
-            return _unitOfWork.MascotaRepository.GetAll();
+            return _unitOfWork.MascotaRepository.GetAllMascotas();
         }
 
         public int GetIdLastMascota()

@@ -5,7 +5,7 @@ using webapi.business.Dtos.Fotos;
 
 namespace webapi.business.Dtos.Mascotas
 {
-    public class MascotaForDetailedAdopcionDto
+    public class MascotaForReturn
     {
         public int Id { get; set; }
         public string Nombre { get; set; }

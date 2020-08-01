@@ -17,6 +17,10 @@ namespace webapi.data.Repositories.Imp
             var listaFotos = context.Foto.Where(x=>x.MascotaId==id).ToList();
             return listaFotos;
         }
+        public IEnumerable<Mascota> GetAllMascotas() {
+            var listaAdopcion = context.Mascota.Where(x => !x.EstadoSituacion.Equals("Adoptado")).ToList();
+            return listaAdopcion;
+        }
         public IEnumerable<Mascota> GetAllMascotaAdopcion()
         {
             var listaAdopcion = context.Mascota.Where(x => x.EstadoSituacion.Equals("En Adopcion")).ToList();
@@ -63,6 +67,11 @@ namespace webapi.data.Repositories.Imp
         {
             mascota.EstadoSituacion = "Adopcion en Proceso";
             Update(mascota);
+        }
+
+        public async Task<Foto> SetFotoPrincipal(int id)
+        {
+            return await context.Foto.Where(x=>x.MascotaId==id).FirstOrDefaultAsync(x=>x.IsPrincipal);
         }
     }
 }

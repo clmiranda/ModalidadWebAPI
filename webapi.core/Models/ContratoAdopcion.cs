@@ -13,7 +13,9 @@ namespace webapi.core.Models
         public string Edad { get; set; }
         public bool TerminosCondiciones { get; set; }
         //public string Ci { get; set; }
+        public DateTime FechaSolicitudAdopcion { get; set; }
         public DateTime FechaAdopcion { get; set; }
+        //public string RazonRechazoCancelado { get; set; }
         public string Estado { get; set; }
         //public int IdDetalleAdopcion { get; set; }
         //public int IdEstadoAdopcion { get; set; }
@@ -29,5 +31,11 @@ namespace webapi.core.Models
         //public int EstadoAdopcionId { get; set; }
         //public virtual ICollection<Foto> Fotos { get; set; }
         public virtual ICollection<Seguimiento> Seguimientos { get; set; }
+        public virtual ContratoRechazo ContratoRechazo { get; set; }
+        public ContratoAdopcion()
+        {
+            FechaSolicitudAdopcion = DateTime.Now;
+            FechaAdopcion = DateTime.Now;
+        }
     }
 }

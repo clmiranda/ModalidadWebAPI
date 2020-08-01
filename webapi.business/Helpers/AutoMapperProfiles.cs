@@ -43,9 +43,9 @@ namespace webapi.business.Helpers
             //        options.MapFrom(s => s.Descripcion);
             //    });
             CreateMap<Denuncia, DenunciaForListDto>()
-                .ForMember(d => d.IdCasoMascota, options =>
+                .ForMember(d => d.CasoMascota, options =>
                   {
-                      options.MapFrom(s => s.CasoMascotas.FirstOrDefault().Id);
+                      options.MapFrom(s => s.CasoMascotas.FirstOrDefault());
                   });
             CreateMap<Denuncia, DenunciaForDetailedDto>()
                 .ForMember(d=>d.CasoMascotas, options=>
@@ -67,7 +67,7 @@ namespace webapi.business.Helpers
                 {
                     options.MapFrom(s => s.CasoMascota.Denuncia.Titulo);
                 });
-            CreateMap<Mascota, MascotaForDetailedAdopcionDto>();
+            CreateMap<Mascota, MascotaForReturn>();
             CreateMap<Mascota, MascotaForAdopcionDto>()
                 .ForMember(d => d.Foto, options =>
                 {

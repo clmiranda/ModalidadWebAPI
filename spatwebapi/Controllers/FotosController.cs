@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using webapi.business.Dtos.Fotos;
 using webapi.business.Helpers;
 using webapi.core.Models;
@@ -48,7 +49,7 @@ namespace spatwebapi.Controllers
             _cloudinary = new Cloudinary(acc);
         }
         [AllowAnonymous]
-        [HttpGet("{mascotaId}/GetAllFotosMascota")]
+        [HttpGet("Mascota/{mascotaId}/GetAllFotosMascota")]
         public IEnumerable<FotoForReturnDto> GetAllFotosMascota(int mascotaId)
         {
             var lista = _repoMascota.GetAllFotosMascota(mascotaId);
@@ -114,7 +115,7 @@ namespace spatwebapi.Controllers
             //    return Unauthorized("No tiene acceso a este recurso.");
             var mascotaRepo = await _repoMascota.GetById(mascotaId);
             Foto fotoMap = new Foto();
-            List<FotoForReturnDto> listaFotos = new List<FotoForReturnDto>();
+            //List<FotoForReturnDto> listaFotos = new List<FotoForReturnDto>();
             foreach (var item in fotoMascota.Archivo)
             {
                 var imagen = item;
@@ -142,18 +143,36 @@ namespace spatwebapi.Controllers
                 if (!mascotaRepo.Fotos.Any(x => x.IsPrincipal))
                     fotoMap.IsPrincipal = true;
 
-
-                listaFotos.Add(_mapper.Map<FotoForReturnDto>(fotoMap));
+                //listaFotos.Add(_mapper.Map<FotoForReturnDto>(fotoMap));
             }
             if (await _repoMascota.SaveAll())
             {
                 //var photoToReturn = _mapper.Map<FotoForReturnDto>(fotoMap);
                 //return CreatedAtRoute("GetFoto", new { mascotaId = mascotaId, id = fotoMap.Id }, photoToReturn);
                 //return CreatedAtRoute("{mascotaId}/GetAllFotosMascota", new { mascotaId = mascotaId}, listaFotos);
-                return Ok();
+                var lista = _mapper.Map<IEnumerable<FotoForReturnDto>>(mascotaRepo.Fotos);
+                string jsonReturn = JsonConvert.SerializeObject(lista, Formatting.Indented);
+                return Json(jsonReturn);
             }
 
-            return BadRequest("Hubo problemas al guardar la foto.");
+            return Json("Hubo problemas al guardar la foto.");
+        }
+        [AllowAnonymous]
+        [HttpPost("Mascota/{id}/EstablecerFotoPrincipal/{idfoto}")]
+        public async Task<IActionResult> EstablecerFotoPrincipal(int id, int idfoto) { 
+        var mascota= await _repoMascota.GetById(id);
+            if (!mascota.Fotos.Any(x => x.Id == idfoto))
+                return Unauthorized("La Foto seleccionada no existe.");
+            var foto= await _repoMascota.GetFoto(idfoto);
+            if (foto.IsPrincipal)
+                return BadRequest("La Foto seleccionada ya es la principal.");
+
+            var getPrincipal = await _repoMascota.SetFotoPrincipal(id);
+            getPrincipal.IsPrincipal = false;
+            foto.IsPrincipal = true;
+            if (await _repoMascota.SaveAll())
+                return Ok();
+            return BadRequest("Hubo problemas al establecer la Foto principal.");
         }
         [AllowAnonymous]
         [HttpDelete("Mascota/{mascotaId}/EliminarFotoMascota/{idfoto}")]
@@ -184,7 +203,7 @@ namespace spatwebapi.Controllers
             //    mascota.Fotos.Remove(objetoFoto);
 
             if (await _repoMascota.SaveAll())
-                return Ok();
+                return Ok(/*_mapper.Map<IEnumerable<FotoForReturnDto>>(mascota.Fotos)*/);
             //return CreatedAtRoute("Mascota/"+ mascotaId + "/GetAllFotosMascota", new { mascotaId = mascotaId });
 
             return BadRequest("La Foto no pudo ser eliminada.");

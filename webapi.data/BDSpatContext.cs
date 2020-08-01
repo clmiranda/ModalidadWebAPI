@@ -24,6 +24,7 @@ namespace webapi.data
 
         public virtual DbSet<CasoMascota> CasoMascota { get; set; }
         public virtual DbSet<ContratoAdopcion> ContratoAdopcion { get; set; }
+        public virtual DbSet<ContratoRechazo> ContratoRechazo { get; set; }
         //public virtual DbSet<DetalleAdopcion> DetalleAdopcion { get; set; }
         //public virtual DbSet<EstadoAdopcion> EstadoAdopcion { get; set; }
         public virtual DbSet<Mascota> Mascota { get; set; }
@@ -92,7 +93,6 @@ namespace webapi.data
 
             modelBuilder.Entity<ContratoAdopcion>(entity =>
             {
-                //entity.HasKey(e => e.IdContratoAdopcion);
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.NombreCompleto).HasMaxLength(3000);
                 entity.Property(e => e.Domicilio).HasMaxLength(3000);
@@ -123,6 +123,11 @@ namespace webapi.data
                 //    .HasConstraintName("FK_ContratoAdopcion_EstadoAdopcion");
             });
 
+
+            modelBuilder.Entity<ContratoRechazo>(entity =>
+            {
+                entity.Property(e => e.RazonRechazo).HasMaxLength(300);
+            });
 
             //modelBuilder.Entity<DetalleAdopcion>(entity =>
             //{
