@@ -13,7 +13,7 @@ namespace webapi.data.Repositories.Imp
     {
         public ContratoAdopcionRepository(BDSpatContext context) : base(context) { }
         public async Task<IEnumerable<ContratoAdopcion>> GetAllAdopcionesPendientes() {
-            return await context.ContratoAdopcion.Where(x=>x.Estado.Equals("En Proceso")).ToListAsync();
+            return await context.ContratoAdopcion.Where(x=>x.Estado.Equals("Pendiente")||x.Estado.Equals("Aprobado")).ToListAsync();
         }
         public ContratoAdopcion GetContratoByIdMascota(int id)
         {
@@ -39,6 +39,11 @@ namespace webapi.data.Repositories.Imp
         {
             contrato.Estado = "Cancelado";
             Update(contrato);
+        }
+
+        public void InsertContratoRechazo(ContratoRechazo contrato)
+        {
+            context.ContratoRechazo.AddAsync(contrato);
         }
     }
 }

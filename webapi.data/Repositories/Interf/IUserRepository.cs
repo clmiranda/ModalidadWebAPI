@@ -9,6 +9,7 @@ namespace webapi.data.Repositories.Interf
 {
     public interface IUserRepository
     {
+        IEnumerable<User> GetAllVoluntarios();
         Task<IdentityResult> CreateUser(User u, string password);
         Task<string> GenerateEmailToken(User u);
         Task<string> GeneratePasswordResetToken(User u);

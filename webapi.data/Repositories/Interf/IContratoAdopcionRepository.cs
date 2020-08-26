@@ -11,6 +11,7 @@ namespace webapi.data.Repositories.Interf
         Task<IEnumerable<ContratoAdopcion>> GetAllAdopcionesPendientes();
         ContratoAdopcion GetContratoByIdMascota(int id);
         void ModifyStateMascota(int id);
+        void InsertContratoRechazo(ContratoRechazo contrato);
         void AprobarAdopcion(ContratoAdopcion contrato);
         void RechazarAdopcion(ContratoAdopcion contrato);
         void CancelarAdopcion(ContratoAdopcion contrato);

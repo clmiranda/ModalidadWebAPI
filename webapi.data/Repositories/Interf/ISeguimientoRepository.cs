@@ -9,5 +9,6 @@ namespace webapi.data.Repositories.Interf
     public interface ISeguimientoRepository: IRepository<Seguimiento>
     {
         Task<Seguimiento> GetByIdContrato(int id);
+        //IEnumerable<Seguimiento> GetAllSeguimiento();
     }
 }

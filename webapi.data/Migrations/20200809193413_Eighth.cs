@@ -46,6 +46,12 @@ namespace webapi.data.Migrations
             //    name: "EstadoAdopcionId",
             //    table: "ContratoAdopcion");
 
+            migrationBuilder.AddColumn<int>(
+                name: "CantidadVisitas",
+                table: "Seguimiento",
+                nullable: false,
+                defaultValue: 0);
+
             migrationBuilder.AlterColumn<int>(
                 name: "UserId",
                 table: "ReporteSeguimiento",
@@ -131,6 +137,10 @@ namespace webapi.data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ContratoRechazo");
+
+            migrationBuilder.DropColumn(
+                name: "CantidadVisitas",
+                table: "Seguimiento");
 
             migrationBuilder.DropColumn(
                 name: "Descripcion",

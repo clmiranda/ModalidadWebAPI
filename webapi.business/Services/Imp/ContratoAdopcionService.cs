@@ -31,10 +31,10 @@ namespace webapi.business.Services.Imp
             _unitOfWork.ContratoAdopcionRepository.Update(contrato);
             return await _unitOfWork.SaveAll();
         }
-        public async void ContratoEstadoMascota(Mascota mascota)
+        public async Task<bool> ContratoEstadoMascota(Mascota mascota)
         {
             _unitOfWork.MascotaRepository.ContratoEstadoMascota(mascota);
-            await _unitOfWork.SaveAll();
+            return await _unitOfWork.SaveAll();
         }
         public int GetLast() {
             return _unitOfWork.ContratoAdopcionRepository.GetLast().Id;
@@ -42,6 +42,10 @@ namespace webapi.business.Services.Imp
         public ContratoAdopcion GetContratoByIdMascota(int id)
         {
             return _unitOfWork.ContratoAdopcionRepository.GetContratoByIdMascota(id);
+        }
+        public async Task<bool> ContratoRechazo(ContratoRechazo contrato) {
+            _unitOfWork.ContratoAdopcionRepository.InsertContratoRechazo(contrato);
+            return await _unitOfWork.SaveAll();
         }
         public async Task<bool> AprobarAdopcion(ContratoAdopcion contrato) {
             _unitOfWork.ContratoAdopcionRepository.AprobarAdopcion(contrato);

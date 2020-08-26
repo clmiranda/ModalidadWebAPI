@@ -129,5 +129,10 @@ namespace webapi.data.Repositories.Imp
             if (u != null)
                 _context.Foto.Remove(u.Result);
         }
+        public IEnumerable<User> GetAllVoluntarios()
+        {
+            var lista =_context.Users.Where(x=>x.UserRoles.Any(y=>y.Role.Name.Equals("Voluntario"))).ToList();
+            return lista;
+        }
     }
 }

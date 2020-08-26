@@ -18,12 +18,10 @@ namespace spatwebapi.Controllers
     [AllowAnonymous]
     public class CasoMascotaController : ControllerBase
     {
-        private readonly IConfiguration _config;
         private ICasoMascotaService _casoMascotaService;
         private readonly IMapper _mapper;
-        public CasoMascotaController(IConfiguration config, ICasoMascotaService casoMascotaService, IMapper mapper)
+        public CasoMascotaController(ICasoMascotaService casoMascotaService, IMapper mapper)
         {
-            _config = config;
             _casoMascotaService = casoMascotaService;
             _mapper = mapper;
         }
@@ -41,8 +39,7 @@ namespace spatwebapi.Controllers
         {
             var obj = await _casoMascotaService.GetCasoMascotaById(id);
             if (obj == null) return null;
-            var resul = _mapper.Map<CasoMascotaForDetailedDto>(obj);
-            return resul;
+            return _mapper.Map<CasoMascotaForDetailedDto>(obj);
         }
         [HttpGet("GetCasoMascotaByIdDenuncia/{id}")]
         public async Task<CasoMascotaForDetailedDto> GetCasoMascotaByIdDenuncia(int id)

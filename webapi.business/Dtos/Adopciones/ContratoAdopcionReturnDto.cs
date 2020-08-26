@@ -13,6 +13,7 @@ namespace webapi.business.Dtos.Adopciones
         public string RazonAdopcion { get; set; }
         public string Edad { get; set; }
         public bool TerminosCondiciones { get; set; }
+        public DateTime FechaSolicitudAdopcion { get; set; }
         public DateTime FechaAdopcion { get; set; }
         public string Estado { get; set; }
         public int MascotaId { get; set; }

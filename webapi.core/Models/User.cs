@@ -14,7 +14,7 @@ namespace webapi.core.Models
         //public virtual ICollection<DetalleAdopcion> DetalleAdopciones { get; set; }
         //public virtual ICollection<Foto> Fotos { get; set; }
         public virtual ICollection<ContratoAdopcion> ContratoAdopciones { get; set; }
-        public virtual ICollection<ReporteSeguimiento> ReporteSeguimientos { get; set; }
+        public virtual ICollection<Seguimiento> Seguimientos { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }
