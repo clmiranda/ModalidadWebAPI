@@ -39,6 +39,8 @@
     <Compile Remove="Migrations\20200721203107_Eighth.Designer.cs" />
     <Compile Remove="Migrations\20200721203737_Eighth.cs" />
     <Compile Remove="Migrations\20200721203737_Eighth.Designer.cs" />
+    <Compile Remove="Migrations\20200721223844_Eighth.cs" />
+    <Compile Remove="Migrations\20200721223844_Eighth.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

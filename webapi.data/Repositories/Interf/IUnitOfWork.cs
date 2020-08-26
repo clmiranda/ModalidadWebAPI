@@ -16,6 +16,7 @@ namespace webapi.data.Repositories.Interf
         IMascotaRepository MascotaRepository { get; }
         IContratoAdopcionRepository ContratoAdopcionRepository { get; }
         ISeguimientoRepository SeguimientoRepository { get; }
+        IReporteSeguimientoRepository ReporteSeguimientoRepository { get; }
         Task<bool> SaveAll();
         void Rollback();
     }

@@ -8,7 +8,10 @@ namespace webapi.core.Models
     {
         public DateTime FechaInicio { get; set; }
         public DateTime FechaConclusion { get; set; }
+        public int CantidadVisitas { get; set; }
         public string Estado { get; set; }
+        public virtual User User { get; set; }
+        public int? UserId { get; set; }
         //public int IdContratoAdopcion { get; set; }
         //public int? IdReporteSeguimiento { get; set; }
         public virtual ContratoAdopcion ContratoAdopcion { get; set; }

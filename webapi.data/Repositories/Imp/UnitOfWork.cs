@@ -21,6 +21,7 @@ namespace webapi.data.Repositories.Imp
         private IMascotaRepository _mascotaRepository;
         private IContratoAdopcionRepository _contratoAdopcionRepository;
         private ISeguimientoRepository _seguimientoRepository;
+        private IReporteSeguimientoRepository _reporteSeguimientoRepository;
         public UnitOfWork(BDSpatContext databaseContext,
             SignInManager<User> signInManager, UserManager<User> userManager)
         {
@@ -64,7 +65,10 @@ namespace webapi.data.Repositories.Imp
         {
             get { return _seguimientoRepository = _seguimientoRepository ?? new SeguimientoRepository(_databaseContext); }
         }
-
+        public IReporteSeguimientoRepository ReporteSeguimientoRepository
+        {
+            get { return _reporteSeguimientoRepository = _reporteSeguimientoRepository ?? new ReporteSeguimientoRepository(_databaseContext); }
+        }
         public async Task<bool> SaveAll()
         { return await _databaseContext.SaveChangesAsync() > 0; }
 

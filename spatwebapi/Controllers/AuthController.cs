@@ -6,15 +6,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using webapi.business.Dtos.Usuario;
 using webapi.business.Services.Interf;
+using webapi.core.Models;
 
 namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthController : ControllerBase
+    public class AuthController : Controller
     {
         private readonly IConfiguration _config;
         private IUserService _userService;

@@ -56,6 +56,9 @@ namespace webapi.root
             services.AddScoped<ISeguimientoService, SeguimientoService>();
             services.AddScoped<ISeguimientoRepository, SeguimientoRepository>();
 
+            services.AddScoped<IReporteSeguimientoService, ReporteSeguimientoService>();
+            services.AddScoped<IReporteSeguimientoRepository, ReporteSeguimientoRepository>();
+
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

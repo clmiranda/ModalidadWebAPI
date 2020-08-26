@@ -398,14 +398,9 @@ namespace webapi.data.Migrations
                     b.Property<int?>("SeguimientoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SeguimientoId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ReporteSeguimiento");
                 });
@@ -446,6 +441,9 @@ namespace webapi.data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CantidadVisitas")
+                        .HasColumnType("int");
+
                     b.Property<int>("ContratoAdopcionId")
                         .HasColumnType("int");
 
@@ -459,9 +457,14 @@ namespace webapi.data.Migrations
                     b.Property<DateTime>("FechaInicio")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ContratoAdopcionId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Seguimiento");
                 });
@@ -665,10 +668,6 @@ namespace webapi.data.Migrations
                     b.HasOne("webapi.core.Models.Seguimiento", "Seguimiento")
                         .WithMany("ReporteSeguimientos")
                         .HasForeignKey("SeguimientoId");
-
-                    b.HasOne("webapi.core.Models.User", "User")
-                        .WithMany("ReporteSeguimientos")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("webapi.core.Models.Seguimiento", b =>
@@ -678,6 +677,10 @@ namespace webapi.data.Migrations
                         .HasForeignKey("ContratoAdopcionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("webapi.core.Models.User", "User")
+                        .WithMany("Seguimientos")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("webapi.core.Models.UserRole", b =>

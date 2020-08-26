@@ -10,6 +10,7 @@ namespace webapi.business.Services.Interf
 {
     public interface IUserService
     {
+        IEnumerable<User> GetAllVoluntarios();
         Task<User> Login(UserForLoginDto userforLogin);
         Task<object> GenerateJwtToken(User user, string security);
         Task<IdentityResult> RegisterUser(UserForRegisterDto user); //dto

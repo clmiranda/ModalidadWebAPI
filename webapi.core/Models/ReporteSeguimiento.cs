@@ -15,9 +15,6 @@ namespace webapi.core.Models
         public string Estado { get; set; }
         //public int IdUsuario { get; set; }
         //public int? IdSeguimiento { get; set; }
-
-        public virtual User User { get; set; }
-        public int? UserId { get; set; }
         public virtual Seguimiento Seguimiento { get; set; }
         public int? SeguimientoId { get; set; }
         //public virtual ICollection<Seguimiento> Seguimientos { get; set; }

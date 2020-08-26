@@ -136,5 +136,10 @@ namespace webapi.business.Services.Imp
             else
                 return null;
         }
+        public IEnumerable<User> GetAllVoluntarios()
+        {
+            var lista = _unitOfWork.UserRepository.GetAllVoluntarios();
+            return lista;
+        }
     }
 }
