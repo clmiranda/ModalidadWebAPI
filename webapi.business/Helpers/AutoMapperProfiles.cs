@@ -25,6 +25,7 @@ namespace webapi.business.Helpers
             CreateMap<UserForRegisterDto, User>();
             CreateMap<User, UserTokenToReturnDto>();
             CreateMap<User, UserForListDto>();
+            CreateMap<User, UserForDetailedDto>();
 
             CreateMap<CasoMascota, CasoMascotaForListDto>()
                 .ForMember(d => d.TituloDenuncia, options =>
@@ -83,8 +84,9 @@ namespace webapi.business.Helpers
                 //    options.MapFrom(s=>s.ReporteSeguimientos.Count());
                 //});
             CreateMap<ContratoAdopcion, ContratoAdopcionForList>();
-            CreateMap<ReporteSeguimiento, ReporteSeguimientoForList>();
+            CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
             CreateMap<ReporteSeguimientoForCreate, ReporteSeguimiento>();
+            CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
         }
     }
 }

@@ -11,27 +11,19 @@ namespace spatwebapi
     {
         public static void SendEmailConfirmation(string subject, string body, string confirmationLink, string emailAddressee)
         {
-            //try
-            //{
-            using (var mailMessage = new MailMessage())
+            MailMessage mailMessage = new MailMessage("codigo901@gmail.com", emailAddressee);
+            mailMessage.Subject = subject;
+            mailMessage.Body = "<a href=" + confirmationLink + ">" + body + "</a>";
+            mailMessage.IsBodyHtml = true;
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential()
             {
-                using (var client = new SmtpClient("smtp.gmail.com", 587))
-                {
-                    //provide credentials
-                    client.Credentials = new NetworkCredential("oscarbj03@gmail.com", "zxp-+7.1*");
-                    client.EnableSsl = true;
-
-                    // configure the mail message
-                    mailMessage.From = new MailAddress("oscarbj03@gmail.com");
-                    mailMessage.To.Insert(0, new MailAddress(emailAddressee));
-                    mailMessage.Subject = subject;
-                    mailMessage.Body = "<a href=" + confirmationLink + ">" + body + "</link>";//"You did it ";
-                    mailMessage.IsBodyHtml = true;
-
-                    //send email
-                    client.Send(mailMessage);
-                }
-            }
+                UserName = "codigo901@gmail.com",
+                Password = "zkp97-_+2*"
+            };
+            client.EnableSsl = true;
+            client.Send(mailMessage);
         }
     }
 }

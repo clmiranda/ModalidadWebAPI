@@ -6,11 +6,11 @@ namespace webapi.core.Models
 {
     public partial class ContratoAdopcion : BaseEntity
     {
-        public string NombreCompleto { get; set; }
-        public string Domicilio { get; set; }
-        public string NumeroCelular { get; set; }
+        //public string NombreCompleto { get; set; }
+        //public string Domicilio { get; set; }
+        //public string NumeroCelular { get; set; }
         public string RazonAdopcion { get; set; }
-        public string Edad { get; set; }
+        //public string Edad { get; set; }
         public bool TerminosCondiciones { get; set; }
         //public string Ci { get; set; }
         public DateTime FechaSolicitudAdopcion { get; set; }
@@ -32,10 +32,10 @@ namespace webapi.core.Models
         //public virtual ICollection<Foto> Fotos { get; set; }
         public virtual ICollection<Seguimiento> Seguimientos { get; set; }
         public virtual ContratoRechazo ContratoRechazo { get; set; }
-        public ContratoAdopcion()
-        {
-            FechaSolicitudAdopcion = DateTime.Now;
-            FechaAdopcion = DateTime.Now;
-        }
+        //public ContratoAdopcion()
+        //{
+        //    FechaSolicitudAdopcion = DateTime.Now;
+        //    FechaAdopcion = DateTime.Now;
+        //}
     }
 }

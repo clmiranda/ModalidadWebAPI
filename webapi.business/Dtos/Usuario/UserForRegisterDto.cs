@@ -20,7 +20,13 @@ namespace webapi.business.Dtos.Usuario
         [Required]
         public string Apellidos { get; set; }
         [Required]
+        public string Domicilio { get; set; }
+        [Required]
+        public string NumeroCelular { get; set; }
+        [Required]
+        public string Edad { get; set; }
         public string Estado { get; set; }
+        [Required]
         public string Sexo { get; set; }
     }
 }
