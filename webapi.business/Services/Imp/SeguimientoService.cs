@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Services.Interf;
@@ -58,9 +59,31 @@ namespace webapi.business.Services.Imp
         public async Task<bool> CheckedVoluntarioAsignado(Seguimiento seguimiento, User user) {
             seguimiento.User = user;
             seguimiento.UserId = user.Id;
+            seguimiento.Estado = "Pendiente";
             user.Seguimientos.Add(seguimiento);
             _unitOfWork.SeguimientoRepository.Update(seguimiento);
             return await _unitOfWork.SaveAll();
+        }
+        public async Task<bool> AsignarSeguimiento(int id)
+        {
+            var resul = await _unitOfWork.SeguimientoRepository.GetById(id);
+            resul.Estado = "Asignado";
+            _unitOfWork.SeguimientoRepository.Update(resul);
+            return await _unitOfWork.SaveAll();
+        }
+        public async Task<bool> RechazarSeguimiento(int id)
+        {
+            var resul = await _unitOfWork.SeguimientoRepository.GetById(id);
+            resul.User = null;
+            resul.UserId = null;
+            resul.Estado = "Activo";
+            _unitOfWork.SeguimientoRepository.Update(resul);
+            return await _unitOfWork.SaveAll();
+        }
+        public IEnumerable<Seguimiento> FindByCondition(int userId)
+        {
+            var resul = _unitOfWork.SeguimientoRepository.FindByCondition(x=>x.UserId== userId).ToList();
+            return resul;
         }
     }
 }

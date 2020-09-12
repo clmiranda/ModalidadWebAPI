@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using webapi.core.Models;
@@ -129,10 +130,15 @@ namespace webapi.data.Repositories.Imp
             if (u != null)
                 _context.Foto.Remove(u.Result);
         }
-        public IEnumerable<User> GetAllVoluntarios()
+        public IQueryable<User> FindByCondition(Expression<Func<User, bool>> expression)
         {
-            var lista =_context.Users.Where(x=>x.UserRoles.Any(y=>y.Role.Name.Equals("Voluntario"))).ToList();
-            return lista;
+            //return entities.Where(expression).AsNoTracking();
+            return _context.Users.Where(expression).AsQueryable();
         }
+        //public IEnumerable<User> GetAllVoluntarios()
+        //{
+        //    var lista =_context.Users.Where(x=>x.UserRoles.Any(y=>y.Role.Name.Equals("Voluntario"))).ToList();
+        //    return lista;
+        //}
     }
 }

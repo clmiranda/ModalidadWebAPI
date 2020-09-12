@@ -4,10 +4,12 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Usuario;
+using webapi.business.Helpers;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
@@ -69,7 +71,7 @@ namespace webapi.business.Services.Imp
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            var appUser = _mapper.Map<UserForListDto>(user);
+            var appUser = _mapper.Map<UserForDetailedDto>(user);
 
             //var x = new {nombre="asdfasdf",id=2,estado="activo" };
 
@@ -82,12 +84,13 @@ namespace webapi.business.Services.Imp
             _unitOfWork.UserRepository.AddRole(userToCreate);
             return result;
         }
-        public async Task<UserForDetailedDto> GetUsuario(int id)
+        public async Task<User> GetUsuario(int id)
         {
             var user = await _unitOfWork.UserRepository.GetById(id);
-            if (user == null) return null;
-            var userToReturn = _mapper.Map<UserForDetailedDto>(user);
-            return userToReturn;
+            return user;
+            //if (user == null) return null;
+            //var userToReturn = _mapper.Map<UserForDetailedDto>(user);
+            //return userToReturn;
         }
         public async Task<IdentityResult> ConfirmEmail(string userId, string token)
         {
@@ -136,10 +139,13 @@ namespace webapi.business.Services.Imp
             else
                 return null;
         }
-        public IEnumerable<User> GetAllVoluntarios()
+        public async Task<PaginationList<User>> GetAllVoluntarios(VoluntarioParameters voluntarioParameters)
         {
-            var lista = _unitOfWork.UserRepository.GetAllVoluntarios();
-            return lista;
+            var resul = _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario")));
+            var voluntarios = resul.OrderByDescending(x=>x.Nombres).AsQueryable();
+            voluntarios = voluntarios.Where(x=>x.Nombres.Contains(voluntarioParameters.Busqueda) || x.Apellidos.Contains(voluntarioParameters.Busqueda));
+
+            return await PaginationList<User>.ToPagedList(voluntarios, voluntarioParameters.PageNumber, voluntarioParameters.PageSize);
         }
     }
 }

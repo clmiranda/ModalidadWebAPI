@@ -17,6 +17,6 @@ namespace webapi.data.Repositories.Interf
         void Delete(T entity);
         T GetFirst();
         T GetLast();
-        Task<IEnumerable<T>> FindByCondition(Expression<Func<T, bool>> expression);
+        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
     }
 }

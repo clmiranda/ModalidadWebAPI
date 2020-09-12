@@ -185,13 +185,6 @@ namespace webapi.data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Domicilio")
-                        .HasColumnType("nvarchar(3000)")
-                        .HasMaxLength(3000);
-
-                    b.Property<string>("Edad")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Estado")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
@@ -204,14 +197,6 @@ namespace webapi.data.Migrations
 
                     b.Property<int>("MascotaId")
                         .HasColumnType("int");
-
-                    b.Property<string>("NombreCompleto")
-                        .HasColumnType("nvarchar(3000)")
-                        .HasMaxLength(3000);
-
-                    b.Property<string>("NumeroCelular")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
 
                     b.Property<string>("RazonAdopcion")
                         .HasColumnType("nvarchar(300)")
@@ -487,6 +472,13 @@ namespace webapi.data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Domicilio")
+                        .HasColumnType("nvarchar(3000)")
+                        .HasMaxLength(3000);
+
+                    b.Property<string>("Edad")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -515,6 +507,10 @@ namespace webapi.data.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<string>("NumeroCelular")
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");

@@ -15,5 +15,8 @@ namespace webapi.business.Services.Interf
         Task<bool> UpdateSeguimiento(Seguimiento seguimiento);
         Task<bool> DeleteSeguimiento(Seguimiento seguimiento);
         Task<bool> CheckedVoluntarioAsignado(Seguimiento seguimiento, User user);
+        Task<bool> AsignarSeguimiento(int id);
+        Task<bool> RechazarSeguimiento(int id);
+        IEnumerable<Seguimiento> FindByCondition(int userId);
     }
 }

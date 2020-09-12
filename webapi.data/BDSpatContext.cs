@@ -70,6 +70,8 @@ namespace webapi.data
 
                 entity.Property(e => e.Nombres).HasMaxLength(200);
                 entity.Property(e => e.Apellidos).HasMaxLength(200);
+                entity.Property(e => e.Domicilio).HasMaxLength(3000);
+                entity.Property(e => e.NumeroCelular).HasMaxLength(30);
                 entity.Property(e => e.Estado).HasMaxLength(50);
                 entity.Property(e => e.Sexo).HasMaxLength(50);
                 entity.Property(e => e.UserName).HasMaxLength(50);
@@ -94,9 +96,9 @@ namespace webapi.data
             modelBuilder.Entity<ContratoAdopcion>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.NombreCompleto).HasMaxLength(3000);
-                entity.Property(e => e.Domicilio).HasMaxLength(3000);
-                entity.Property(e => e.NumeroCelular).HasMaxLength(50);
+                //entity.Property(e => e.NombreCompleto).HasMaxLength(3000);
+                //entity.Property(e => e.Domicilio).HasMaxLength(3000);
+                //entity.Property(e => e.NumeroCelular).HasMaxLength(50);
                 entity.Property(e => e.RazonAdopcion).HasMaxLength(300);
                 entity.Property(e => e.Estado).HasMaxLength(50);
                 //entity.Property(e => e.Ci).HasMaxLength(50);
