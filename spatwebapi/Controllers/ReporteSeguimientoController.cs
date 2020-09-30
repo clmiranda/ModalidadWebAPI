@@ -32,31 +32,72 @@ namespace spatwebapi.Controllers
             var reporte = _mapper.Map<ReporteSeguimientoForReturn>(await _reporteSeguimientoService.GetById(id));
             return reporte;
         }
-        [HttpGet("{id}/ListReporteSeguimiento")]
-        public IEnumerable<ReporteSeguimientoForReturn> ListReporteSeguimiento(int id)
+        [Authorize(Roles ="Administrador")]
+        [HttpGet("{id}/GetReportesForAdmin")]
+        public IEnumerable<ReporteSeguimientoForReturn> GetReportesForAdmin(int id)
         {
-            var lista = _reporteSeguimientoService.GetByCondition(id);
+            var lista = _reporteSeguimientoService.GetReportesForAdmin(id);
+            return lista;
+        }
+        [Authorize(Roles = "Voluntario")]
+        [HttpGet("{id}/GetReportesForVoluntario")]
+        public IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id)
+        {
+            var lista = _reporteSeguimientoService.GetReportesForVoluntario(id);
             return lista;
         }
         [HttpPost("CreateReporteSeguimiento")]
         public async Task<IActionResult> CreateReporteSeguimiento(ReporteSeguimientoForCreate reporteDto)
         {
-            if (await _reporteSeguimientoService.CreateReporteSeguimiento(reporteDto))
-                return Ok("El Reporte fue agregado exitosamente.");
+            if (await _reporteSeguimientoService.VerifyMaximoReportes(reporteDto.SeguimientoId))
+            {
+                if (await _reporteSeguimientoService.CreateReporteSeguimiento(reporteDto))
+                    return Ok("El Reporte fue agregado exitosamente.");
 
-            return BadRequest("Hubo problemas al agregar el Reporte");
+                return BadRequest("Hubo problemas al agregar el Reporte");
+            }
+            return BadRequest("No se pueden asignar más de 10 Reportes por Seguimiento.");
         }
-        [HttpPut("UpdateReporteSeguimiento")]
-        public async Task<IActionResult> UpdateReporteSeguimiento(ReporteSeguimientoForUpdate reporte)
+        [HttpPut("UpdateReporteSeguimientoVoluntario")]
+        public async Task<IActionResult> UpdateReporteSeguimientoVoluntario(ReporteSeguimientoForUpdate reporte)
         {
             var modelo = await _reporteSeguimientoService.GetById(reporte.Id);
             if (modelo.Estado.Equals("Enviado"))
                 return BadRequest("El reporte ya fue enviado anteriormente.");
 
-            if (await _reporteSeguimientoService.UpdateReporteSeguimiento(reporte))
+            if (await _reporteSeguimientoService.UpdateReporteSeguimientoVoluntario(reporte))
                 return Ok("El Reporte fue enviado exitosamente.");
 
             return BadRequest("Hubo problemas al enviar el Reporte");
+        }
+        [HttpPut("SaveReporteSeguimientoAdmin")]
+        public async Task<IActionResult> SaveReporteSeguimientoAdmin(ReporteSeguimientoForUpdateAdmin reporte)
+        {
+            var modelo = await _reporteSeguimientoService.GetById(reporte.Id);
+            if (modelo.Estado.Equals("Enviado"))
+                return BadRequest("El Reporte ya fue enviado anteriormente.");
+            if (await _reporteSeguimientoService.VerifyDate(reporte))
+            {
+                if (await _reporteSeguimientoService.UpdateReporteSeguimientoAdmin(reporte))
+                    return Ok("El Reporte fue actualizado exitosamente.");
+            }
+            else
+                return BadRequest("La fecha no debe ser misma que la de otro reporte y debe estar en el " +
+                    "rango establecido.");
+
+            return BadRequest("Hubo problemas al actualizar el Reporte");
+        }
+        [HttpDelete("{idseguimiento}/DeleteReporte/{id}")]
+        public async Task<IActionResult> DeleteReporte(int idseguimiento, int id)
+        {
+            if (await _reporteSeguimientoService.VerifyMinimoReportes(idseguimiento))
+            {
+                if (await _reporteSeguimientoService.DeleteReporte(id))
+                    return Ok("Reporte eliminado correctamente.");
+
+                return BadRequest("Hubo un problema al eliminar el Reporte.");
+            }
+            return BadRequest("El mínimo de Reportes por Seguimiento debe ser de 3.");
         }
     }
 }

@@ -146,38 +146,6 @@ namespace webapi.data.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("webapi.core.Models.CasoMascota", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("DenunciaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("nvarchar(max)")
-                        .HasMaxLength(10000);
-
-                    b.Property<string>("Estado")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<DateTime>("FechaRescate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Titulo")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DenunciaId");
-
-                    b.ToTable("CasoMascota");
-                });
-
             modelBuilder.Entity("webapi.core.Models.ContratoAdopcion", b =>
                 {
                     b.Property<int>("Id")
@@ -299,7 +267,7 @@ namespace webapi.data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CasoMascotaId")
+                    b.Property<int>("DenunciaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
@@ -334,7 +302,8 @@ namespace webapi.data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CasoMascotaId");
+                    b.HasIndex("DenunciaId")
+                        .IsUnique();
 
                     b.ToTable("Mascota");
                 });
@@ -447,7 +416,8 @@ namespace webapi.data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContratoAdopcionId");
+                    b.HasIndex("ContratoAdopcionId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -610,15 +580,6 @@ namespace webapi.data.Migrations
                         .HasForeignKey("AuthorId");
                 });
 
-            modelBuilder.Entity("webapi.core.Models.CasoMascota", b =>
-                {
-                    b.HasOne("webapi.core.Models.Denuncia", "Denuncia")
-                        .WithMany("CasoMascotas")
-                        .HasForeignKey("DenunciaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("webapi.core.Models.ContratoAdopcion", b =>
                 {
                     b.HasOne("webapi.core.Models.Mascota", "Mascota")
@@ -652,9 +613,9 @@ namespace webapi.data.Migrations
 
             modelBuilder.Entity("webapi.core.Models.Mascota", b =>
                 {
-                    b.HasOne("webapi.core.Models.CasoMascota", "CasoMascota")
-                        .WithMany("Mascotas")
-                        .HasForeignKey("CasoMascotaId")
+                    b.HasOne("webapi.core.Models.Denuncia", "Denuncia")
+                        .WithOne("Mascota")
+                        .HasForeignKey("webapi.core.Models.Mascota", "DenunciaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -669,8 +630,8 @@ namespace webapi.data.Migrations
             modelBuilder.Entity("webapi.core.Models.Seguimiento", b =>
                 {
                     b.HasOne("webapi.core.Models.ContratoAdopcion", "ContratoAdopcion")
-                        .WithMany("Seguimientos")
-                        .HasForeignKey("ContratoAdopcionId")
+                        .WithOne("Seguimiento")
+                        .HasForeignKey("webapi.core.Models.Seguimiento", "ContratoAdopcionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

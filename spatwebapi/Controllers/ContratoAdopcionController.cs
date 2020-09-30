@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using webapi.business.Dtos.Adopciones;
+using webapi.business.Dtos.ContratoRechazo;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 
@@ -20,7 +21,6 @@ namespace spatwebapi.Controllers
         private IContratoAdopcionService _contratoAdopcionService;
         private IMascotaService _mascotaService;
         private ISeguimientoService _seguimientoService;
-        private static Seguimiento seguimiento;
         public ContratoAdopcionController(IContratoAdopcionService contratoAdopcionService, IMapper mapper,
             ISeguimientoService seguimientoService, IMascotaService mascotaService)
         {
@@ -50,10 +50,6 @@ namespace spatwebapi.Controllers
             var modelo = _mapper.Map<ContratoAdopcionReturnDto>(resul);
             return modelo;
         }
-        //[HttpGet("ExistFotosForContrato/{idContrato}")]
-        //public bool ExistFotosForContrato(int idContrato) {
-        //    return _contratoAdopcionService.ExistFotosForContrato(idContrato);
-        //}
         [HttpPost("GenerarContrato")]
         public async Task<IActionResult> GenerarContrato([FromBody] ContratoAdopcionReturnDto contrato) {
             var modelo = _mapper.Map<ContratoAdopcion>(contrato);
@@ -84,36 +80,26 @@ namespace spatwebapi.Controllers
                 return BadRequest("No se ha encontrado el Contrato.");
             return Ok(resul);
         }
-        [HttpPost("AprobarAdopcion")]
-        public async Task<IActionResult> AprobarAdopcion([FromBody] ContratoAdopcionReturnDto contrato) {
-            var modelo = await _contratoAdopcionService.GetById(contrato.Id);
+        [HttpPost("{id}/AprobarAdopcion")]
+        public async Task<IActionResult> AprobarAdopcion(int id) {
+            var modelo = await _contratoAdopcionService.GetById(id);
             if (modelo!=null)
             {
-                if (await _contratoAdopcionService.AprobarAdopcion(modelo)) {
-                    seguimiento = new Seguimiento
-                    {
-                        ContratoAdopcionId = modelo.Id,
-                        FechaInicio = DateTime.Now,
-                        FechaConclusion = DateTime.Now,
-                        Estado = "Activo"
-                    };
-                    var resul= await _seguimientoService.CreateSeguimiento(seguimiento);
-                    if (resul)
-                        return Ok("El contrato se ha aprobado correctamente, se ha creado el seguimiento correspondiente.");
-                    else
-                        return BadRequest("Se aprobo el contrato, pero ocurrio un problema al generar el seguimiento de la adopcion.");
+                if (await _contratoAdopcionService.AprobarAdopcion(id)) {
+                        return Ok("El contrato se ha aprobado correctamente, se ha creado el seguimiento y los reportes respectivos.");
                 }
-                return BadRequest("Ha ocurrido un problema al tratar de aprobar el Contrato.");
+                else
+                    return BadRequest("Se aprobo el contrato, pero ocurrio un problema al generar los demas datos.");
             }
             return BadRequest("No se ha encontrado el Contrato.");
         }
-        [HttpPost("RechazarAdopcion")]
-        public async Task<IActionResult> RechazarAdopcion([FromBody] ContratoRechazo contrato) {
-            var modelo = await _contratoAdopcionService.GetById(contrato.ContratoAdopcionId);
+        [HttpPost("{id}/RechazarAdopcion")]
+        public async Task<IActionResult> RechazarAdopcion(ContratoRechazoForCreateDto contratoRechazo) {
+            var modelo = await _contratoAdopcionService.GetById(contratoRechazo.ContratoAdopcionId);
             if (modelo!=null)
             {
-                if (await _contratoAdopcionService.RechazarAdopcion(modelo)) {
-                    if (await _contratoAdopcionService.ContratoRechazo(contrato))
+                if (await _contratoAdopcionService.RechazarAdopcion(contratoRechazo.ContratoAdopcionId)) {
+                    if (await _contratoAdopcionService.CreateContratoRechazo(contratoRechazo))
                     {
                         return Ok("Contrato rechazado, se ha creado un informe de la razon del Rechazo");
                     }
@@ -124,20 +110,19 @@ namespace spatwebapi.Controllers
             }
             return BadRequest("No se ha encontrado el Contrato.");
         }
-        [HttpPost("CancelarAdopcion")]
-        public async Task<IActionResult> CancelarAdopcion([FromBody] ContratoRechazo contrato) {
-            var modelo = await _contratoAdopcionService.GetById(contrato.ContratoAdopcionId);
+        [HttpPost("{id}/CancelarAdopcion")]
+        public async Task<IActionResult> CancelarAdopcion(ContratoRechazoForCreateDto contratoRechazo) {
+            var modelo = await _contratoAdopcionService.GetById(contratoRechazo.ContratoAdopcionId);
             if (modelo!=null)
             {
-                if (await _contratoAdopcionService.CancelarAdopcion(modelo))
+                if (await _contratoAdopcionService.CancelarAdopcion(contratoRechazo.ContratoAdopcionId))
                 {
-                    var resul = await _seguimientoService.GetByIdContrato(contrato.ContratoAdopcionId);
-                    if (await _seguimientoService.DeleteSeguimiento(resul))
+                    if (await _contratoAdopcionService.CreateContratoRechazo(contratoRechazo))
                         return Ok("Se ha cancelado el Contrato y eliminado el Seguimiento correspondiente.");
 
-                    return BadRequest("Se ha cancelado el Contrato, pero hubo problemas al eliminar el Seguimiento.");
+                    return BadRequest("Ha ocurrido un error al cancelar el Contrato");
                 }
-                return BadRequest("Ha ocurrido un error al tratar de cancelar el Contrato");
+                return BadRequest("Ha ocurrido un error al cancelar el Contrato");
             }
             return BadRequest("No se ha encontrado el Contrato.");
         }

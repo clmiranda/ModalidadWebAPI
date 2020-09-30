@@ -59,11 +59,11 @@ namespace spatwebapi.Controllers
         }
         [AllowAnonymous]
         [HttpPut("SaveSeguimiento")]
-        public async Task<IActionResult> SaveSeguimiento([FromBody] Seguimiento modelo)
+        public async Task<IActionResult> SaveSeguimiento([FromBody] Seguimiento seguimiento)
         {
-            var objeto = await _seguimientoService.GetById(modelo.Id);
-            objeto.CantidadVisitas = modelo.CantidadVisitas;
-            if (await _seguimientoService.UpdateSeguimiento(objeto)) {
+            //var objeto = await _seguimientoService.GetById(seguimiento.Id);
+            //objeto.CantidadVisitas = seguimiento.CantidadVisitas;
+            if (await _seguimientoService.UpdateSeguimiento(seguimiento)) {
                 return Ok("Datos actualizados correctamente, se generaron los reportes respectivos.");
             }
             return BadRequest("Ocurrio un problema al actualizar los datos.");
@@ -85,7 +85,7 @@ namespace spatwebapi.Controllers
         public IEnumerable<SeguimientoForReturnDto> ListVoluntarioSeguimientos()
         {
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var lista = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(_seguimientoService.FindByCondition(int.Parse(id)));
+            var lista = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(_seguimientoService.GetSeguimientoForVoluntario(int.Parse(id)));
             return lista;
         }
         [Authorize(Roles = "Voluntario")]

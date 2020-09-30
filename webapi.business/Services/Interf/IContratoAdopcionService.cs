@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using webapi.business.Dtos.ContratoRechazo;
 using webapi.core.Models;
 
 namespace webapi.business.Services.Interf
@@ -15,9 +16,9 @@ namespace webapi.business.Services.Interf
         int GetLast();
         ContratoAdopcion GetContratoByIdMascota(int id);
         Task<bool> ContratoEstadoMascota(Mascota mascota);
-        Task<bool> ContratoRechazo(ContratoRechazo contrato);
-        Task<bool> AprobarAdopcion(ContratoAdopcion contrato);
-        Task<bool> RechazarAdopcion(ContratoAdopcion contrato);
-        Task<bool> CancelarAdopcion(ContratoAdopcion contrato);
+        Task<bool> CreateContratoRechazo(ContratoRechazoForCreateDto contratoRechazo);
+        Task<bool> AprobarAdopcion(int id);
+        Task<bool> RechazarAdopcion(int id);
+        Task<bool> CancelarAdopcion(int id);
     }
 }

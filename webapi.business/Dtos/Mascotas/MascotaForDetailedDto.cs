@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using webapi.business.Dtos.Denuncias;
 using webapi.business.Dtos.Fotos;
 
 namespace webapi.business.Dtos.Mascotas
@@ -17,10 +18,9 @@ namespace webapi.business.Dtos.Mascotas
         public string EstadoSituacion { get; set; }
         //public byte[] Imagen { get; set; }
         //public int IdTipoMascota { get; set; }
-        public int CasoMascotaId { get; set; }
+        //public int CasoMascotaId { get; set; }
         public string FotoUrl { get; set; }
-        public string TituloDenuncia { get; set; }
-        public string TituloCaso { get; set; }
+        public virtual DenunciaForDetailedDto Denuncia { get; set; }
         public virtual ICollection<FotoForReturnDto> Fotos { get; set; }
     }
 }

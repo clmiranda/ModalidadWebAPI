@@ -49,14 +49,6 @@ namespace spatwebapi.Controllers
             var resul = _mapper.Map<MascotaForReturn>(obj);
             return resul;
         }
-        [HttpGet("GetMascotaByIdCaso/{id}")]
-        public async Task<MascotaForDetailedDto> GetMascotaByIdCaso(int id)
-        {
-            var obj = await _mascotaService.GetMascotaByIdCaso(id);
-            if (obj == null) return null;
-            var resul = _mapper.Map<MascotaForDetailedDto>(obj);
-            return resul;
-        }
 
         //Retornar el nombre de la mascota con su foto principal la cual tiene q establecerse
         //desde la vista de agregar mascota la principal
@@ -101,9 +93,9 @@ namespace spatwebapi.Controllers
         public async Task<IActionResult> DeleteMascota(int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
-            int valor = mascota.CasoMascotaId;
+            //int valor = mascota.CasoMascotaId;
             if (await _mascotaService.DeleteMascota(mascota))
-                return Ok(new { mensaje = "El Registro de la Mascota fue eliminado de manera exitosa.", idcaso = valor });
+                return Ok(/*new { mensaje = */"El Registro de la Mascota fue eliminado de manera exitosa."/*, idcaso = valor }*/);
             else
                 return BadRequest("Hubo problemas al Eliminar el Registro de la Mascota.");
         }

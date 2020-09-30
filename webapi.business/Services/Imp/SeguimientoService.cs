@@ -30,24 +30,30 @@ namespace webapi.business.Services.Imp
         {
             return await _unitOfWork.SeguimientoRepository.GetByIdContrato(id);
         }
-        public async Task<bool> CreateSeguimiento(Seguimiento seguimiento)
+        public async Task<bool> CreateSeguimiento(ContratoAdopcion contrato)
         {
-             _unitOfWork.SeguimientoRepository.Insert(seguimiento);
+            Seguimiento seguimiento = new Seguimiento();
+            seguimiento.ContratoAdopcion = contrato;
+            seguimiento.ContratoAdopcionId = contrato.Id;
+            seguimiento.Estado = "Activo";
+            _unitOfWork.SeguimientoRepository.Insert(seguimiento);
+            //var obj = _unitOfWork.SeguimientoRepository.FindByCondition(x=>x.Estado.Equals("Activo")).LastOrDefault();
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> UpdateSeguimiento(Seguimiento seguimiento)
         {
-            _unitOfWork.SeguimientoRepository.Update(seguimiento);
-            for (int i = 0; i < seguimiento.CantidadVisitas; i++)
-            {
-                ReporteSeguimiento reporteSeguimiento = new ReporteSeguimiento
-                {
-                    FechaReporte = DateTime.Now,
-                    Estado = "Activo",
-                    SeguimientoId = seguimiento.Id
-                };
-                seguimiento.ReporteSeguimientos.Add(reporteSeguimiento);
-            }
+            var objeto = await _unitOfWork.SeguimientoRepository.GetById(seguimiento.Id);
+            //objeto.CantidadVisitas = seguimiento.CantidadVisitas;
+            _unitOfWork.SeguimientoRepository.Update(objeto);
+            //for (int i = 0; i < seguimiento.CantidadVisitas; i++)
+            //{
+            //    ReporteSeguimiento reporteSeguimiento = new ReporteSeguimiento();
+            //    //FechaReporte = DateTime.Now.Date,
+            //    reporteSeguimiento.Seguimiento = objeto;
+            //    reporteSeguimiento.SeguimientoId = seguimiento.Id;
+            //    reporteSeguimiento.Estado = "Activo";
+            //    seguimiento.ReporteSeguimientos.Add(reporteSeguimiento);
+            //}
             return await _unitOfWork.SaveAll();
         }
 
@@ -80,7 +86,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork.SeguimientoRepository.Update(resul);
             return await _unitOfWork.SaveAll();
         }
-        public IEnumerable<Seguimiento> FindByCondition(int userId)
+        public IEnumerable<Seguimiento> GetSeguimientoForVoluntario(int userId)
         {
             var resul = _unitOfWork.SeguimientoRepository.FindByCondition(x=>x.UserId== userId).ToList();
             return resul;

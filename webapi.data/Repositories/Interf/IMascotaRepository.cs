@@ -8,7 +8,7 @@ namespace webapi.data.Repositories.Interf
 {
     public interface IMascotaRepository: IRepository<Mascota>
     {
-        Task<Mascota> GetMascotaByIdCaso(int id);
+        //Task<Mascota> GetMascotaByIdCaso(int id);
         public IEnumerable<Mascota> GetAllMascotaAdopcion();
         IEnumerable<Mascota> GetAllMascotas();
         IEnumerable<Foto> GetAllFotosMascota(int id);

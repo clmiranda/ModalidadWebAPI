@@ -39,10 +39,10 @@ namespace webapi.data.Repositories.Imp
                 .FirstOrDefault().ToString());
         }
 
-        public Task<Mascota> GetMascotaByIdCaso(int id)
-        {
-            return context.Mascota.FirstOrDefaultAsync(x=>x.CasoMascotaId==id);
-        }
+        //public Task<Mascota> GetMascotaByIdCaso(int id)
+        //{
+        //    return context.Mascota.FirstOrDefaultAsync(x=>x.CasoMascotaId==id);
+        //}
         public async Task<bool> SaveAll()
         { return await context.SaveChangesAsync() > 0; }
         public void AprobarAdopcion(Mascota mascota)

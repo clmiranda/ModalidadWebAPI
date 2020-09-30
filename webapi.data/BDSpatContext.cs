@@ -22,7 +22,7 @@ namespace webapi.data
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
 
-        public virtual DbSet<CasoMascota> CasoMascota { get; set; }
+        //public virtual DbSet<CasoMascota> CasoMascota { get; set; }
         public virtual DbSet<ContratoAdopcion> ContratoAdopcion { get; set; }
         public virtual DbSet<ContratoRechazo> ContratoRechazo { get; set; }
         //public virtual DbSet<DetalleAdopcion> DetalleAdopcion { get; set; }
@@ -80,18 +80,18 @@ namespace webapi.data
             //{
             //});
 
-            modelBuilder.Entity<CasoMascota>(entity =>
-            {
-                //entity.HasKey(e => e.IdCasoMascota);
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Titulo).HasMaxLength(500);
-                entity.Property(e => e.Descripcion).HasMaxLength(10000);
-                entity.Property(e => e.Estado).HasMaxLength(50);
-                //entity.HasOne(d => d.Denuncia)
-                //    .WithMany(p => p.CasoMascotas)
-                //    .HasForeignKey(d => d.IdDenuncia)
-                //    .HasConstraintName("FK_CasoMascota_Denuncia");
-            });
+            //modelBuilder.Entity<CasoMascota>(entity =>
+            //{
+            //    //entity.HasKey(e => e.IdCasoMascota);
+            //    entity.HasKey(e => e.Id);
+            //    entity.Property(e => e.Titulo).HasMaxLength(500);
+            //    entity.Property(e => e.Descripcion).HasMaxLength(10000);
+            //    entity.Property(e => e.Estado).HasMaxLength(50);
+            //    //entity.HasOne(d => d.Denuncia)
+            //    //    .WithMany(p => p.CasoMascotas)
+            //    //    .HasForeignKey(d => d.IdDenuncia)
+            //    //    .HasConstraintName("FK_CasoMascota_Denuncia");
+            //});
 
             modelBuilder.Entity<ContratoAdopcion>(entity =>
             {

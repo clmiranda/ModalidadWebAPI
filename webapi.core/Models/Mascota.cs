@@ -20,8 +20,10 @@ namespace webapi.core.Models
 
         //public virtual TipoMascota TipoMascota { get; set; }
         //public int TipoMascotaId { get; set; }
-        public virtual CasoMascota CasoMascota { get; set; }
-        public int CasoMascotaId { get; set; }
+        //public virtual CasoMascota CasoMascota { get; set; }
+        //public int CasoMascotaId { get; set; }
+        public virtual Denuncia Denuncia { get; set; }
+        public int DenunciaId { get; set; }
         public virtual ICollection<Foto> Fotos { get; set; }
         public virtual ICollection<ContratoAdopcion> ContratoAdopciones { get; set; }
         //public virtual ICollection<CasoMascota> CasoMascotas { get; set; }

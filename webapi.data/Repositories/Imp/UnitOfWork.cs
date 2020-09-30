@@ -17,11 +17,12 @@ namespace webapi.data.Repositories.Imp
         private IAuthorRepository _authorRepository;
         private IRepository<Book> _bookRepository;
         private IRepository<Denuncia> _denunciaRepository;
-        private ICasoMascotaRepository _casoMascotaRepository;
+        //private ICasoMascotaRepository _casoMascotaRepository;
         private IMascotaRepository _mascotaRepository;
         private IContratoAdopcionRepository _contratoAdopcionRepository;
         private ISeguimientoRepository _seguimientoRepository;
         private IReporteSeguimientoRepository _reporteSeguimientoRepository;
+        private IRepository<ContratoRechazo> _contratoRechazoRepository;
         public UnitOfWork(BDSpatContext databaseContext,
             SignInManager<User> signInManager, UserManager<User> userManager)
         {
@@ -49,10 +50,10 @@ namespace webapi.data.Repositories.Imp
         {
             get { return _denunciaRepository = _denunciaRepository ?? new Repository<Denuncia>(_databaseContext); }
         }
-        public ICasoMascotaRepository CasoMascotaRepository
-        {
-            get { return _casoMascotaRepository = _casoMascotaRepository ?? new CasoMascotaRepository(_databaseContext); }
-        }
+        //public ICasoMascotaRepository CasoMascotaRepository
+        //{
+        //    get { return _casoMascotaRepository = _casoMascotaRepository ?? new CasoMascotaRepository(_databaseContext); }
+        //}
         public IMascotaRepository MascotaRepository
         {
             get { return _mascotaRepository = _mascotaRepository ?? new MascotaRepository(_databaseContext); }
@@ -69,6 +70,12 @@ namespace webapi.data.Repositories.Imp
         {
             get { return _reporteSeguimientoRepository = _reporteSeguimientoRepository ?? new ReporteSeguimientoRepository(_databaseContext); }
         }
+
+        public IRepository<ContratoRechazo> ContratoRechazoRepository
+        {
+            get { return _contratoRechazoRepository = _contratoRechazoRepository ?? new Repository<ContratoRechazo>(_databaseContext); }
+        }
+
         public async Task<bool> SaveAll()
         { return await _databaseContext.SaveChangesAsync() > 0; }
 
