@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace webapi.data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class First : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,9 @@ namespace webapi.data.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     Nombres = table.Column<string>(maxLength: 200, nullable: true),
                     Apellidos = table.Column<string>(maxLength: 200, nullable: true),
+                    Domicilio = table.Column<string>(maxLength: 3000, nullable: true),
+                    NumeroCelular = table.Column<string>(maxLength: 30, nullable: true),
+                    Edad = table.Column<string>(nullable: true),
                     Estado = table.Column<string>(maxLength: 50, nullable: true),
                     Sexo = table.Column<string>(maxLength: 50, nullable: true)
                 },
@@ -72,25 +75,13 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Titulo = table.Column<string>(maxLength: 500, nullable: true),
                     Descripcion = table.Column<string>(maxLength: 10000, nullable: true),
                     Estado = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Denuncia", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EstadoAdopcion",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EstadoAdopcion", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,20 +97,6 @@ namespace webapi.data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notificacion", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TipoMascota",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(maxLength: 100, nullable: true),
-                    Estado = table.Column<string>(maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TipoMascota", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,28 +206,6 @@ namespace webapi.data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReporteSeguimiento",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descripcion = table.Column<string>(maxLength: 10000, nullable: true),
-                    FechaReporte = table.Column<DateTime>(nullable: false),
-                    Estado = table.Column<string>(maxLength: 50, nullable: true),
-                    IdUsuario = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReporteSeguimiento", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReporteSeguimiento_User",
-                        column: x => x.IdUsuario,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
@@ -272,28 +227,6 @@ namespace webapi.data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CasoMascota",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descripcion = table.Column<string>(maxLength: 10000, nullable: true),
-                    FechaRescate = table.Column<DateTime>(nullable: false),
-                    Estado = table.Column<string>(maxLength: 50, nullable: true),
-                    IdDenuncia = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CasoMascota", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CasoMascota_Denuncia",
-                        column: x => x.IdDenuncia,
-                        principalTable: "Denuncia",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Mascota",
                 columns: table => new
                 {
@@ -301,51 +234,21 @@ namespace webapi.data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(maxLength: 100, nullable: true),
                     Sexo = table.Column<string>(maxLength: 50, nullable: true),
-                    Estado = table.Column<string>(maxLength: 50, nullable: true),
-                    Imagen = table.Column<byte[]>(nullable: true),
-                    IdTipoMascota = table.Column<int>(nullable: false),
-                    IdCasoMascota = table.Column<int>(nullable: false)
+                    Descripcion = table.Column<string>(maxLength: 3000, nullable: true),
+                    Tamaño = table.Column<string>(maxLength: 100, nullable: true),
+                    Esterilizado = table.Column<bool>(nullable: true),
+                    Edad = table.Column<string>(maxLength: 50, nullable: true),
+                    FechaAgregado = table.Column<DateTime>(nullable: false),
+                    EstadoSituacion = table.Column<string>(maxLength: 50, nullable: true),
+                    DenunciaId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mascota", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mascota_CasoMascota",
-                        column: x => x.IdCasoMascota,
-                        principalTable: "CasoMascota",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Mascota_TipoMascota",
-                        column: x => x.IdTipoMascota,
-                        principalTable: "TipoMascota",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DetalleAdopcion",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Estado = table.Column<string>(maxLength: 50, nullable: true),
-                    IdMascota = table.Column<int>(nullable: false),
-                    IdUsuario = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DetalleAdopcion", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DetalleAdopcion_Mascota",
-                        column: x => x.IdMascota,
-                        principalTable: "Mascota",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DetalleAdopcion_User",
-                        column: x => x.IdUsuario,
-                        principalTable: "AspNetUsers",
+                        name: "FK_Mascota_Denuncia_DenunciaId",
+                        column: x => x.DenunciaId,
+                        principalTable: "Denuncia",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -356,27 +259,70 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NombreCompleto = table.Column<string>(maxLength: 3000, nullable: true),
-                    Domicilio = table.Column<string>(maxLength: 3000, nullable: true),
-                    NumeroCelular = table.Column<string>(maxLength: 50, nullable: true),
-                    Ci = table.Column<string>(maxLength: 50, nullable: true),
+                    RazonAdopcion = table.Column<string>(maxLength: 300, nullable: true),
+                    TerminosCondiciones = table.Column<bool>(nullable: false),
+                    FechaSolicitudAdopcion = table.Column<DateTime>(nullable: false),
                     FechaAdopcion = table.Column<DateTime>(nullable: false),
-                    IdDetalleAdopcion = table.Column<int>(nullable: false),
-                    IdEstadoAdopcion = table.Column<int>(nullable: false)
+                    Estado = table.Column<string>(maxLength: 50, nullable: true),
+                    MascotaId = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ContratoAdopcion", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContratoAdopcion_DetalleAdopcion",
-                        column: x => x.IdDetalleAdopcion,
-                        principalTable: "DetalleAdopcion",
+                        name: "FK_ContratoAdopcion_Mascota_MascotaId",
+                        column: x => x.MascotaId,
+                        principalTable: "Mascota",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ContratoAdopcion_EstadoAdopcion",
-                        column: x => x.IdEstadoAdopcion,
-                        principalTable: "EstadoAdopcion",
+                        name: "FK_ContratoAdopcion_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Foto",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(nullable: true),
+                    IsPrincipal = table.Column<bool>(nullable: false),
+                    IdPublico = table.Column<string>(nullable: true),
+                    FechaAgregado = table.Column<DateTime>(nullable: false),
+                    MascotaId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Foto", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Foto_Mascota_MascotaId",
+                        column: x => x.MascotaId,
+                        principalTable: "Mascota",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContratoRechazo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RazonRechazo = table.Column<string>(maxLength: 300, nullable: true),
+                    ContratoAdopcionId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContratoRechazo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ContratoRechazo_ContratoAdopcion_ContratoAdopcionId",
+                        column: x => x.ContratoAdopcionId,
+                        principalTable: "ContratoAdopcion",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -389,23 +335,46 @@ namespace webapi.data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FechaInicio = table.Column<DateTime>(nullable: false),
                     FechaConclusion = table.Column<DateTime>(nullable: false),
+                    CantidadVisitas = table.Column<int>(nullable: false),
                     Estado = table.Column<string>(maxLength: 50, nullable: true),
-                    IdContratoAdopcion = table.Column<int>(nullable: false),
-                    IdReporteSeguimiento = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: true),
+                    ContratoAdopcionId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Seguimiento", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Seguimiento_ContratoAdopcion",
-                        column: x => x.IdContratoAdopcion,
+                        name: "FK_Seguimiento_ContratoAdopcion_ContratoAdopcionId",
+                        column: x => x.ContratoAdopcionId,
                         principalTable: "ContratoAdopcion",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Seguimiento_ReporteSeguimiento",
-                        column: x => x.IdReporteSeguimiento,
-                        principalTable: "ReporteSeguimiento",
+                        name: "FK_Seguimiento_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReporteSeguimiento",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(maxLength: 10000, nullable: true),
+                    FechaReporte = table.Column<DateTime>(nullable: false),
+                    Estado = table.Column<string>(maxLength: 50, nullable: true),
+                    SeguimientoId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReporteSeguimiento", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReporteSeguimiento_Seguimiento_SeguimientoId",
+                        column: x => x.SeguimientoId,
+                        principalTable: "Seguimiento",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -462,61 +431,47 @@ namespace webapi.data.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CasoMascota_IdDenuncia",
-                table: "CasoMascota",
-                column: "IdDenuncia");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContratoAdopcion_Ci",
+                name: "IX_ContratoAdopcion_MascotaId",
                 table: "ContratoAdopcion",
-                column: "Ci",
-                unique: true,
-                filter: "[Ci] IS NOT NULL");
+                column: "MascotaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContratoAdopcion_IdDetalleAdopcion",
+                name: "IX_ContratoAdopcion_UserId",
                 table: "ContratoAdopcion",
-                column: "IdDetalleAdopcion");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContratoAdopcion_IdEstadoAdopcion",
-                table: "ContratoAdopcion",
-                column: "IdEstadoAdopcion");
+                name: "IX_ContratoRechazo_ContratoAdopcionId",
+                table: "ContratoRechazo",
+                column: "ContratoAdopcionId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_DetalleAdopcion_IdMascota",
-                table: "DetalleAdopcion",
-                column: "IdMascota");
+                name: "IX_Foto_MascotaId",
+                table: "Foto",
+                column: "MascotaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DetalleAdopcion_IdUsuario",
-                table: "DetalleAdopcion",
-                column: "IdUsuario");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Mascota_IdCasoMascota",
+                name: "IX_Mascota_DenunciaId",
                 table: "Mascota",
-                column: "IdCasoMascota");
+                column: "DenunciaId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mascota_IdTipoMascota",
-                table: "Mascota",
-                column: "IdTipoMascota");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReporteSeguimiento_IdUsuario",
+                name: "IX_ReporteSeguimiento_SeguimientoId",
                 table: "ReporteSeguimiento",
-                column: "IdUsuario");
+                column: "SeguimientoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Seguimiento_IdContratoAdopcion",
+                name: "IX_Seguimiento_ContratoAdopcionId",
                 table: "Seguimiento",
-                column: "IdContratoAdopcion");
+                column: "ContratoAdopcionId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Seguimiento_IdReporteSeguimiento",
+                name: "IX_Seguimiento_UserId",
                 table: "Seguimiento",
-                column: "IdReporteSeguimiento");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -540,10 +495,16 @@ namespace webapi.data.Migrations
                 name: "Books");
 
             migrationBuilder.DropTable(
+                name: "ContratoRechazo");
+
+            migrationBuilder.DropTable(
+                name: "Foto");
+
+            migrationBuilder.DropTable(
                 name: "Notificacion");
 
             migrationBuilder.DropTable(
-                name: "Seguimiento");
+                name: "ReporteSeguimiento");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -552,28 +513,16 @@ namespace webapi.data.Migrations
                 name: "Authors");
 
             migrationBuilder.DropTable(
+                name: "Seguimiento");
+
+            migrationBuilder.DropTable(
                 name: "ContratoAdopcion");
-
-            migrationBuilder.DropTable(
-                name: "ReporteSeguimiento");
-
-            migrationBuilder.DropTable(
-                name: "DetalleAdopcion");
-
-            migrationBuilder.DropTable(
-                name: "EstadoAdopcion");
 
             migrationBuilder.DropTable(
                 name: "Mascota");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "CasoMascota");
-
-            migrationBuilder.DropTable(
-                name: "TipoMascota");
 
             migrationBuilder.DropTable(
                 name: "Denuncia");

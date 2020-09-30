@@ -46,7 +46,7 @@ namespace webapi.root
 
             services.AddScoped<IDenunciaService, DenunciaService>();
 
-            services.AddScoped<ICasoMascotaService, CasoMascotaService>();
+            //services.AddScoped<ICasoMascotaService, CasoMascotaService>();
             services.AddScoped<IMascotaService, MascotaService>();
             services.AddScoped<IMascotaRepository, MascotaRepository>();
 

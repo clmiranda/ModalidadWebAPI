@@ -12,7 +12,7 @@ namespace webapi.business.Services.Interf
         IEnumerable<Mascota> GetAllMascotaAdopcion();
         Task<Mascota> GetMascotaById(int id);
         int GetIdLastMascota();
-        Task<Mascota> GetMascotaByIdCaso(int id);
+        //Task<Mascota> GetMascotaByIdCaso(int id);
         Task<bool> CreateMascota(Mascota mascota);
         Task<bool> UpdateMascota(Mascota mascota);
         Task<bool> DeleteMascota(Mascota mascota);

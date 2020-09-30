@@ -12,11 +12,11 @@ namespace webapi.data.Repositories.Interf
         IRepository<Book> BookRepository { get; }
         IUserRepository UserRepository { get; }
         IRepository<Denuncia> DenunciaRepository { get; }
-        ICasoMascotaRepository CasoMascotaRepository { get; }
         IMascotaRepository MascotaRepository { get; }
         IContratoAdopcionRepository ContratoAdopcionRepository { get; }
         ISeguimientoRepository SeguimientoRepository { get; }
         IReporteSeguimientoRepository ReporteSeguimientoRepository { get; }
+        IRepository<ContratoRechazo> ContratoRechazoRepository { get; }
         Task<bool> SaveAll();
         void Rollback();
     }

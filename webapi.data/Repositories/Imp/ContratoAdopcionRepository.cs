@@ -40,10 +40,5 @@ namespace webapi.data.Repositories.Imp
             contrato.Estado = "Cancelado";
             Update(contrato);
         }
-
-        public void InsertContratoRechazo(ContratoRechazo contrato)
-        {
-            context.ContratoRechazo.AddAsync(contrato);
-        }
     }
 }

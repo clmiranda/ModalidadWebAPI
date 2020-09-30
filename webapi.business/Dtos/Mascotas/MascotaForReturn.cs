@@ -16,6 +16,8 @@ namespace webapi.business.Dtos.Mascotas
         public string Edad { get; set; }
         public DateTime FechaAgregado { get; set; }
         public string EstadoSituacion { get; set; }
+        //public virtual CasoMascotaForDetailedDto CasoMascota { get; set; }
+        //public int CasoMascotaId { get; set; }
         public virtual ICollection<FotoForReturnDto> Fotos { get; set; }
     }
 }

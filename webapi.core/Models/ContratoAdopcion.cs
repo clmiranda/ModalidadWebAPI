@@ -30,7 +30,7 @@ namespace webapi.core.Models
         //public virtual EstadoAdopcion EstadoAdopcion { get; set; }
         //public int EstadoAdopcionId { get; set; }
         //public virtual ICollection<Foto> Fotos { get; set; }
-        public virtual ICollection<Seguimiento> Seguimientos { get; set; }
+        public virtual Seguimiento Seguimiento { get; set; }
         public virtual ContratoRechazo ContratoRechazo { get; set; }
         //public ContratoAdopcion()
         //{

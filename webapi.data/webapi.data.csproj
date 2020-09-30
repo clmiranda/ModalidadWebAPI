@@ -13,14 +13,28 @@
     <Compile Remove="Migrations\20200511192615_Second.Designer.cs" />
     <Compile Remove="Migrations\20200511195843_Second.cs" />
     <Compile Remove="Migrations\20200511195843_Second.Designer.cs" />
+    <Compile Remove="Migrations\20200511200256_Initial.cs" />
+    <Compile Remove="Migrations\20200511200256_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200513164632_Second.cs" />
+    <Compile Remove="Migrations\20200513164632_Second.Designer.cs" />
+    <Compile Remove="Migrations\20200513174155_Third.cs" />
+    <Compile Remove="Migrations\20200513174155_Third.Designer.cs" />
     <Compile Remove="Migrations\20200526194428_fourth.cs" />
     <Compile Remove="Migrations\20200526194428_fourth.Designer.cs" />
     <Compile Remove="Migrations\20200526195733_Fifth.cs" />
     <Compile Remove="Migrations\20200526195733_Fifth.Designer.cs" />
     <Compile Remove="Migrations\20200526200334_Fourth.cs" />
     <Compile Remove="Migrations\20200526200334_Fourth.Designer.cs" />
+    <Compile Remove="Migrations\20200526200845_Fourth.cs" />
+    <Compile Remove="Migrations\20200526200845_Fourth.Designer.cs" />
+    <Compile Remove="Migrations\20200528203737_Fifth.cs" />
+    <Compile Remove="Migrations\20200528203737_Fifth.Designer.cs" />
     <Compile Remove="Migrations\20200530150050_Sixth.cs" />
     <Compile Remove="Migrations\20200530150050_Sixth.Designer.cs" />
+    <Compile Remove="Migrations\20200530151354_Sixth.cs" />
+    <Compile Remove="Migrations\20200530151354_Sixth.Designer.cs" />
+    <Compile Remove="Migrations\20200611220613_Seventh.cs" />
+    <Compile Remove="Migrations\20200611220613_Seventh.Designer.cs" />
     <Compile Remove="Migrations\20200625214203_eighth.cs" />
     <Compile Remove="Migrations\20200625214203_eighth.Designer.cs" />
     <Compile Remove="Migrations\20200625214251_Eighth.cs" />
@@ -41,6 +55,16 @@
     <Compile Remove="Migrations\20200721203737_Eighth.Designer.cs" />
     <Compile Remove="Migrations\20200721223844_Eighth.cs" />
     <Compile Remove="Migrations\20200721223844_Eighth.Designer.cs" />
+    <Compile Remove="Migrations\20200809193413_Eighth.cs" />
+    <Compile Remove="Migrations\20200809193413_Eighth.Designer.cs" />
+    <Compile Remove="Migrations\20200817214239_Ninth.cs" />
+    <Compile Remove="Migrations\20200817214239_Ninth.Designer.cs" />
+    <Compile Remove="Migrations\20200828202525_Tenth.cs" />
+    <Compile Remove="Migrations\20200828202525_Tenth.Designer.cs" />
+    <Compile Remove="Migrations\20200929002516_Tenth.cs" />
+    <Compile Remove="Migrations\20200929002516_Tenth.Designer.cs" />
+    <Compile Remove="Migrations\20200929161252_Tenth.cs" />
+    <Compile Remove="Migrations\20200929161252_Tenth.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

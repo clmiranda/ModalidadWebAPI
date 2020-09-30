@@ -48,10 +48,10 @@ namespace webapi.business.Services.Imp
             return await _unitOfWork.MascotaRepository.GetById(id);
         }
 
-        public Task<Mascota> GetMascotaByIdCaso(int id)
-        {
-            return _unitOfWork.MascotaRepository.GetMascotaByIdCaso(id);
-        }
+        //public Task<Mascota> GetMascotaByIdCaso(int id)
+        //{
+        //    return _unitOfWork.MascotaRepository.GetMascotaByIdCaso(id);
+        //}
 
         public async Task<bool> UpdateMascota(Mascota mascota)
         {

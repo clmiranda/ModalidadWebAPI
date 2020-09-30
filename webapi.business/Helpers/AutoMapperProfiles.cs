@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using webapi.business.Dtos;
 using webapi.business.Dtos.Adopciones;
-using webapi.business.Dtos.CasosMascota;
 using webapi.business.Dtos.Denuncias;
 using webapi.business.Dtos.Fotos;
 using webapi.business.Dtos.Mascotas;
@@ -27,11 +26,11 @@ namespace webapi.business.Helpers
             CreateMap<User, UserForListDto>();
             CreateMap<User, UserForDetailedDto>();
 
-            CreateMap<CasoMascota, CasoMascotaForListDto>()
-                .ForMember(d => d.TituloDenuncia, options =>
-                  {
-                      options.MapFrom(s => s.Denuncia.Titulo);
-                  });
+            //CreateMap<CasoMascota, CasoMascotaForListDto>()
+            //    .ForMember(d => d.TituloDenuncia, options =>
+            //      {
+            //          options.MapFrom(s => s.Denuncia.Titulo);
+            //      });
             //CreateMap<Denuncia, DenunciaFilterDto>()
             //    .ForMember(d=>d.Id, options=>
             //    {
@@ -45,31 +44,31 @@ namespace webapi.business.Helpers
             //    {
             //        options.MapFrom(s => s.Descripcion);
             //    });
-            CreateMap<Denuncia, DenunciaForListDto>()
-                .ForMember(d => d.CasoMascota, options =>
-                  {
-                      options.MapFrom(s => s.CasoMascotas.FirstOrDefault());
-                  });
-            CreateMap<Denuncia, DenunciaForDetailedDto>()
-                .ForMember(d=>d.CasoMascotas, options=>
-                {
-                    options.MapFrom(s=>s.CasoMascotas.FirstOrDefault());
-                });
+            CreateMap<Denuncia, DenunciaForListDto>();
+                //.ForMember(d => d.CasoMascota, options =>
+                //  {
+                //      options.MapFrom(s => s.CasoMascotas.FirstOrDefault());
+                //  });
+            CreateMap<Denuncia, DenunciaForDetailedDto>();
+                //.ForMember(d=>d.CasoMascotas, options=>
+                //{
+                //    options.MapFrom(s=>s.CasoMascotas.FirstOrDefault());
+                //});
             CreateMap<DenunciaForDetailedDto, Denuncia>();
-            CreateMap<CasoMascota, CasoMascotaForDetailedDto>();
-            CreateMap<Mascota, MascotaForDetailedDto>()
-                .ForMember(d=>d.CasoMascotaId, options=>
-                {
-                    options.MapFrom(s=>s.CasoMascotaId);
-                })
-                .ForMember(d => d.TituloCaso, options =>
-                {
-                    options.MapFrom(s => s.CasoMascota.Titulo);
-                })
-                .ForMember(d => d.TituloDenuncia, options =>
-                {
-                    options.MapFrom(s => s.CasoMascota.Denuncia.Titulo);
-                });
+            //CreateMap<CasoMascota, CasoMascotaForDetailedDto>();
+            CreateMap<Mascota, MascotaForDetailedDto>();
+                //.ForMember(d=>d.CasoMascotaId, options=>
+                //{
+                //    options.MapFrom(s=>s.CasoMascotaId);
+                //})
+                //.ForMember(d => d.TituloCaso, options =>
+                //{
+                //    options.MapFrom(s => s.CasoMascota.Titulo);
+                //})
+                //.ForMember(d => d.TituloDenuncia, options =>
+                //{
+                //    options.MapFrom(s => s.CasoMascota.Denuncia.Titulo);
+                //});
             CreateMap<Mascota, MascotaForReturn>();
             CreateMap<Mascota, MascotaForAdopcionDto>()
                 .ForMember(d => d.Foto, options =>
