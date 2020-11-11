@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "9D9B8YlExtMLqvol5VP/Qf4no5pyPeJTIIjE1F7oIF/whAXdilJm56Jq3673OjIXsjQkwrWMcwOl8oiblhVLYg==",
+  "dgSpecHash": "0gBs6fb/vtkz2MHSqXMUMy3YbjuCR8a5aEG8QTtkU7Ep2JypkPOivUmwsFsSP3m/utzog66IgTZbA+D6fNisUA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.business\\webapi.business.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Usuario\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\7.0.0\\automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\cloudinarydotnet\\1.13.1\\cloudinarydotnet.1.13.1.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.aspnetcore.authentication.cookies\\2.2.0\\microsoft.aspnetcore.authentication.cookies.2.2.0.nupkg.sha512",

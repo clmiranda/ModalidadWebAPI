@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.ContratoRechazo;
+using webapi.business.Pagination;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 
@@ -36,36 +38,42 @@ namespace spatwebapi.Controllers
             return modelo;
         }
         [HttpGet("GetAllAdopcionesPendientes")]
-        public async Task<IEnumerable<ContratoAdopcionReturnDto>> GetAllAdopcionesPendientes() {
-            var resul = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>(await _contratoAdopcionService.GetAllAdopcionesPendientes());
-            return resul;
+        public async Task<PaginationContratoAdopcion> GetAllAdopcionesPendientes([FromQuery] ContratoAdopcionParametros parametros) {
+            //var lista = await _contratoAdopcionService.FindByCondition(x=> x.Estado.Equals("Pendiente") || x.Estado.Equals("Aprobado")).ToListAsync();
+            //var resul = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>(lista);
+            var lista = await _contratoAdopcionService.GetAll(parametros);
+            return lista;
         }
         [HttpGet("GetContratoByIdMascota/{id}")]
-        public ContratoAdopcionReturnDto GetContratoByIdMascota(int id)
+        public async Task<ActionResult<ContratoAdopcionReturnDto>> GetContratoByIdMascota(int id)
         {
-            var resul = _contratoAdopcionService.GetContratoByIdMascota(id);
+            var mascota = await _mascotaService.GetMascotaById(id);
+            if (mascota==null)
+                return NotFound();
+            var resul = await _contratoAdopcionService.FindByCondition(x=>x.Mascota.Id==id).FirstOrDefaultAsync();
             if (resul==null)
-                return null;
+                return Ok(null);
 
             var modelo = _mapper.Map<ContratoAdopcionReturnDto>(resul);
-            return modelo;
+            return Ok(modelo);
         }
         [HttpPost("GenerarContrato")]
-        public async Task<IActionResult> GenerarContrato([FromBody] ContratoAdopcionReturnDto contrato) {
-            var modelo = _mapper.Map<ContratoAdopcion>(contrato);
-            if (await _contratoAdopcionService.CreateContratoAdopcion(modelo))
+        public async Task<IActionResult> GenerarContrato([FromBody] ContratoAdopcionForCreate contrato) {
+            //var modelo = _mapper.Map<ContratoAdopcion>(contrato);
+            if (await _contratoAdopcionService.CreateContratoAdopcion(contrato))
             {
-                var mascota = await _mascotaService.GetMascotaById(modelo.MascotaId);
-                if(await _contratoAdopcionService.ContratoEstadoMascota(mascota))
-                return Ok();
-                return BadRequest("El contrato fue enviado, pero hubo un conflicto guardando algunos datos.");
+                return Ok("El contrato ha sido enviado para su revision.");
+                //var mascota = await _mascotaService.GetMascotaById(modelo.MascotaId);
+                //if(await _contratoAdopcionService.ContratoEstadoMascota(mascota))
+                //return Ok();
+                //return BadRequest("El contrato fue enviado, pero hubo un conflicto guardando algunos datos.");
             }
             return BadRequest("Ha ocurrido un error guardando los datos.");
         }
         [HttpPut("ModifyFechaContrato")]
         public async Task<IActionResult> ModifyFechaContrato([FromBody] ContratoAdopcionReturnDto contrato) {
             var modelo =await _contratoAdopcionService.GetById(contrato.Id);
-            modelo.FechaAdopcion = contrato.FechaAdopcion;
+            //modelo.FechaAdopcion = contrato.FechaAdopcion;
             if (await _contratoAdopcionService.UpdateContratoAdopcion(modelo))
             {
                 var res = _mapper.Map<ContratoAdopcionReturnDto>(modelo);
@@ -93,7 +101,7 @@ namespace spatwebapi.Controllers
             }
             return BadRequest("No se ha encontrado el Contrato.");
         }
-        [HttpPost("{id}/RechazarAdopcion")]
+        [HttpPost("RechazarAdopcion")]
         public async Task<IActionResult> RechazarAdopcion(ContratoRechazoForCreateDto contratoRechazo) {
             var modelo = await _contratoAdopcionService.GetById(contratoRechazo.ContratoAdopcionId);
             if (modelo!=null)

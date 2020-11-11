@@ -6,13 +6,25 @@ namespace webapi.core.Models
 {
     public partial class ContratoAdopcion : BaseEntity
     {
-        //public string NombreCompleto { get; set; }
-        //public string Domicilio { get; set; }
-        //public string NumeroCelular { get; set; }
-        public string RazonAdopcion { get; set; }
-        //public string Edad { get; set; }
-        public bool TerminosCondiciones { get; set; }
-        //public string Ci { get; set; }
+        //datos
+        public string Nombres { get; set; }
+        public string Apellidos { get; set; }
+        public string Ci { get; set; }
+        public string Domicilio { get; set; }
+        public string NumeroCelular { get; set; }
+
+        //preguntas
+        public string Pregunta1 { get; set; }
+        public string Pregunta2 { get; set; }
+        public string Pregunta3 { get; set; }
+        public string Pregunta4 { get; set; }
+        public string Pregunta5 { get; set; }
+        public string Pregunta6 { get; set; }
+        public string Pregunta7 { get; set; }
+
+        //parametro opcional
+        //public Foto FotoHogarMascota { get; set; }
+        //public bool TerminosCondiciones { get; set; }
         public DateTime FechaSolicitudAdopcion { get; set; }
         public DateTime FechaAdopcion { get; set; }
         //public string RazonRechazoCancelado { get; set; }
@@ -23,8 +35,8 @@ namespace webapi.core.Models
         //public int IdMascota { get; set; }
         public virtual Mascota Mascota { get; set; }
         public int MascotaId { get; set; }
-        public virtual User User { get; set; }
-        public int UserId { get; set; }
+        //public virtual User User { get; set; }
+        //public int UserId { get; set; }
 
         //public virtual DetalleAdopcion DetalleAdopcion { get; set; }
         //public virtual EstadoAdopcion EstadoAdopcion { get; set; }

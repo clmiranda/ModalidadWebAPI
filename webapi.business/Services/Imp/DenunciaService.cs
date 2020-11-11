@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Denuncias;
+using webapi.business.Helpers;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
@@ -20,25 +22,52 @@ namespace webapi.business.Services.Imp
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async  Task<IEnumerable<Denuncia>> GetAllDenuncias()
+        public async  Task<PaginationDenuncia> GetAllDenuncias(DenunciaParametros parametros)
         {
             var resul= await _unitOfWork.DenunciaRepository.GetAll()/*.Include(x=>x.CasoMascotas).ToListAsync()*/;
-            return resul;
+            var x = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul);
+            var lista = x.OrderByDescending(x => x.Titulo).AsQueryable();
+            if (String.IsNullOrEmpty(parametros.Busqueda))
+                parametros.Busqueda = "";
+            lista = lista.Where(x=>x.Titulo.ToLower().Contains(parametros.Busqueda.ToLower())|| x.Descripcion.ToLower().Contains(parametros.Busqueda.ToLower()));
+            var pagination= /*await*/ PaginationList<DenunciaForListDto>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);
+            PaginationDenuncia paginationDenuncia = new PaginationDenuncia
+            {
+                Items = pagination,
+                CurrentPage = pagination.CurrentPage,
+                PageSize = pagination.PageSize,
+                TotalPages = pagination.TotalPages,
+                TotalCount = pagination.TotalCount
+            };
+            return paginationDenuncia;
+            //return resul;
         }
         public async Task<Denuncia> GetDenunciaById(int id)
         {
             var obj= await _unitOfWork.DenunciaRepository.GetById(id);
             return obj;
         }
-        public async Task<bool> CreateDenuncia(Denuncia denuncia)
+        public async Task<Denuncia> CreateDenuncia(Denuncia denuncia)
         {
+            //Mascota m = new Mascota
+            //{
+            //    FechaAgregado = DateTime.Now.Date,
+            //    EstadoSituacion = "Inactivo"
+            //};
+            //denuncia.Mascota=m;
             _unitOfWork.DenunciaRepository.Insert(denuncia);
-            return await _unitOfWork.SaveAll();
+            //_unitOfWork.MascotaRepository.Insert(m);
+            if (await _unitOfWork.SaveAll())
+                return denuncia;
+            return null;
+
         }
-        public async Task<bool> UpdateDenuncia(Denuncia denuncia)
+        public async Task<Denuncia> UpdateDenuncia(Denuncia denuncia)
         {
             _unitOfWork.DenunciaRepository.Update(denuncia);
-            return await _unitOfWork.SaveAll();
+            if (await _unitOfWork.SaveAll())
+                return denuncia;
+            return null;
         }
         public async Task<bool> DeleteDenuncia(Denuncia denuncia)
         {

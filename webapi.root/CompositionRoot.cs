@@ -48,16 +48,19 @@ namespace webapi.root
 
             //services.AddScoped<ICasoMascotaService, CasoMascotaService>();
             services.AddScoped<IMascotaService, MascotaService>();
-            services.AddScoped<IMascotaRepository, MascotaRepository>();
+            //services.AddScoped<IMascotaRepository, MascotaRepository>();
 
             services.AddScoped<IContratoAdopcionService, ContratoAdopcionService>();
-            services.AddScoped<IContratoAdopcionRepository, ContratoAdopcionRepository>();
+            //services.AddScoped<IContratoAdopcionRepository, ContratoAdopcionRepository>();
 
             services.AddScoped<ISeguimientoService, SeguimientoService>();
             services.AddScoped<ISeguimientoRepository, SeguimientoRepository>();
 
             services.AddScoped<IReporteSeguimientoService, ReporteSeguimientoService>();
             services.AddScoped<IReporteSeguimientoRepository, ReporteSeguimientoRepository>();
+
+            services.AddScoped<IFotoService, FotoService>();
+            services.AddScoped<IFotoRepository, FotoRepository>();
 
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();

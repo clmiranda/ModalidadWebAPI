@@ -23,10 +23,10 @@ namespace webapi.business.Helpers
 			TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 			AddRange(items);
 		}
-		public static async Task<PaginationList<T>> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
+		public static PaginationList<T> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
 		{
-			var count = await source.CountAsync();
-			var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+			var count = source.Count();
+			var items =  source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
 			return new PaginationList<T>(items, count, pageNumber, pageSize);
 		}
 	}

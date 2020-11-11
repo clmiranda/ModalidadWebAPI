@@ -77,6 +77,7 @@ namespace webapi.business.Helpers
                 });
             CreateMap<ContratoAdopcionReturnDto, ContratoAdopcion>();
             CreateMap<ContratoAdopcion, ContratoAdopcionReturnDto>();
+            CreateMap<ContratoAdopcionForCreate, ContratoAdopcion>();
             CreateMap<Seguimiento, SeguimientoForReturnDto>();
                 //.ForMember(d=>d.CantidadReportes, options=>
                 //{
@@ -86,6 +87,7 @@ namespace webapi.business.Helpers
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
             CreateMap<ReporteSeguimientoForCreate, ReporteSeguimiento>();
             CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
+            CreateMap<MascotaForCreationDto, Mascota>();
         }
     }
 }

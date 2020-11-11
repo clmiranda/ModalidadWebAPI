@@ -12,6 +12,7 @@ namespace webapi.business.Dtos.Denuncias
         public string Titulo { get; set; }
         public string Descripcion { get; set; }
         public virtual MascotaForDetailedDto Mascota { get; set; }
+        public int MascotaId { get; set; }
         //public virtual CasoMascotaForDetailedDto CasoMascota { get; set; }
         //public DenunciaForListDto()
         //{

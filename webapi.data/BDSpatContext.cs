@@ -99,7 +99,7 @@ namespace webapi.data
                 //entity.Property(e => e.NombreCompleto).HasMaxLength(3000);
                 //entity.Property(e => e.Domicilio).HasMaxLength(3000);
                 //entity.Property(e => e.NumeroCelular).HasMaxLength(50);
-                entity.Property(e => e.RazonAdopcion).HasMaxLength(300);
+                entity.Property(e => e.Pregunta7).HasMaxLength(300);
                 entity.Property(e => e.Estado).HasMaxLength(50);
                 //entity.Property(e => e.Ci).HasMaxLength(50);
                 //entity.HasIndex(e => e.Ci).IsUnique();
@@ -164,6 +164,7 @@ namespace webapi.data
                 entity.Property(e => e.Tamaño).HasMaxLength(100);
                 entity.Property(e => e.Edad).HasMaxLength(50);
                 entity.Property(e => e.EstadoSituacion).HasMaxLength(50);
+                //entity.HasOne(e => e.ContratoAdopcion).WithOne(e => e.Mascota).HasForeignKey<ContratoAdopcion>(c=>c.Id);
                 //entity.HasOne(d => d.CasoMascota)
                 //    .WithMany(p => p.Mascotas)
                 //    .HasForeignKey(d => d.IdCasoMascota)
@@ -186,7 +187,7 @@ namespace webapi.data
             {
                 //entity.HasKey(e => e.IdReporteSeguimiento);
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Descripcion).HasMaxLength(10000);
+                entity.Property(e => e.Observaciones).HasMaxLength(10000);
                 entity.Property(e => e.Estado).HasMaxLength(50);
                 //entity.HasOne(d => d.User)
                 //    .WithMany(p => p.ReporteSeguimientos)

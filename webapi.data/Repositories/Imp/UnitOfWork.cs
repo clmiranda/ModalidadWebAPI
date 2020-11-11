@@ -18,11 +18,12 @@ namespace webapi.data.Repositories.Imp
         private IRepository<Book> _bookRepository;
         private IRepository<Denuncia> _denunciaRepository;
         //private ICasoMascotaRepository _casoMascotaRepository;
-        private IMascotaRepository _mascotaRepository;
-        private IContratoAdopcionRepository _contratoAdopcionRepository;
+        private IRepository<Mascota> _mascotaRepository;
+        private IRepository<ContratoAdopcion> _contratoAdopcionRepository;
         private ISeguimientoRepository _seguimientoRepository;
         private IReporteSeguimientoRepository _reporteSeguimientoRepository;
         private IRepository<ContratoRechazo> _contratoRechazoRepository;
+        private IFotoRepository _fotoRepository;
         public UnitOfWork(BDSpatContext databaseContext,
             SignInManager<User> signInManager, UserManager<User> userManager)
         {
@@ -54,13 +55,13 @@ namespace webapi.data.Repositories.Imp
         //{
         //    get { return _casoMascotaRepository = _casoMascotaRepository ?? new CasoMascotaRepository(_databaseContext); }
         //}
-        public IMascotaRepository MascotaRepository
+        public IRepository<Mascota> MascotaRepository
         {
-            get { return _mascotaRepository = _mascotaRepository ?? new MascotaRepository(_databaseContext); }
+            get { return _mascotaRepository = _mascotaRepository ?? new Repository<Mascota>(_databaseContext); }
         }
-        public IContratoAdopcionRepository ContratoAdopcionRepository
+        public IRepository<ContratoAdopcion> ContratoAdopcionRepository
         {
-            get { return _contratoAdopcionRepository = _contratoAdopcionRepository ?? new ContratoAdopcionRepository(_databaseContext); }
+            get { return _contratoAdopcionRepository = _contratoAdopcionRepository ?? new Repository<ContratoAdopcion>(_databaseContext); }
         }
         public ISeguimientoRepository SeguimientoRepository
         {
@@ -74,6 +75,11 @@ namespace webapi.data.Repositories.Imp
         public IRepository<ContratoRechazo> ContratoRechazoRepository
         {
             get { return _contratoRechazoRepository = _contratoRechazoRepository ?? new Repository<ContratoRechazo>(_databaseContext); }
+        }
+
+        public IFotoRepository FotoRepository
+        {
+            get { return _fotoRepository = _fotoRepository ?? new FotoRepository(_databaseContext); }
         }
 
         public async Task<bool> SaveAll()

@@ -153,6 +153,15 @@ namespace webapi.data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Apellidos")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ci")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Domicilio")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Estado")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
@@ -166,21 +175,38 @@ namespace webapi.data.Migrations
                     b.Property<int>("MascotaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("RazonAdopcion")
+                    b.Property<string>("Nombres")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeroCelular")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pregunta1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pregunta2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pregunta3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pregunta4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pregunta5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pregunta6")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pregunta7")
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
-                    b.Property<bool>("TerminosCondiciones")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("MascotaId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("MascotaId")
+                        .IsUnique();
 
                     b.ToTable("ContratoAdopcion");
                 });
@@ -338,16 +364,25 @@ namespace webapi.data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("nvarchar(max)")
-                        .HasMaxLength(10000);
-
                     b.Property<string>("Estado")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("FechaReporte")
+                    b.Property<string>("EstadoHogarMascota")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EstadoMascota")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaAsignada")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaRealizada")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observaciones")
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(10000);
 
                     b.Property<int?>("SeguimientoId")
                         .HasColumnType("int");
@@ -583,14 +618,8 @@ namespace webapi.data.Migrations
             modelBuilder.Entity("webapi.core.Models.ContratoAdopcion", b =>
                 {
                     b.HasOne("webapi.core.Models.Mascota", "Mascota")
-                        .WithMany("ContratoAdopciones")
-                        .HasForeignKey("MascotaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("webapi.core.Models.User", "User")
-                        .WithMany("ContratoAdopciones")
-                        .HasForeignKey("UserId")
+                        .WithOne("ContratoAdopcion")
+                        .HasForeignKey("webapi.core.Models.ContratoAdopcion", "MascotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
