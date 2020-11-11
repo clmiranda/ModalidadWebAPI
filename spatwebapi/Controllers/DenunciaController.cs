@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using webapi.business.Dtos;
 using webapi.business.Dtos.Denuncias;
+using webapi.business.Helpers;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 
@@ -29,10 +30,14 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAllDenuncias")]
-        public async Task<IEnumerable<DenunciaForListDto>> GetAllDenuncias() {
-            var resul= await _denunciaService.GetAllDenuncias();
-            var lista = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul);
-            return lista;
+        public async Task<PaginationDenuncia> GetAllDenuncias([FromQuery]DenunciaParametros parametros) {
+            //var resul= await _denunciaService.GetAllDenuncias();
+            //var lista = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul);
+            //return lista;
+            var resul = await _denunciaService.GetAllDenuncias(parametros);
+            //var lista = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul.Items);
+            return resul;
+
         }
         //[HttpGet("GetAllDenunciasFilter")]
         //public async Task<IEnumerable<DenunciaFilterDto>> GetAllDenunciasFilter()
@@ -55,18 +60,20 @@ namespace spatwebapi.Controllers
         [HttpPost("CreateDenuncia")]
         public async Task<IActionResult> CreateDenuncia(Denuncia denuncia)
         {
-            if (await _denunciaService.CreateDenuncia(denuncia))
-                return Ok("La denuncia fue creada de manera exitosa");
-            else
-                return BadRequest("Hubo problemas al registrar.");
+            var d = await _denunciaService.CreateDenuncia(denuncia);
+            if (d.Equals(null))
+                return BadRequest("Hubo problemas al crear la denuncia.");
+
+            return Ok(d);
         }
         [HttpPut("UpdateDenuncia/{id}")]
         public async Task<IActionResult> UpdateDenuncia(Denuncia denuncia)
         {
-            if (await _denunciaService.UpdateDenuncia(denuncia))
-                return Ok("La denuncia fue modificada de manera exitosa");
-            else
-                return BadRequest("Hubo problemas al modificar el registro.");
+            var d=await _denunciaService.UpdateDenuncia(denuncia);
+            if (d.Equals(null))
+                return BadRequest("Hubo problemas al modificar la denuncia.");
+
+            return Ok(d);
         }
         [HttpDelete("DeleteDenuncia/{id}")]
         public async Task<IActionResult> DeleteDenuncia(int id)

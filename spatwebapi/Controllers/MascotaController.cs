@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using webapi.business.Dtos.Mascotas;
+using webapi.business.Helpers;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 
@@ -15,85 +15,121 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class MascotaController : ControllerBase
     {
         private IMascotaService _mascotaService;
+        private IDenunciaService _denunciaService;
         private readonly IMapper _mapper;
-        public MascotaController(IMascotaService mascotaService, IMapper mapper)
+        public MascotaController(IMascotaService mascotaService, IMapper mapper,
+            IDenunciaService denunciaService)
         {
             _mascotaService = mascotaService;
+            _denunciaService = denunciaService;
             _mapper = mapper;
         }
         [HttpGet("GetAllMascotas")]
-        public IEnumerable<MascotaForReturn> GetAllMascotas()
+        public IEnumerable<MascotaForDetailedDto> GetAllMascotas()
         {
-            var lista = _mascotaService.GetAllMascotas();
-            var resul = _mapper.Map<IEnumerable<MascotaForReturn>>(lista);
+            var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
+            var resul = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
             return resul;
         }
 
+        //[HttpGet("GetMascota/{id}")]
+        //public ActionResult<Mascota> GetMascota(int id)
+        //{
+        //    var obj = _mascotaService.FindByCondition(x=>x.Id==id);
+        //    if (obj == null) return null;
+        //    var resul = _mapper.Map<MascotaForDetailedDto>(obj);
+        //    return Ok(resul);
+        //}
         [HttpGet("GetMascota/{id}")]
-        public async Task<MascotaForDetailedDto> GetMascota(int id)
+        public MascotaForDetailedDto GetMascota(int id)
         {
-            var obj = await _mascotaService.GetMascotaById(id);
+            var obj = _mascotaService.FindByCondition(x => x.Id == id).FirstOrDefault();
             if (obj == null) return null;
             var resul = _mapper.Map<MascotaForDetailedDto>(obj);
             return resul;
         }
-        [HttpGet("GetMascotaAdopcion/{id}")]
-        public async Task<MascotaForReturn> GetMascotaAdopcion(int id)
+        [HttpGet("GetMascotaDenuncia/{id}")]
+        public async Task<ActionResult<MascotaForDetailedDto>> GetMascotaDenuncia(int id)
         {
-            var obj = await _mascotaService.GetMascotaById(id);
-            if (obj == null) return null;
-            var resul = _mapper.Map<MascotaForReturn>(obj);
+            var denuncia =await _denunciaService.GetDenunciaById(id);
+            if (denuncia == null)
+                return NotFound();
+            var obj = _mascotaService.FindByCondition(x => x.DenunciaId == id).FirstOrDefault();
+            if (obj == null) return Ok(null);
+            var resul = _mapper.Map<MascotaForDetailedDto>(obj);
+            return Ok(resul);
+        }
+
+        [HttpGet("GetLastRegister")]
+        public MascotaForDetailedDto GetLastRegister()
+        {
+            var obj = _mascotaService.GetAllMascotas().Result.LastOrDefault();
+            if (obj == null)
+                return null;
+            var resul = _mapper.Map<MascotaForDetailedDto>(obj);
             return resul;
         }
 
         //Retornar el nombre de la mascota con su foto principal la cual tiene q establecerse
         //desde la vista de agregar mascota la principal
         [HttpGet("GetAllMascotaAdopcion")]
-        public IEnumerable<MascotaForAdopcionDto> GetAllMascotaAdopcion()
+        [AllowAnonymous]
+        public async Task<PaginationMascota> GetAllMascotaAdopcion([FromQuery] MascotaParametros parametros)
         {
-            var lista = _mascotaService.GetAllMascotaAdopcion();
-            var resul = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(lista);
+            //var lista = _mascotaService.FindByCondition(x=>x.EstadoSituacion.Equals("Activo") && x.ContratoAdopcion==null).ToList();
+            //var resul = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(lista);
+            var resul = await _mascotaService.GetAllMascotas(parametros);
             return resul;
         }
 
         // POST: api/CasoMascota
         [HttpPost("CreateMascota")]
-        public async Task<IActionResult> CreateMascota([FromBody] Mascota mascota)
+        public async Task<IActionResult> CreateMascota([FromBody] Mascota mascotaDto)
         {
-            if (await _mascotaService.CreateMascota(mascota))
-            {
-                return Ok(new { mensaje = "El registro de la mascota fue realizado de manera exitosa.", id = _mascotaService.GetIdLastMascota() });
-            }
-            else
-                return BadRequest("Hubo problemas al realizar el Registro de la Mascota.");
+            var mascota = await _mascotaService.CreateMascota(mascotaDto);
+            if (mascota.Equals(null))
+                return BadRequest("Hubo problemas al crear la Mascota.");
+
+            return Ok(mascota);
+            //if (await _mascotaService.CreateMascota(mascota))
+            //{
+            //return Ok(new { mensaje = "El registro de la mascota fue realizado de manera exitosa.", id = _mascotaService.GetIdLastMascota() });
+            //}
+            //else
+            //    return BadRequest("Hubo problemas al realizar el Registro de la Mascota.");
         }
-        [HttpPut("UpdateMascota/{id}")]
-        public async Task<IActionResult> UpdateMascota([FromBody] Mascota mascota)
+        [HttpPut("UpdateMascota")]
+        public async Task<ActionResult> UpdateMascota([FromBody] Mascota mascota)
         {
-            if (await _mascotaService.UpdateMascota(mascota))
-                return Ok("El Registro de la Mascota fue modificado de manera exitosa.");
-            else
+            //var m= await _mascotaService.GetMascotaById(mascota.Id);
+            //if (m == null) return null;
+            var update = await _mascotaService.UpdateMascota(mascota);
+            if (update.Equals(null))
                 return BadRequest("Hubo problemas al Modificar el Registro de la Mascota.");
+            else
+                return Ok(update);
         }
         [HttpPut("ChangeStateSituacion/{id}")]
         public async Task<IActionResult> ChangeStateSituacion([FromBody] string estado, int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
-            mascota.EstadoSituacion = estado;
-            if (await _mascotaService.UpdateMascota(mascota))
-                return Ok("El Estado de la Mascota "+mascota.Nombre+ " fue modificado a "+estado+".");
+            //mascota.EstadoSituacion = estado;
+            if (mascota == null)
+                return NotFound("No se encontro la Mascota.");
+            if (await _mascotaService.ChangeEstado(estado, id))
+                return Ok("El estado de la Mascota " + mascota.Nombre + " se modifico correctamente.");
             else
-                return BadRequest("Hubo problemas al Modificar el Estado de la Mascota "+mascota.Nombre+".");
+                return BadRequest("Hubo problemas al modificar el estado de la Mascota " + mascota.Nombre + ".");
         }
         [HttpDelete("DeleteMascota/{id}")]
         public async Task<IActionResult> DeleteMascota(int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
-            //int valor = mascota.CasoMascotaId;
+            if (mascota == null)
+                return NotFound("La Mascota no fue encontrada.");
             if (await _mascotaService.DeleteMascota(mascota))
                 return Ok(/*new { mensaje = */"El Registro de la Mascota fue eliminado de manera exitosa."/*, idcaso = valor }*/);
             else

@@ -145,7 +145,7 @@ namespace webapi.business.Services.Imp
             var voluntarios = resul.OrderByDescending(x=>x.Nombres).AsQueryable();
             voluntarios = voluntarios.Where(x=>x.Nombres.Contains(voluntarioParameters.Busqueda) || x.Apellidos.Contains(voluntarioParameters.Busqueda));
 
-            return await PaginationList<User>.ToPagedList(voluntarios, voluntarioParameters.PageNumber, voluntarioParameters.PageSize);
+            return /*await*/ PaginationList<User>.ToPagedList(voluntarios, voluntarioParameters.PageNumber, voluntarioParameters.PageSize);
         }
     }
 }

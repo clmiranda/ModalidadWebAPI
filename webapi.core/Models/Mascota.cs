@@ -25,7 +25,7 @@ namespace webapi.core.Models
         public virtual Denuncia Denuncia { get; set; }
         public int DenunciaId { get; set; }
         public virtual ICollection<Foto> Fotos { get; set; }
-        public virtual ICollection<ContratoAdopcion> ContratoAdopciones { get; set; }
+        public virtual ContratoAdopcion ContratoAdopcion { get; set; }
         //public virtual ICollection<CasoMascota> CasoMascotas { get; set; }
         //public virtual ICollection<DetalleAdopcion> DetalleAdopciones { get; set; }
     }

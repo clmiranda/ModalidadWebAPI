@@ -32,12 +32,12 @@ namespace webapi.business.Services.Imp
         }
         public IEnumerable<ReporteSeguimientoForReturn> GetReportesForAdmin(int id)
         {
-            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id).OrderBy(y => y.FechaReporte.Date).ToList());
+            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id).OrderBy(y => y.FechaRealizada.Date).ToList());
             return lista;
         }
         public IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id)
         {
-            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id && x.Estado.Equals("Asignado")).ToList().OrderBy(y => y.FechaReporte.Date));
+            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id && x.Estado.Equals("Asignado")).ToList().OrderBy(y => y.FechaRealizada.Date));
             return lista;
         }
         public async Task<bool> CreateReporteSeguimiento(ReporteSeguimientoForCreate reporteDto) {
@@ -51,7 +51,7 @@ namespace webapi.business.Services.Imp
             var modelo = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporte.Id);
             if (modelo.Seguimiento.FechaInicio.Date<= reporte.FechaReporte.Date && modelo.Seguimiento.FechaConclusion.Date >= reporte.FechaReporte.Date)
             {
-                if (!modelo.Seguimiento.ReporteSeguimientos.Any(x=>x.FechaReporte.Date== reporte.FechaReporte.Date && !x.Estado.Equals("Activo")))
+                if (!modelo.Seguimiento.ReporteSeguimientos.Any(x=>x.FechaRealizada.Date== reporte.FechaReporte.Date && !x.Estado.Equals("Activo")))
                     return true;
 
                 return false;
@@ -78,7 +78,7 @@ namespace webapi.business.Services.Imp
         public async Task<bool> UpdateReporteSeguimientoVoluntario(ReporteSeguimientoForUpdate reporte)
         {
             var modelo = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporte.Id);
-            modelo.Descripcion = reporte.Descripcion;
+            modelo.Observaciones = reporte.Descripcion;
             modelo.Estado = reporte.Estado;
             _unitOfWork.ReporteSeguimientoRepository.Update(modelo);
             return await _unitOfWork.SaveAll();
@@ -86,7 +86,7 @@ namespace webapi.business.Services.Imp
         public async Task<bool> UpdateReporteSeguimientoAdmin(ReporteSeguimientoForUpdateAdmin reporte)
         {
             var modelo = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporte.Id);
-            modelo.FechaReporte = reporte.FechaReporte.Date;
+            modelo.FechaRealizada = reporte.FechaReporte.Date;
             modelo.Estado = reporte.Estado;
             _unitOfWork.ReporteSeguimientoRepository.Update(modelo);
             return await _unitOfWork.SaveAll();
