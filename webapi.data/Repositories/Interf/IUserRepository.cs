@@ -13,9 +13,10 @@ namespace webapi.data.Repositories.Interf
     {
         IQueryable<User> FindByCondition(Expression<Func<User, bool>> expression);
         //IEnumerable<User> GetAllVoluntarios();
-        Task<IdentityResult> CreateUser(User u, string password);
+        Task<IdentityResult> PostUsuario(User u, string password);
+        Task<IdentityResult> UpdateUsuario(User u);
         Task<string> GenerateEmailToken(User u);
-        Task<string> GeneratePasswordResetToken(User u);
+        Task<string> GeneratePasswordResetToken(User usuario);
         Task<User> FindById(string userId);
         Task<User> FindByName(string userName);
         Task<User> FindByEmail(string userEmail);
@@ -27,6 +28,8 @@ namespace webapi.data.Repositories.Interf
         Task<Foto> GetFoto(int id);
         void DeleteFoto(int id);
         void AddRole(User user);
+
+        Task<IEnumerable<User>> GetRolesUsuarios();
 
 
         //crud

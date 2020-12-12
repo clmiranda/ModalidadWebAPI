@@ -34,9 +34,13 @@ namespace webapi.data.Repositories.Imp
             return await _userManager.ConfirmEmailAsync(u, token);
         }
 
-        public async Task<IdentityResult> CreateUser(User u, string password)
+        public async Task<IdentityResult> PostUsuario(User u, string password)
         {
             return await _userManager.CreateAsync(u, password);
+        }
+        public async Task<IdentityResult> UpdateUsuario(User u)
+        {
+            return await _userManager.UpdateAsync(u);
         }
 
         public async Task<User> FindByEmail(string userEmail)
@@ -59,9 +63,9 @@ namespace webapi.data.Repositories.Imp
             return await _userManager.GenerateEmailConfirmationTokenAsync(u);
         }
 
-        public async Task<string> GeneratePasswordResetToken(User u)
+        public async Task<string> GeneratePasswordResetToken(User usuario)
         {
-            return await _userManager.GeneratePasswordResetTokenAsync(u);
+            return await _userManager.GeneratePasswordResetTokenAsync(usuario);
         }
 
         public async Task<IList<string>> GetRoles(User user)
@@ -134,6 +138,24 @@ namespace webapi.data.Repositories.Imp
         {
             //return entities.Where(expression).AsNoTracking();
             return _context.Users.Where(expression).AsQueryable();
+        }
+
+        public async Task<IEnumerable<User>> GetRolesUsuarios()
+        {
+            //var lista = await _context.Users
+            //    .Select(x => new
+            //    {
+            //        Id = x.Id,
+            //        UserName = x.UserName,
+            //        Roles = (from RolUsuario in x.UserRoles
+            //                 join Rol in _context.Roles
+            //                 on RolUsuario.RoleId
+            //                 equals Rol.Id
+            //                 select Rol.Name).ToList()
+
+            //    }).ToListAsync();
+            var listado = await _userManager.Users.ToListAsync();
+            return listado;
         }
         //public IEnumerable<User> GetAllVoluntarios()
         //{

@@ -14,12 +14,16 @@ namespace webapi.business.Services.Interf
         Task<PaginationList<User>> GetAllVoluntarios(VoluntarioParameters voluntarioParameters);
         Task<User> Login(UserForLoginDto userforLogin);
         Task<object> GenerateJwtToken(User user, string security);
-        Task<IdentityResult> RegisterUser(UserForRegisterDto user); //dto
+        Task<IdentityResult> PostUsuario(UserForRegisterDto user);
+        Task<IdentityResult> UpdateUsuario(UserUpdateDto userDto);
         Task<UserTokenToReturnDto> GetEmailToken(string email);
         Task<IdentityResult> ConfirmEmail(string userId, string token);
         Task<string> ForgotPassword(ForgotPasswordDto email);
-        Task<IdentityResult> ResetPassword(ResetPasswordDto reset);
+        Task<IdentityResult> ResetPassword(int id, string password);
+        Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto reset);
         Task<User> GetUsuario(int id);
+        IEnumerable<User> GetAll();
+        Task<IEnumerable<User>> GetRolesUsuarios();
         //Task<bool> UpdateUser(int id, UserForUpdateDto userForUpdateDto);
         //Task<PagedList<User>> GetUsers(UserParams userParams);
     }

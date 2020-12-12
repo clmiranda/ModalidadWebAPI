@@ -8,7 +8,7 @@ namespace webapi.business.Helpers
 {
     public class PaginationDenuncia
     {
-		public IEnumerable<DenunciaForListDto> Items { get; set; }
+		public IEnumerable<Denuncia> Items { get; set; }
 		public int CurrentPage { get;  set; }
 		public int TotalPages { get;  set; }
 		public int PageSize { get;  set; }

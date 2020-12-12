@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using webapi.business.Dtos;
 using webapi.business.Dtos.Adopciones;
+using webapi.business.Dtos.ContratoRechazo;
 using webapi.business.Dtos.Denuncias;
 using webapi.business.Dtos.Fotos;
 using webapi.business.Dtos.Mascotas;
@@ -24,7 +25,12 @@ namespace webapi.business.Helpers
             CreateMap<UserForRegisterDto, User>();
             CreateMap<User, UserTokenToReturnDto>();
             CreateMap<User, UserForListDto>();
-            CreateMap<User, UserForDetailedDto>();
+            CreateMap<User, UserForDetailedDto>()
+                .ForMember(d => d.Edad, options =>
+              {
+                  options.MapFrom(s => s.FechaNacimiento.CalculoEdad());
+              });
+            CreateMap<UserUpdateDto, User>();
 
             //CreateMap<CasoMascota, CasoMascotaForListDto>()
             //    .ForMember(d => d.TituloDenuncia, options =>
@@ -84,10 +90,22 @@ namespace webapi.business.Helpers
                 //    options.MapFrom(s=>s.ReporteSeguimientos.Count());
                 //});
             CreateMap<ContratoAdopcion, ContratoAdopcionForList>();
+            CreateMap<ContratoAdopcion, ContratoAdopcionForDetailDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
             CreateMap<ReporteSeguimientoForCreate, ReporteSeguimiento>();
             CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
             CreateMap<MascotaForCreationDto, Mascota>();
+            CreateMap<ContratoRechazo, ContratoRechazoForReturnDto>();
+            CreateMap<User, UserRolesForReturn>()
+                .ForMember(dest => dest.Edad, opt =>
+                {
+                    opt.MapFrom(d => d.FechaNacimiento.CalculoEdad());
+                })
+                .ForMember(dest => dest.Roles, opt =>
+                {
+                    opt.MapFrom(d => d.UserRoles.Select((role) => new
+                    { name = role.Role.Name }).Select(x => x.name));
+                });
         }
     }
 }

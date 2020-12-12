@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +21,13 @@ namespace spatwebapi.Controllers
     {
         private readonly IConfiguration _config;
         private IUserService _userService;
-        public AuthController(IConfiguration config, IUserService userService)
+        private IMapper _mapper;
+        public AuthController(IConfiguration config, IUserService userService,
+            IMapper mapper)
         {
             _config = config;
             _userService = userService;
+            _mapper = mapper;
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userforLogin)
@@ -35,10 +39,10 @@ namespace spatwebapi.Controllers
 
             return Ok(aux);
         }
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(UserForRegisterDto userforRegisterDto)
+        [HttpPost("PostUsuario")]
+        public async Task<IActionResult> PostUsuario([FromBody]UserForRegisterDto userforRegisterDto)
         {
-            var result = await _userService.RegisterUser(userforRegisterDto);
+            var result = await _userService.PostUsuario(userforRegisterDto);
             if (result.Succeeded)
             {
                 var userToCreate = await _userService.GetEmailToken(userforRegisterDto.Email);
@@ -47,7 +51,7 @@ namespace spatwebapi.Controllers
                 string subject = "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.";
                 string body = "Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.";
                 SendEmail.SendEmailConfirmation(subject, body, confirmationLink, userforRegisterDto.Email);
-                return Ok("Un Email ha sido enviado a su Correo Electrónico, debe ingresar al enlace enviado para confirmar su Cuenta.");
+                return Ok(/*"Un Email de confirmacion de la cuenta ha sido enviado al Correo Electronico."*/);
             }
             else
                 return BadRequest(result.Errors);
@@ -76,13 +80,13 @@ namespace spatwebapi.Controllers
                 return BadRequest("El email ingresado aún no ha sido confirmado.");
             else
             {
-                var passwordResetLink = Url.Action("ValidateResetPassword", "Auth",
+                var linkReseteo = Url.Action("ValidateResetPassword", "Auth",
                         new { email = email.Email, token = token }, Request.Scheme);
 
                 string subject = "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.";
-                string body = "Accede a este enlace para poder reestablecer tu contraseña";
-                SendEmail.SendEmailConfirmation(subject, body, passwordResetLink, email.Email);
-                return Ok("Un Email ha sido enviado a su Correo Electrónico, debe ingresar al enlace enviado para reestablecer su Contraseña");
+                string body = "Accede a este enlace para poder reestablecer tu contraseña.";
+                SendEmail.SendEmailConfirmation(subject, body, linkReseteo, email.Email);
+                return Ok(/*"Un Email ha sido enviado a su Correo Electrónico, debe ingresar al enlace enviado para reestablecer su Contraseña."*/);
             }
         }
         [HttpGet("ValidateResetPassword")]
@@ -90,14 +94,14 @@ namespace spatwebapi.Controllers
         {
             return Redirect("https://localhost:44382/Cuenta/ResetPassword?email=" + email + "&token=" + token);
         }
-        [HttpPost("resetPassword")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordDto reset)
+        [HttpPost("ResetPasswordExterno")]
+        public async Task<IActionResult> ResetPasswordExterno(ResetPasswordDto reset)
         {
-            var result = await _userService.ResetPassword(reset);
+            var result = await _userService.ResetPasswordExterno(reset);
             if (reset == null)
                 return BadRequest("El Usuario o Token es inválido.");
             if (result.Succeeded)
-                return Ok("Su contraseña se ha restaurado de manera correcta.");
+                return Ok(/*"Su contraseña se ha restaurado de manera correcta."*/);
             else return BadRequest(result.Errors);
         }
     }

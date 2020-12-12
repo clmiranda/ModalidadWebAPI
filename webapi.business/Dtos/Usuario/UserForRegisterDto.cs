@@ -7,26 +7,27 @@ namespace webapi.business.Dtos.Usuario
 {
     public class UserForRegisterDto
     {
-        [Required]
-        [StringLength(100)]
+        //[Required]
+        //[StringLength(100)]
         public string Email { set; get; }
-        [Required]
-        public string Username { set; get; }
-        [Required]
-        [StringLength(8, MinimumLength = 4, ErrorMessage = "Su Contraseña de tener entre 4 y 8 caracteres!")]
+        //[Required]
+        public string UserName { set; get; }
+        //[Required]
+        //[StringLength(8, MinimumLength = 4, ErrorMessage = "Su Contraseña de tener entre 4 y 8 caracteres!")]
         public string Password { set; get; }
-        [Required]
+        //[Required]
         public string Nombres { get; set; }
-        [Required]
+        //[Required]
         public string Apellidos { get; set; }
-        [Required]
+        //[Required]
         public string Domicilio { get; set; }
-        [Required]
+        //[Required]
         public string NumeroCelular { get; set; }
-        [Required]
-        public string Edad { get; set; }
-        public string Estado { get; set; }
-        [Required]
+        //[Required]
         public string Sexo { get; set; }
+        //[Required]
+        public DateTime FechaNacimiento { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public string Estado { get; set; }
     }
 }

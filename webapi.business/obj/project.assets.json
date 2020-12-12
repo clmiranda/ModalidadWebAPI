@@ -6817,6 +6817,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
             "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.core\\webapi.core.csproj": {
               "projectPath": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.core\\webapi.core.csproj"
@@ -6835,6 +6836,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "CloudinaryDotNet": {
             "target": "Package",
@@ -6872,7 +6874,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

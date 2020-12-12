@@ -62,6 +62,9 @@ namespace webapi.root
             services.AddScoped<IFotoService, FotoService>();
             services.AddScoped<IFotoRepository, FotoRepository>();
 
+            services.AddScoped<IRolUserService, RolUserService>();
+            services.AddScoped<IRolUserRepository, RolUserRepository>();
+
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -72,12 +75,12 @@ namespace webapi.root
         {
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {
-                opt.Password.RequireDigit = false;
-                opt.Password.RequiredLength = 4;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequireUppercase = false;
+                opt.Password.RequireDigit = true;
+                opt.Password.RequiredLength = 8;
+                opt.Password.RequireNonAlphanumeric = true;
+                opt.Password.RequireUppercase = true;
 
-                opt.SignIn.RequireConfirmedEmail = false;
+                opt.SignIn.RequireConfirmedEmail = true;
                 opt.User.RequireUniqueEmail = false;
             }).AddDefaultTokenProviders().AddErrorDescriber<CustomIdentityErrorDescriber>();
 

@@ -19,9 +19,10 @@ namespace webapi.business.Helpers
                 //create roles
                 var roles = new List<Role>
                 {
-                    new Role{Name="Admin"},
+                    new Role{Name="SuperAdministrador"},
+                    new Role{Name="Administrador"},
                     new Role{Name="Voluntario"},
-                    new Role{Name="Adoptante"},
+                    new Role{Name="Moderador"}
                 };
 
                 foreach (var item in roles)
@@ -36,8 +37,10 @@ namespace webapi.business.Helpers
                 if (result.Succeeded)
                 {
                     var admin = userManager.FindByNameAsync("Admin").Result;
-                    userManager.AddToRoleAsync(admin, "Admin").Wait();
+                    userManager.AddToRoleAsync(admin, "SuperAdministrador").Wait();
+                    userManager.AddToRoleAsync(admin, "Administrador").Wait();
                     userManager.AddToRoleAsync(admin, "Voluntario").Wait();
+                    userManager.AddToRoleAsync(admin, "Moderador").Wait();
                 }
             }
         }
@@ -48,6 +51,9 @@ namespace webapi.business.Helpers
             u.Apellidos = "Admin";
             u.Estado = "Activo";
             u.UserName = "admin";
+            u.Email = "miranda76575@gmail.com";
+            u.EmailConfirmed = true;
+            u.FechaCreacion = DateTime.Now;
 
             return u;
         }

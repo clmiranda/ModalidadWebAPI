@@ -28,5 +28,13 @@ namespace webapi.business.Helpers
                 JsonConvert.SerializeObject(paginationHeader, camelCaseFormatter));
             response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
         }
+        public static int CalculoEdad(this DateTime theDateTime)
+        {
+            var age = DateTime.Today.Year - theDateTime.Year;
+            if (theDateTime.AddYears(age) > DateTime.Today)
+                age--;
+
+            return age;
+        }
     }
 }

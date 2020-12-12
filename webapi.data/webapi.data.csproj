@@ -69,6 +69,8 @@
     <Compile Remove="Migrations\20201030221538_Third.Designer.cs" />
     <Compile Remove="Migrations\20201030223448_Third.cs" />
     <Compile Remove="Migrations\20201030223448_Third.Designer.cs" />
+    <Compile Remove="Migrations\20201121220742_UserChangesColumns.cs" />
+    <Compile Remove="Migrations\20201121220742_UserChangesColumns.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

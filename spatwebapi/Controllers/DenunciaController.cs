@@ -30,13 +30,16 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAllDenuncias")]
-        public async Task<PaginationDenuncia> GetAllDenuncias([FromQuery]DenunciaParametros parametros) {
+        public async Task<ActionResult> GetAllDenuncias([FromQuery]DenunciaParametros parametros) {
             //var resul= await _denunciaService.GetAllDenuncias();
             //var lista = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul);
             //return lista;
             var resul = await _denunciaService.GetAllDenuncias(parametros);
-            //var lista = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul.Items);
-            return resul;
+            var lista = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul);
+            Response.AddPagination(resul.CurrentPage, resul.PageSize,
+                 resul.TotalCount, resul.TotalPages);
+            //_mapper.Map<IEnumerable<DenunciaForListDto>>(resul.Items);
+            return Ok(lista);
 
         }
         //[HttpGet("GetAllDenunciasFilter")]

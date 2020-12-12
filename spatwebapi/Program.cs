@@ -33,7 +33,7 @@ namespace spatwebapi
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "Ha ocurrido un error durante la migracion");
+                    logger.LogError(ex, "Ha ocurrido un error durante la migracion.");
                 }
             }
 

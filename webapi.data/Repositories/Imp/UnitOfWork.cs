@@ -11,8 +11,8 @@ namespace webapi.data.Repositories.Imp
     public class UnitOfWork: IUnitOfWork
     {
         private readonly BDSpatContext _databaseContext;
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManejador;
+        private readonly SignInManager<User> _signInManejador;
         private IUserRepository _userRepository;
         private IAuthorRepository _authorRepository;
         private IRepository<Book> _bookRepository;
@@ -24,12 +24,13 @@ namespace webapi.data.Repositories.Imp
         private IReporteSeguimientoRepository _reporteSeguimientoRepository;
         private IRepository<ContratoRechazo> _contratoRechazoRepository;
         private IFotoRepository _fotoRepository;
+        private IRolUserRepository _rolUserRepository;
         public UnitOfWork(BDSpatContext databaseContext,
             SignInManager<User> signInManager, UserManager<User> userManager)
         {
             _databaseContext = databaseContext;
-            _signInManager = signInManager;
-            _userManager = userManager;
+            _signInManejador = signInManager;
+            _userManejador = userManager;
 
         }
 
@@ -45,7 +46,7 @@ namespace webapi.data.Repositories.Imp
 
         public IUserRepository UserRepository
         {
-            get { return _userRepository = _userRepository ?? new UserRepository(_databaseContext, _userManager, _signInManager); }
+            get { return _userRepository = _userRepository ?? new UserRepository(_databaseContext, _userManejador, _signInManejador); }
         }
         public IRepository<Denuncia> DenunciaRepository
         {
@@ -80,6 +81,11 @@ namespace webapi.data.Repositories.Imp
         public IFotoRepository FotoRepository
         {
             get { return _fotoRepository = _fotoRepository ?? new FotoRepository(_databaseContext); }
+        }
+
+        public IRolUserRepository RolUserRepository
+        {
+            get { return _rolUserRepository = _rolUserRepository ?? new RolUserRepository(_userManejador); }
         }
 
         public async Task<bool> SaveAll()

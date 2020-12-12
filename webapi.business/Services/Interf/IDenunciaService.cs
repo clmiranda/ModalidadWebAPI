@@ -10,7 +10,7 @@ namespace webapi.business.Services.Interf
 {
     public interface IDenunciaService
     {
-         Task<PaginationDenuncia> GetAllDenuncias(DenunciaParametros parametros);
+         Task<PaginationList<Denuncia>> GetAllDenuncias(DenunciaParametros parametros);
         Task<Denuncia> GetDenunciaById(int id);
         Task<Denuncia> CreateDenuncia(Denuncia denuncia);
         Task<Denuncia> UpdateDenuncia(Denuncia denuncia);

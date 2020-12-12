@@ -77,11 +77,17 @@ namespace webapi.business.Services.Imp
 
             return new { user = appUser, token = tokenHandler.WriteToken(token) };
         }
-        public async Task<IdentityResult> RegisterUser(UserForRegisterDto userforRegisterDto)
+        public async Task<IdentityResult> PostUsuario(UserForRegisterDto userforRegisterDto)
         {
+            userforRegisterDto.FechaCreacion = DateTime.Now;
+            userforRegisterDto.Estado = "Activo";
             var userToCreate = _mapper.Map<User>(userforRegisterDto);
-            var result = await _unitOfWork.UserRepository.CreateUser(userToCreate, userforRegisterDto.Password);
-            _unitOfWork.UserRepository.AddRole(userToCreate);
+            var result = await _unitOfWork.UserRepository.PostUsuario(userToCreate, userforRegisterDto.Password);
+            //if (result.Succeeded)
+            //{
+            //    _unitOfWork.UserRepository.AddRole(userToCreate);
+            //    return result;
+            //}
             return result;
         }
         public async Task<User> GetUsuario(int id)
@@ -91,6 +97,17 @@ namespace webapi.business.Services.Imp
             //if (user == null) return null;
             //var userToReturn = _mapper.Map<UserForDetailedDto>(user);
             //return userToReturn;
+        }
+        public IEnumerable<User> GetAll()
+        {
+            var lista = _unitOfWork.UserRepository.FindByCondition(x=>x.UserRoles.Any(y=>y.RoleId!=7));
+            return lista;
+        }
+        public async Task<IdentityResult> UpdateUsuario(UserUpdateDto userDto) {
+            var usuario = await _unitOfWork.UserRepository.GetById(userDto.Id);
+            var modelo= _mapper.Map(userDto, usuario);
+            var resul= await _unitOfWork.UserRepository.UpdateUsuario(modelo);
+            return resul;
         }
         public async Task<IdentityResult> ConfirmEmail(string userId, string token)
         {
@@ -127,17 +144,33 @@ namespace webapi.business.Services.Imp
 
             return userToReturn;
         }
-        public async Task<IdentityResult> ResetPassword(ResetPasswordDto reset)
+        public async Task<IdentityResult> ResetPassword(int id, string password)
         {
-            reset.Token = Base64UrlEncoder.Decode(reset.Token);
-            var user = await _unitOfWork.UserRepository.FindByEmail(reset.Email);
-            if (user != null)
-            {
-                var result = await _unitOfWork.UserRepository.ResetPassword(user, reset.Token, reset.Password);
+            var usuario = await _unitOfWork.UserRepository.GetById(id);
+            string token = await _unitOfWork.UserRepository.GeneratePasswordResetToken(usuario);
+            //reset.Token = Base64UrlEncoder.Decode(reset.Token);
+            //var user = await _unitOfWork.UserRepository.FindByEmail(reset.Email);
+            //if (user != null)
+            //{
+            var result = await _unitOfWork.UserRepository.ResetPassword(usuario, token, password);
                 return result;
-            }
-            else
-                return null;
+            //}
+            //else
+            //    return null;
+        }
+        public async Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto reset)
+        {
+            var usuario = await _unitOfWork.UserRepository.FindByEmail(reset.Email);
+            string token = await _unitOfWork.UserRepository.GeneratePasswordResetToken(usuario);
+            //reset.Token = Base64UrlEncoder.Decode(reset.Token);
+            //var user = await _unitOfWork.UserRepository.FindByEmail(reset.Email);
+            //if (user != null)
+            //{
+            var result = await _unitOfWork.UserRepository.ResetPassword(usuario, token, reset.Password);
+            return result;
+            //}
+            //else
+            //    return null;
         }
         public async Task<PaginationList<User>> GetAllVoluntarios(VoluntarioParameters voluntarioParameters)
         {
@@ -145,7 +178,13 @@ namespace webapi.business.Services.Imp
             var voluntarios = resul.OrderByDescending(x=>x.Nombres).AsQueryable();
             voluntarios = voluntarios.Where(x=>x.Nombres.Contains(voluntarioParameters.Busqueda) || x.Apellidos.Contains(voluntarioParameters.Busqueda));
 
-            return /*await*/ PaginationList<User>.ToPagedList(voluntarios, voluntarioParameters.PageNumber, voluntarioParameters.PageSize);
+            return await PaginationList<User>.ToPagedList(voluntarios, voluntarioParameters.PageNumber, voluntarioParameters.PageSize);
+        }
+
+        public async Task<IEnumerable<User>> GetRolesUsuarios()
+        {
+            var users = await _unitOfWork.UserRepository.GetRolesUsuarios();
+            return users;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace webapi.business.Services.Imp
             _reporteSeguimientoService = reporteSeguimientoService;
         }
         public async Task<IEnumerable<Seguimiento>> GetAll() {
-            var lista= await _unitOfWork.SeguimientoRepository.GetAll();
+            var lista= _unitOfWork.SeguimientoRepository.GetAll();
             return lista;
         }
         public async Task<Seguimiento> GetById(int id)
@@ -30,7 +30,7 @@ namespace webapi.business.Services.Imp
         {
             return await _unitOfWork.SeguimientoRepository.GetByIdContrato(id);
         }
-        public async Task<bool> CreateSeguimiento(ContratoAdopcion contrato)
+        public void CreateSeguimiento(ContratoAdopcion contrato)
         {
             Seguimiento seguimiento = new Seguimiento();
             seguimiento.ContratoAdopcion = contrato;
@@ -38,7 +38,6 @@ namespace webapi.business.Services.Imp
             seguimiento.Estado = "Activo";
             _unitOfWork.SeguimientoRepository.Insert(seguimiento);
             //var obj = _unitOfWork.SeguimientoRepository.FindByCondition(x=>x.Estado.Equals("Activo")).LastOrDefault();
-            return await _unitOfWork.SaveAll();
         }
         public async Task<bool> UpdateSeguimiento(Seguimiento seguimiento)
         {
