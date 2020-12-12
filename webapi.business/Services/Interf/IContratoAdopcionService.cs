@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.ContratoRechazo;
+using webapi.business.Helpers;
 using webapi.business.Pagination;
 using webapi.core.Models;
 
@@ -16,7 +17,7 @@ namespace webapi.business.Services.Interf
         Task<PaginationContratoAdopcion> GetAll(ContratoAdopcionParametros parametros);
         Task<ContratoAdopcion> GetById(int id);
         //Task<IEnumerable<ContratoAdopcion>> GetAllAdopcionesPendientes();
-        Task<bool> CreateContratoAdopcion(ContratoAdopcionForCreate contrato);
+        Task<ContratoAdopcion> CreateContratoAdopcion(ContratoAdopcionForCreate contrato);
         Task<bool> UpdateContratoAdopcion(ContratoAdopcion contrato);
         int GetLast();
         //ContratoAdopcion GetContratoByIdMascota(int id);

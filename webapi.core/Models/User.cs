@@ -11,7 +11,9 @@ namespace webapi.core.Models
         public string Apellidos { get; set; }
         public string Domicilio { get; set; }
         public string NumeroCelular { get; set; }
-        public string Edad { get; set; }
+        public DateTime FechaNacimiento { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        //public string Edad { get; set; }
         public string Estado { get; set; }
         public string Sexo { get; set; }
         //public virtual ICollection<DetalleAdopcion> DetalleAdopciones { get; set; }

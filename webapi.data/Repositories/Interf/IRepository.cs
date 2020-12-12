@@ -10,7 +10,8 @@ namespace webapi.data.Repositories.Interf
 {
     public interface IRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAll();
+        IQueryable<T> GetAll();
+        //Task<IEnumerable<T>> GetAll();
         Task<T> GetById(int id);
         void Insert(T entity);
         void Update(T entity);

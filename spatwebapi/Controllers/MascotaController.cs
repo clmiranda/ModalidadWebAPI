@@ -77,12 +77,12 @@ namespace spatwebapi.Controllers
         //desde la vista de agregar mascota la principal
         [HttpGet("GetAllMascotaAdopcion")]
         [AllowAnonymous]
-        public async Task<PaginationMascota> GetAllMascotaAdopcion([FromQuery] MascotaParametros parametros)
+        public async Task<ActionResult> GetAllMascotaAdopcion([FromQuery] MascotaParametros parametros)
         {
             //var lista = _mascotaService.FindByCondition(x=>x.EstadoSituacion.Equals("Activo") && x.ContratoAdopcion==null).ToList();
             //var resul = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(lista);
             var resul = await _mascotaService.GetAllMascotas(parametros);
-            return resul;
+            return Ok(resul);
         }
 
         // POST: api/CasoMascota

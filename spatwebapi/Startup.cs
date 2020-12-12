@@ -36,6 +36,12 @@ namespace spatwebapi
             //{
             //    c.AddPolicy("AllowOrigin", options => options.WithOrigins("https://localhost:44382"));
             //});
+
+            //Politica de CORS agregada, en caso de problemas quitarla
+            //services.AddCors(c =>
+            //{
+            //    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            //});
             CompositionRoot.injectDependencies(services, Configuration);
             CompositionRoot.otherDependencies(services, Configuration);
             services.AddControllers();
@@ -71,8 +77,11 @@ namespace spatwebapi
             app.UseRouting();
             //app.UseCors(options => options.WithOrigins("https://localhost:44382"));
             app.UseAuthentication();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthorization();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {

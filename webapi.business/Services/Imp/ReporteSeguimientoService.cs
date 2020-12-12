@@ -27,7 +27,7 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IEnumerable<ReporteSeguimiento>> GetAll()
         {
-            var lista = await _unitOfWork.ReporteSeguimientoRepository.GetAll();
+            var lista = _unitOfWork.ReporteSeguimientoRepository.GetAll();
             return lista;
         }
         public IEnumerable<ReporteSeguimientoForReturn> GetReportesForAdmin(int id)

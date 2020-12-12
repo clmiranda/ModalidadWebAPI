@@ -12,7 +12,7 @@ namespace webapi.business.Dtos.Mascotas
         public string Sexo { get; set; }
         public string Descripcion { get; set; }
         public string Tamaño { get; set; }
-        public bool? Esterilizado { get; set; }
+        public bool Esterilizado { get; set; }
         public string Edad { get; set; }
         public DateTime FechaAgregado { get; set; }
         public string EstadoSituacion { get; set; }

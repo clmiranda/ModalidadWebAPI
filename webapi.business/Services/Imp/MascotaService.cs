@@ -52,13 +52,13 @@ namespace webapi.business.Services.Imp
 
         public async Task<IEnumerable<Mascota>> GetAllMascotas()
         {
-            var resul = await _unitOfWork.MascotaRepository.GetAll();
+            var resul = _unitOfWork.MascotaRepository.GetAll();
             return resul;
         }
 
         public async Task<PaginationMascota> GetAllMascotas(MascotaParametros parametros)
         {
-            var resul = await _unitOfWork.MascotaRepository.GetAll()/*.Include(x=>x.CasoMascotas).ToListAsync()*/;
+            var resul = _unitOfWork.MascotaRepository.GetAll()/*.Include(x=>x.CasoMascotas).ToListAsync()*/;
             var x = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(resul);
             var lista = x.OrderByDescending(x => x.Nombre).AsQueryable();
             if (String.IsNullOrEmpty(parametros.Busqueda))
@@ -67,11 +67,11 @@ namespace webapi.business.Services.Imp
                 parametros.Filter = "";
 
             if (parametros.Filter=="All")
-                lista = lista.Where(x => x.Nombre != null && x.EstadoSituacion=="Activo" && x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
-            else if(parametros.Filter==null || parametros.Filter=="")
+                lista = lista.Where(x => x.Nombre != null/* && x.EstadoSituacion=="Activo"*/ && x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
+            else if(parametros.Filter=="Adopcion"/* || parametros.Filter==""*/)
                 lista = lista.Where(x => x.Nombre != null && x.EstadoSituacion == "Activo" && x.ContratoAdopcion==null && x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
 
-            var pagination = /*await*/ PaginationList<MascotaForAdopcionDto>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);
+            var pagination = await PaginationList<MascotaForAdopcionDto>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);
             PaginationMascota paginationMascota = new PaginationMascota
             {
                 Items = pagination,

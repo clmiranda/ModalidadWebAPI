@@ -68,13 +68,12 @@ namespace webapi.data
                 entity.HasIndex(e => e.UserName).IsUnique();
 
 
-                entity.Property(e => e.Nombres).HasMaxLength(200);
-                entity.Property(e => e.Apellidos).HasMaxLength(200);
-                entity.Property(e => e.Domicilio).HasMaxLength(3000);
-                entity.Property(e => e.NumeroCelular).HasMaxLength(30);
+                //entity.Property(e => e.Nombres).HasMaxLength(200);
+                //entity.Property(e => e.Apellidos).HasMaxLength(200);
+                //entity.Property(e => e.Domicilio).HasMaxLength(3000);
+                //entity.Property(e => e.NumeroCelular).HasMaxLength(30);
                 entity.Property(e => e.Estado).HasMaxLength(50);
-                entity.Property(e => e.Sexo).HasMaxLength(50);
-                entity.Property(e => e.UserName).HasMaxLength(50);
+                //entity.Property(e => e.Sexo).HasMaxLength(50);
             });
             //modelBuilder.Entity<Role>(entity =>
             //{
@@ -93,43 +92,43 @@ namespace webapi.data
             //    //    .HasConstraintName("FK_CasoMascota_Denuncia");
             //});
 
-            modelBuilder.Entity<ContratoAdopcion>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                //entity.Property(e => e.NombreCompleto).HasMaxLength(3000);
-                //entity.Property(e => e.Domicilio).HasMaxLength(3000);
-                //entity.Property(e => e.NumeroCelular).HasMaxLength(50);
-                entity.Property(e => e.Pregunta7).HasMaxLength(300);
-                entity.Property(e => e.Estado).HasMaxLength(50);
-                //entity.Property(e => e.Ci).HasMaxLength(50);
-                //entity.HasIndex(e => e.Ci).IsUnique();
+            //modelBuilder.Entity<ContratoAdopcion>(entity =>
+            //{
+            //    entity.HasKey(e => e.Id);
+            //    //entity.Property(e => e.NombreCompleto).HasMaxLength(3000);
+            //    //entity.Property(e => e.Domicilio).HasMaxLength(3000);
+            //    //entity.Property(e => e.NumeroCelular).HasMaxLength(50);
+            //    entity.Property(e => e.Pregunta7).HasMaxLength(300);
+            //    entity.Property(e => e.Estado).HasMaxLength(50);
+            //    //entity.Property(e => e.Ci).HasMaxLength(50);
+            //    //entity.HasIndex(e => e.Ci).IsUnique();
 
 
-                //entity.HasOne(d => d.DetalleAdopcion)
-                //    .WithMany(p => p.ContratoAdopciones)
-                //    .HasForeignKey(d => d.IdDetalleAdopcion)
-                //    .HasConstraintName("FK_ContratoAdopcion_DetalleAdopcion");
-                //entity.HasOne(d => d.User)
-                //    .WithMany(p => p.ContratoAdopciones)
-                //    .HasForeignKey(d => d.IdUsuario)
-                //    .HasConstraintName("FK_ContratoAdopcion_Usuario");
+            //    //entity.HasOne(d => d.DetalleAdopcion)
+            //    //    .WithMany(p => p.ContratoAdopciones)
+            //    //    .HasForeignKey(d => d.IdDetalleAdopcion)
+            //    //    .HasConstraintName("FK_ContratoAdopcion_DetalleAdopcion");
+            //    //entity.HasOne(d => d.User)
+            //    //    .WithMany(p => p.ContratoAdopciones)
+            //    //    .HasForeignKey(d => d.IdUsuario)
+            //    //    .HasConstraintName("FK_ContratoAdopcion_Usuario");
 
-                //entity.HasOne(d => d.Mascota)
-                //    .WithMany(p => p.ContratoAdopciones)
-                //    .HasForeignKey(d => d.IdMascota)
-                //    .HasConstraintName("FK_ContratoAdopcion_Mascota");
+            //    //entity.HasOne(d => d.Mascota)
+            //    //    .WithMany(p => p.ContratoAdopciones)
+            //    //    .HasForeignKey(d => d.IdMascota)
+            //    //    .HasConstraintName("FK_ContratoAdopcion_Mascota");
 
-                //entity.HasOne(d => d.EstadoAdopcion)
-                //    .WithMany(p => p.ContratoAdopciones)
-                //    .HasForeignKey(d => d.IdEstadoAdopcion)
-                //    .HasConstraintName("FK_ContratoAdopcion_EstadoAdopcion");
-            });
+            //    //entity.HasOne(d => d.EstadoAdopcion)
+            //    //    .WithMany(p => p.ContratoAdopciones)
+            //    //    .HasForeignKey(d => d.IdEstadoAdopcion)
+            //    //    .HasConstraintName("FK_ContratoAdopcion_EstadoAdopcion");
+            //});
 
 
-            modelBuilder.Entity<ContratoRechazo>(entity =>
-            {
-                entity.Property(e => e.RazonRechazo).HasMaxLength(300);
-            });
+            //modelBuilder.Entity<ContratoRechazo>(entity =>
+            //{
+            //    entity.Property(e => e.RazonRechazo).HasMaxLength(300);
+            //});
 
             //modelBuilder.Entity<DetalleAdopcion>(entity =>
             //{
@@ -154,65 +153,65 @@ namespace webapi.data
             //    entity.Property(e => e.Descripcion).HasMaxLength(10000);
             //});
 
-            modelBuilder.Entity<Mascota>(entity =>
-            {
-                //entity.HasKey(e => e.IdMascota);
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Nombre).HasMaxLength(100);
-                entity.Property(e => e.Sexo).HasMaxLength(50);
-                entity.Property(e => e.Descripcion).HasMaxLength(3000);
-                entity.Property(e => e.Tamaño).HasMaxLength(100);
-                entity.Property(e => e.Edad).HasMaxLength(50);
-                entity.Property(e => e.EstadoSituacion).HasMaxLength(50);
-                //entity.HasOne(e => e.ContratoAdopcion).WithOne(e => e.Mascota).HasForeignKey<ContratoAdopcion>(c=>c.Id);
-                //entity.HasOne(d => d.CasoMascota)
-                //    .WithMany(p => p.Mascotas)
-                //    .HasForeignKey(d => d.IdCasoMascota)
-                //    .HasConstraintName("FK_Mascota_CasoMascota");
-                //entity.HasOne(d => d.TipoMascota)
-                //    .WithMany(p => p.Mascotas)
-                //    .HasForeignKey(d => d.IdTipoMascota)
-                //    .HasConstraintName("FK_Mascota_TipoMascota");
-            });
+            //modelBuilder.Entity<Mascota>(entity =>
+            //{
+            //    //entity.HasKey(e => e.IdMascota);
+            //    entity.HasKey(e => e.Id);
+            //    entity.Property(e => e.Nombre).HasMaxLength(100);
+            //    entity.Property(e => e.Sexo).HasMaxLength(50);
+            //    entity.Property(e => e.Descripcion).HasMaxLength(3000);
+            //    entity.Property(e => e.Tamaño).HasMaxLength(100);
+            //    entity.Property(e => e.Edad).HasMaxLength(50);
+            //    entity.Property(e => e.EstadoSituacion).HasMaxLength(50);
+            //    //entity.HasOne(e => e.ContratoAdopcion).WithOne(e => e.Mascota).HasForeignKey<ContratoAdopcion>(c=>c.Id);
+            //    //entity.HasOne(d => d.CasoMascota)
+            //    //    .WithMany(p => p.Mascotas)
+            //    //    .HasForeignKey(d => d.IdCasoMascota)
+            //    //    .HasConstraintName("FK_Mascota_CasoMascota");
+            //    //entity.HasOne(d => d.TipoMascota)
+            //    //    .WithMany(p => p.Mascotas)
+            //    //    .HasForeignKey(d => d.IdTipoMascota)
+            //    //    .HasConstraintName("FK_Mascota_TipoMascota");
+            //});
 
-            modelBuilder.Entity<Notificacion>(entity =>
-            {
-                //entity.HasKey(e => e.IdNotificacion);
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Descripcion).HasMaxLength(10000);
-                entity.Property(e => e.Estado).HasMaxLength(50);
-            });
+            //modelBuilder.Entity<Notificacion>(entity =>
+            //{
+            //    //entity.HasKey(e => e.IdNotificacion);
+            //    entity.HasKey(e => e.Id);
+            //    entity.Property(e => e.Descripcion).HasMaxLength(10000);
+            //    entity.Property(e => e.Estado).HasMaxLength(50);
+            //});
 
-            modelBuilder.Entity<ReporteSeguimiento>(entity =>
-            {
-                //entity.HasKey(e => e.IdReporteSeguimiento);
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Observaciones).HasMaxLength(10000);
-                entity.Property(e => e.Estado).HasMaxLength(50);
-                //entity.HasOne(d => d.User)
-                //    .WithMany(p => p.ReporteSeguimientos)
-                //    .HasForeignKey(d => d.IdUsuario)
-                //    .HasConstraintName("FK_ReporteSeguimiento_User");
-                //entity.HasOne(d => d.Seguimiento)
-                //    .WithMany(p => p.ReporteSeguimientos)
-                //    .HasForeignKey(d => d.IdSeguimiento)
-                //    .HasConstraintName("FK_ReporteSeguimiento_Seguimiento");
-            });
+            //modelBuilder.Entity<ReporteSeguimiento>(entity =>
+            //{
+            //    //entity.HasKey(e => e.IdReporteSeguimiento);
+            //    entity.HasKey(e => e.Id);
+            //    entity.Property(e => e.Observaciones).HasMaxLength(10000);
+            //    entity.Property(e => e.Estado).HasMaxLength(50);
+            //    //entity.HasOne(d => d.User)
+            //    //    .WithMany(p => p.ReporteSeguimientos)
+            //    //    .HasForeignKey(d => d.IdUsuario)
+            //    //    .HasConstraintName("FK_ReporteSeguimiento_User");
+            //    //entity.HasOne(d => d.Seguimiento)
+            //    //    .WithMany(p => p.ReporteSeguimientos)
+            //    //    .HasForeignKey(d => d.IdSeguimiento)
+            //    //    .HasConstraintName("FK_ReporteSeguimiento_Seguimiento");
+            //});
 
-            modelBuilder.Entity<Seguimiento>(entity =>
-            {
-                //entity.HasKey(e => e.IdSeguimiento);
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Estado).HasMaxLength(50);
-                //entity.HasOne(d => d.ContratoAdopcion)
-                //    .WithMany(p => p.Seguimientos)
-                //    .HasForeignKey(d => d.IdContratoAdopcion)
-                //    .HasConstraintName("FK_Seguimiento_ContratoAdopcion");
-                //entity.HasOne(d => d.ReporteSeguimiento)
-                //    .WithMany(p => p.Seguimientos)
-                //    .HasForeignKey(d => d.IdReporteSeguimiento)
-                //    .HasConstraintName("FK_Seguimiento_ReporteSeguimiento");
-            });
+            //modelBuilder.Entity<Seguimiento>(entity =>
+            //{
+            //    //entity.HasKey(e => e.IdSeguimiento);
+            //    entity.HasKey(e => e.Id);
+            //    entity.Property(e => e.Estado).HasMaxLength(50);
+            //    //entity.HasOne(d => d.ContratoAdopcion)
+            //    //    .WithMany(p => p.Seguimientos)
+            //    //    .HasForeignKey(d => d.IdContratoAdopcion)
+            //    //    .HasConstraintName("FK_Seguimiento_ContratoAdopcion");
+            //    //entity.HasOne(d => d.ReporteSeguimiento)
+            //    //    .WithMany(p => p.Seguimientos)
+            //    //    .HasForeignKey(d => d.IdReporteSeguimiento)
+            //    //    .HasConstraintName("FK_Seguimiento_ReporteSeguimiento");
+            //});
 
             //modelBuilder.Entity<TipoMascota>(entity =>
             //{
@@ -221,14 +220,14 @@ namespace webapi.data
             //    entity.Property(e => e.Nombre).HasMaxLength(100);
             //    entity.Property(e => e.Estado).HasMaxLength(50);
             //});
-            modelBuilder.Entity<Denuncia>(entity =>
-            {
-                //entity.HasKey(e => e.IdDenuncia);
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Titulo).HasMaxLength(500);
-                entity.Property(e => e.Descripcion).HasMaxLength(10000);
-                entity.Property(e => e.Estado).HasMaxLength(50);
-            });
+            //modelBuilder.Entity<Denuncia>(entity =>
+            //{
+            //    //entity.HasKey(e => e.IdDenuncia);
+            //    entity.HasKey(e => e.Id);
+            //    entity.Property(e => e.Titulo).HasMaxLength(500);
+            //    entity.Property(e => e.Descripcion).HasMaxLength(10000);
+            //    entity.Property(e => e.Estado).HasMaxLength(50);
+            //});
 
             OnModelCreatingPartial(modelBuilder);
         }

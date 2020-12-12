@@ -13,10 +13,10 @@ namespace webapi.business.Dtos.Usuario
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Las contraseñas no coinciden.")]
-        public string ConfirmPassword { get; set; }
-        [Required]
-        public string Token { get; set; }
+        //[DataType(DataType.Password)]
+        //[Compare("Password", ErrorMessage = "Las contraseñas no coinciden.")]
+        //public string ConfirmPassword { get; set; }
+        //[Required]
+        //public string Token { get; set; }
     }
 }
