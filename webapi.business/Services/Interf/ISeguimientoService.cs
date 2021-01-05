@@ -10,7 +10,7 @@ namespace webapi.business.Services.Interf
 {
     public interface ISeguimientoService
     {
-        Task<IEnumerable<Seguimiento>> GetAll();
+        IEnumerable<Seguimiento> GetAll();
         Task<Seguimiento> GetById(int id);
         Task<Seguimiento> GetByIdContrato(int id);
         void CreateSeguimiento(ContratoAdopcion contrato);

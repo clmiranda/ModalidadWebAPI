@@ -18,8 +18,8 @@ namespace webapi.business.Services.Imp
             _unitOfWork = unitOfWork;
             _reporteSeguimientoService = reporteSeguimientoService;
         }
-        public async Task<IEnumerable<Seguimiento>> GetAll() {
-            var lista= _unitOfWork.SeguimientoRepository.GetAll();
+        public IEnumerable<Seguimiento> GetAll() {
+            var lista= _unitOfWork.SeguimientoRepository.GetAll().ToList();
             return lista;
         }
         public async Task<Seguimiento> GetById(int id)

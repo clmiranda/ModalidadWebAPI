@@ -66,24 +66,23 @@ namespace spatwebapi.Controllers
             var d = await _denunciaService.CreateDenuncia(denuncia);
             if (d.Equals(null))
                 return BadRequest("Hubo problemas al crear la denuncia.");
-
-            return Ok(d);
+            return Ok();
         }
-        [HttpPut("UpdateDenuncia/{id}")]
+        [HttpPut("UpdateDenuncia")]
         public async Task<IActionResult> UpdateDenuncia(Denuncia denuncia)
         {
             var d=await _denunciaService.UpdateDenuncia(denuncia);
             if (d.Equals(null))
                 return BadRequest("Hubo problemas al modificar la denuncia.");
 
-            return Ok(d);
+            return Ok();
         }
         [HttpDelete("DeleteDenuncia/{id}")]
         public async Task<IActionResult> DeleteDenuncia(int id)
         {
             var denuncia= await _denunciaService.GetDenunciaById(id);
             if (await _denunciaService.DeleteDenuncia(denuncia))
-                return Ok("La denuncia fue eliminada de manera exitosa");
+                return Ok();
             else
                 return BadRequest("Hubo problemas al eliminar el registro.");
         }

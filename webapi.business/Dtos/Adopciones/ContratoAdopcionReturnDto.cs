@@ -16,6 +16,12 @@ namespace webapi.business.Dtos.Adopciones
         public string Domicilio { get; set; }
         public string NumeroCelular { get; set; }
         //public string NumeroCelular { get; set; }
+        public string Pregunta1 { get; set; }
+        public string Pregunta2 { get; set; }
+        public string Pregunta3 { get; set; }
+        public string Pregunta4 { get; set; }
+        public string Pregunta5 { get; set; }
+        public string Pregunta6 { get; set; }
         public string Pregunta7 { get; set; }
         //public string Edad { get; set; }
         //public bool TerminosCondiciones { get; set; }

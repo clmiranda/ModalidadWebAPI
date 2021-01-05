@@ -28,11 +28,14 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAllMascotas")]
-        public IEnumerable<MascotaForDetailedDto> GetAllMascotas()
+        public async Task<ActionResult> GetAllMascotas([FromQuery] MascotaParametros parametros)
         {
-            var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
-            var resul = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
-            return resul;
+            var resul = await _mascotaService.GetAllMascotas(parametros);
+            //var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
+            var lista = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(resul);
+            Response.AddPagination(resul.CurrentPage, resul.PageSize,
+                 resul.TotalCount, resul.TotalPages);
+            return Ok(lista);
         }
 
         //[HttpGet("GetMascota/{id}")]
@@ -79,10 +82,12 @@ namespace spatwebapi.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> GetAllMascotaAdopcion([FromQuery] MascotaParametros parametros)
         {
-            //var lista = _mascotaService.FindByCondition(x=>x.EstadoSituacion.Equals("Activo") && x.ContratoAdopcion==null).ToList();
-            //var resul = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(lista);
             var resul = await _mascotaService.GetAllMascotas(parametros);
-            return Ok(resul);
+            //var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
+            var lista = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(resul);
+            Response.AddPagination(resul.CurrentPage, resul.PageSize,
+                 resul.TotalCount, resul.TotalPages);
+            return Ok(lista);
         }
 
         // POST: api/CasoMascota
@@ -92,8 +97,8 @@ namespace spatwebapi.Controllers
             var mascota = await _mascotaService.CreateMascota(mascotaDto);
             if (mascota.Equals(null))
                 return BadRequest("Hubo problemas al crear la Mascota.");
-
-            return Ok(mascota);
+            var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+            return Ok(mapped);
             //if (await _mascotaService.CreateMascota(mascota))
             //{
             //return Ok(new { mensaje = "El registro de la mascota fue realizado de manera exitosa.", id = _mascotaService.GetIdLastMascota() });
@@ -109,8 +114,8 @@ namespace spatwebapi.Controllers
             var update = await _mascotaService.UpdateMascota(mascota);
             if (update.Equals(null))
                 return BadRequest("Hubo problemas al Modificar el Registro de la Mascota.");
-            else
-                return Ok(update);
+            var mapped = _mapper.Map<MascotaForDetailedDto>(update);
+            return Ok(mapped);
         }
         [HttpPut("ChangeStateSituacion/{id}")]
         public async Task<IActionResult> ChangeStateSituacion([FromBody] string estado, int id)

@@ -26,34 +26,35 @@ namespace webapi.business.Services.Imp
             _seguimientoService = seguimientoService;
             _mapper = mapper;
         }
-        public async Task<PaginationContratoAdopcion> GetAll(ContratoAdopcionParametros parametros)
+        public async Task<PaginationList<ContratoAdopcion>> GetAll(ContratoAdopcionParametros parametros)
         {
             var resul = _unitOfWork.ContratoAdopcionRepository.GetAll();
             //var lista = x.OrderByDescending(x => x.Titulo).AsQueryable();
-            if (String.IsNullOrEmpty(parametros.Busqueda))
-                parametros.Busqueda = "";
-            if (String.IsNullOrEmpty(parametros.Filter))
-                parametros.Filter = "";
+            //if (String.IsNullOrEmpty(parametros.Busqueda))
+            //    parametros.Busqueda = "";
+            //if (String.IsNullOrEmpty(parametros.Filter))
+            //    parametros.Filter = "";
+
 
             if (parametros.Filter == "Aprobado")
-                resul = resul.Where(x => x.Estado.Equals("Aprobado") && x.Pregunta7.ToLower().Contains(parametros.Busqueda.ToLower()));
+                resul = resul.Where(x => x.Estado.Equals("Aprobado"));
             else if (parametros.Filter == "Pendiente")
-                resul = resul.Where(x => x.Estado.Equals("Pendiente") && x.Pregunta7.ToLower().Contains(parametros.Busqueda.ToLower()));
+                resul = resul.Where(x => x.Estado.Equals("Pendiente"));
             else if (parametros.Filter == "Rechazado")
-                resul = resul.Where(x => x.Estado.Equals("Rechazado") && x.Pregunta7.ToLower().Contains(parametros.Busqueda.ToLower()));
+                resul = resul.Where(x => x.Estado.Equals("Rechazado"));
             else if (parametros.Filter == "Cancelado")
-                resul = resul.Where(x => x.Estado.Equals("Cancelado") && x.Pregunta7.ToLower().Contains(parametros.Busqueda.ToLower()));
-            var x = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>(resul).AsQueryable();
-            var pagination = await PaginationList<ContratoAdopcionReturnDto>.ToPagedList(x, parametros.PageNumber, parametros.PageSize);
-            PaginationContratoAdopcion paginationReturn = new PaginationContratoAdopcion
-            {
-                Items = pagination,
-                CurrentPage = pagination.CurrentPage,
-                PageSize = pagination.PageSize,
-                TotalPages = pagination.TotalPages,
-                TotalCount = pagination.TotalCount
-            };
-            return paginationReturn;
+                resul = resul.Where(x => x.Estado.Equals("Cancelado")/* && x.Pregunta7.ToLower().Contains(parametros.Busqueda.ToLower())*/);
+            //var x = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>(resul).AsQueryable();
+            var pagination = await PaginationList<ContratoAdopcion>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
+            //PaginationContratoAdopcion paginationReturn = new PaginationContratoAdopcion
+            //{
+            //    Items = pagination,
+            //    CurrentPage = pagination.CurrentPage,
+            //    PageSize = pagination.PageSize,
+            //    TotalPages = pagination.TotalPages,
+            //    TotalCount = pagination.TotalCount
+            //};
+            return pagination;
             //return resul;
         }
         public async Task<ContratoAdopcion> GetById(int id)
@@ -68,8 +69,9 @@ namespace webapi.business.Services.Imp
             //Se usa el GetById para asignar la mascota al contrato, ya que desde el MVC
             //no se esta enviando el Model Mascota del Contrato.
             var mascota = await _unitOfWork.MascotaRepository.GetById(contrato.MascotaId);
-            var modelo = _mapper.Map<ContratoAdopcion>(contrato);
             mascota.EstadoSituacion = "Inactivo";
+            var modelo = _mapper.Map<ContratoAdopcion>(contrato);
+            modelo.Estado = "Pendiente";
             modelo.Mascota = mascota;
             _unitOfWork.ContratoAdopcionRepository.Insert(modelo);
             if (await _unitOfWork.SaveAll())
@@ -134,7 +136,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork.ContratoAdopcionRepository.Update(contrato);
             var mascota = await _unitOfWork.MascotaRepository.GetById(contrato.MascotaId);
             mascota.EstadoSituacion = "Inactivo";
-            mascota.ContratoAdopcion = null;
+            //mascota.ContratoAdopcion = null;
             _unitOfWork.MascotaRepository.Update(mascota);
             //_unitOfWork.SeguimientoRepository.Delete(contrato.Seguimiento);
             //_unitOfWork.ContratoAdopcionRepository.Delete(contrato);
