@@ -16,8 +16,8 @@ namespace webapi.business.Pagination
         }
 
         //public int UserId { get; set; }
-        public string Busqueda { get; set; } = "";
-        public string Filter { get; set; } = "";
+        //public string Busqueda { get; set; } = "";
+        public string Filter { get; set; } = "Pendiente";
         public string OrderBy { get; set; } = "";
     }
 }

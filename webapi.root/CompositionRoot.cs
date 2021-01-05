@@ -26,7 +26,6 @@ namespace webapi.root
 
         public static void injectDependencies(IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<ConfigurationCloudinary>(configuration.GetSection("CloudinarySettings"));
             /*services.AddDbContext<DatabaseContext>(opts => opts.UseInMemoryDatabase("database"));*/
             services.AddScoped<BDSpatContext>();
             //services.AddDbContext<BDSpatContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
@@ -69,6 +68,7 @@ namespace webapi.root
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddCors();
+            services.Configure<ConfigurationCloudinary>(configuration.GetSection("CloudinarySettings"));
         }
 
         public static void otherDependencies(IServiceCollection services, IConfiguration configuration)

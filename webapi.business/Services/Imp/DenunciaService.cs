@@ -26,11 +26,10 @@ namespace webapi.business.Services.Imp
         {
             var resul= _unitOfWork.DenunciaRepository.GetAll()/*.Include(x=>x.CasoMascotas).ToListAsync()*/;
             //var x = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul);
-            var lista = resul.OrderByDescending(x => x.Titulo).AsQueryable();
-            if (String.IsNullOrEmpty(parametros.Busqueda))
-                parametros.Busqueda = "";
-            lista = lista.Where(x=>x.Titulo.ToLower().Contains(parametros.Busqueda.ToLower())|| x.Descripcion.ToLower().Contains(parametros.Busqueda.ToLower()));
-            var pagination= await PaginationList<Denuncia>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);
+            resul = resul.OrderByDescending(x => x.Titulo);
+            if (!String.IsNullOrEmpty(parametros.Busqueda))
+                resul = resul.Where(x => x.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Descripcion.ToLower().Contains(parametros.Busqueda.ToLower()));
+            var pagination= await PaginationList<Denuncia>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
             //PaginationDenuncia paginationDenuncia = new PaginationDenuncia
             //{
             //    Items = pagination,

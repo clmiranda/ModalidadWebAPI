@@ -26,12 +26,13 @@ namespace spatwebapi.Controllers
     public class FotosController : Controller
     {
         private readonly IFotoService _fotoService;
+        private readonly IMascotaService _mascotaService;
         private readonly IMapper _mapper;
         private readonly IUserRepository _repoUser;
         private readonly IOptions<ConfigurationCloudinary> _cloudinaryConfig;
         private IUnitOfWork _unitOfWork;
         private Cloudinary _cloudinary;
-        public FotosController(IUserRepository repoUser, IOptions<ConfigurationCloudinary> cloudinaryConfig, IUnitOfWork unitOfWork, IRepository<ContratoAdopcion> repoContrato, IMapper mapper, IFotoService fotoService)
+        public FotosController(IUserRepository repoUser, IOptions<ConfigurationCloudinary> cloudinaryConfig, IUnitOfWork unitOfWork, IRepository<ContratoAdopcion> repoContrato, IMapper mapper, IFotoService fotoService, IMascotaService mascotaService)
         {
             _cloudinaryConfig = cloudinaryConfig;
             _repoUser = repoUser;
@@ -46,6 +47,7 @@ namespace spatwebapi.Controllers
             _cloudinary = new Cloudinary(acc);
             _mapper = mapper;
             _fotoService = fotoService;
+            _mascotaService = mascotaService;
         }
         //[AllowAnonymous]
         //[HttpGet("Mascota/{mascotaId}/GetAllFotosMascota")]
@@ -67,9 +69,8 @@ namespace spatwebapi.Controllers
             var photo = _mapper.Map<FotoForReturnDto>(photoFromRepo);
             return Ok(photo);
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrador")]
         [HttpPost("Mascota/{mascotaId}/AgregarFotoMascota")]
-        [Consumes("multipart/form-data")]
         public async Task<IActionResult> AgregarFotoMascota(int mascotaId, [FromForm] FotoForCreationDto fotoMascota)
         {
             var fotomascota = await _fotoService.AgregarFotoMascota(mascotaId, fotoMascota);
@@ -93,8 +94,11 @@ namespace spatwebapi.Controllers
         [HttpDelete("Mascota/{mascotaId}/EliminarFotoMascota/{idfoto}")]
         public async Task<IActionResult> EliminarFotoMascota(int mascotaId, int idfoto)
         {
-            if (await _fotoService.EliminarFoto(mascotaId, idfoto, "mascota"))
-                return Ok("La foto fue eliminada exitosamente.");
+            if (await _fotoService.EliminarFoto(mascotaId, idfoto, "mascota")) {
+                var mascota = await _mascotaService.GetMascotaById(mascotaId);
+                var mapped = _mapper.Map<MascotaForReturn>(mascota);
+                return Ok(mapped);
+            }
             return BadRequest("La foto no se pudo eliminar.");
         }
     }

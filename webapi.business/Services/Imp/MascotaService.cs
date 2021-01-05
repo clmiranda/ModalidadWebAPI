@@ -56,31 +56,31 @@ namespace webapi.business.Services.Imp
             return resul;
         }
 
-        public async Task<PaginationMascota> GetAllMascotas(MascotaParametros parametros)
+        public async Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros)
         {
             var resul = _unitOfWork.MascotaRepository.GetAll()/*.Include(x=>x.CasoMascotas).ToListAsync()*/;
-            var x = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(resul);
-            var lista = x.OrderByDescending(x => x.Nombre).AsQueryable();
-            if (String.IsNullOrEmpty(parametros.Busqueda))
-                parametros.Busqueda = "";
-            if (String.IsNullOrEmpty(parametros.Filter))
-                parametros.Filter = "";
+            //var x = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(resul);
+            //var lista = x.OrderByDescending(x => x.Nombre).AsQueryable();
+            //if (String.IsNullOrEmpty(parametros.Busqueda))
+            //    parametros.Busqueda = "";
+            //if (String.IsNullOrEmpty(parametros.Filter))
+            //    parametros.Filter = "";
 
-            if (parametros.Filter=="All")
-                lista = lista.Where(x => x.Nombre != null/* && x.EstadoSituacion=="Activo"*/ && x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
-            else if(parametros.Filter=="Adopcion"/* || parametros.Filter==""*/)
-                lista = lista.Where(x => x.Nombre != null && x.EstadoSituacion == "Activo" && x.ContratoAdopcion==null && x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
+            if (!String.IsNullOrEmpty(parametros.Busqueda))
+                resul = resul.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
+            if(parametros.Filter=="Adopcion")
+                resul = resul.Where(x => x.Nombre != null && x.ContratoAdopcion==null);
 
-            var pagination = await PaginationList<MascotaForAdopcionDto>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);
-            PaginationMascota paginationMascota = new PaginationMascota
-            {
-                Items = pagination,
-                CurrentPage = pagination.CurrentPage,
-                PageSize = pagination.PageSize,
-                TotalPages = pagination.TotalPages,
-                TotalCount = pagination.TotalCount
-            };
-            return paginationMascota;
+            var pagination = await PaginationList<Mascota>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
+            //PaginationMascota paginationMascota = new PaginationMascota
+            //{
+            //    Items = pagination,
+            //    CurrentPage = pagination.CurrentPage,
+            //    PageSize = pagination.PageSize,
+            //    TotalPages = pagination.TotalPages,
+            //    TotalCount = pagination.TotalCount
+            //};
+            return pagination;
             //return await _unitOfWork.MascotaRepository.GetAll();
         }
         public async Task<Mascota> GetMascotaById(int id)

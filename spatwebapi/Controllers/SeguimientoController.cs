@@ -35,9 +35,10 @@ namespace spatwebapi.Controllers
         }
         [AllowAnonymous]
         [HttpGet("ListSeguimiento")]
-        public async Task<IEnumerable<SeguimientoForReturnDto>> ListSeguimiento() {
-            var lista= _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(await _seguimientoService.GetAll());
-            return lista;
+        public IEnumerable<SeguimientoForReturnDto> ListSeguimiento() {
+            var lista = _seguimientoService.GetAll();
+            var mapeado= _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(lista);
+            return mapeado;
         }
         [HttpGet("GetAllVoluntarios")]
         public async Task<IActionResult> GetAllVoluntarios([FromQuery] VoluntarioParameters voluntarioParameters)

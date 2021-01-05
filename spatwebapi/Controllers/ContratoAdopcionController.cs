@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.ContratoRechazo;
+using webapi.business.Helpers;
 using webapi.business.Pagination;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
@@ -47,11 +48,14 @@ namespace spatwebapi.Controllers
             return Ok(modelo);
         }
         [HttpGet("GetAllAdopcionesPendientes")]
-        public async Task<PaginationContratoAdopcion> GetAllAdopcionesPendientes([FromQuery] ContratoAdopcionParametros parametros) {
+        public async Task<ActionResult> GetAllAdopcionesPendientes([FromQuery] ContratoAdopcionParametros parametros) {
             //var lista = await _contratoAdopcionService.FindByCondition(x=> x.Estado.Equals("Pendiente") || x.Estado.Equals("Aprobado")).ToListAsync();
             //var resul = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>(lista);
-            var lista = await _contratoAdopcionService.GetAll(parametros);
-            return lista;
+            var resul = await _contratoAdopcionService.GetAll(parametros);
+            var lista = _mapper.Map<IEnumerable<ContratoAdopcionForList>>(resul);
+            Response.AddPagination(resul.CurrentPage, resul.PageSize,
+                 resul.TotalCount, resul.TotalPages);
+            return Ok(lista);
         }
         [HttpGet("GetContratoByIdMascota/{id}")]
         public async Task<ActionResult<ContratoAdopcionReturnDto>> GetContratoByIdMascota(int id)
@@ -123,7 +127,8 @@ namespace spatwebapi.Controllers
                 if (await _contratoAdopcionService.RechazarAdopcion(contratoRechazo.ContratoAdopcionId)) {
                     if (await _contratoAdopcionService.CreateContratoRechazo(contratoRechazo))
                     {
-                        return Ok("Contrato rechazado, se ha creado un informe de la razon del Rechazo");
+                        var contrato = _mapper.Map<ContratoAdopcionReturnDto>(modelo);
+                        return Ok(contrato);
                     }
                     return BadRequest("Ha ocurrido un problema al tratar de generar el informe de Rechazo");
                 }
@@ -132,16 +137,17 @@ namespace spatwebapi.Controllers
             }
             return BadRequest("No se ha encontrado el Contrato.");
         }
-        [HttpPut("{id}/CancelarAdopcion")]
+        [HttpPut("CancelarAdopcion")]
         public async Task<IActionResult> CancelarAdopcion(ContratoRechazoForCreateDto contratoRechazo) {
             var modelo = await _contratoAdopcionService.GetById(contratoRechazo.ContratoAdopcionId);
             if (modelo!=null)
             {
                 if (await _contratoAdopcionService.CancelarAdopcion(contratoRechazo.ContratoAdopcionId))
                 {
-                    if (await _contratoAdopcionService.CreateContratoRechazo(contratoRechazo))
-                        return Ok("Se ha cancelado el Contrato y eliminado el Seguimiento correspondiente.");
-
+                    if (await _contratoAdopcionService.CreateContratoRechazo(contratoRechazo)) {
+                        var contrato = _mapper.Map<ContratoAdopcionReturnDto>(modelo);
+                        return Ok(contrato);
+                    }
                     return BadRequest("Ha ocurrido un error al cancelar el Contrato");
                 }
                 return BadRequest("Ha ocurrido un error al cancelar el Contrato");

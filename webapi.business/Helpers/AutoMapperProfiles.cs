@@ -89,7 +89,11 @@ namespace webapi.business.Helpers
                 //{
                 //    options.MapFrom(s=>s.ReporteSeguimientos.Count());
                 //});
-            CreateMap<ContratoAdopcion, ContratoAdopcionForList>();
+            CreateMap<ContratoAdopcion, ContratoAdopcionForList>()
+                .ForMember(d => d.RazonAdopcion, options =>
+                {
+                    options.MapFrom(s => s.Pregunta1);
+                });
             CreateMap<ContratoAdopcion, ContratoAdopcionForDetailDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
             CreateMap<ReporteSeguimientoForCreate, ReporteSeguimiento>();

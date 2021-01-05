@@ -9,6 +9,9 @@ namespace webapi.business.Dtos.Adopciones
     public class ContratoAdopcionForList
     {
         public int Id { get; set; }
+        public string Nombres { get; set; }
+        public string Apellidos { get; set; }
+        public string Domicilio { get; set; }
         //public string NombreCompleto { get; set; }
         //public string Domicilio { get; set; }
         //public string NumeroCelular { get; set; }
@@ -19,8 +22,8 @@ namespace webapi.business.Dtos.Adopciones
         public string Estado { get; set; }
         public virtual MascotaForReturn Mascota { get; set; }
         public int MascotaId { get; set; }
-        public virtual UserForDetailedDto User { get; set; }
-        public int UserId { get; set; }
+        //public virtual UserForDetailedDto User { get; set; }
+        //public int UserId { get; set; }
 
     }
 }
