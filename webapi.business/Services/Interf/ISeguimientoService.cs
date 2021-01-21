@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using webapi.business.Dtos.Seguimientos;
 using webapi.core.Models;
 
 namespace webapi.business.Services.Interf
@@ -11,6 +12,7 @@ namespace webapi.business.Services.Interf
     public interface ISeguimientoService
     {
         IEnumerable<Seguimiento> GetAll();
+        Task<bool> UpdateFecha(FechaReporteDto dto);
         Task<Seguimiento> GetById(int id);
         Task<Seguimiento> GetByIdContrato(int id);
         void CreateSeguimiento(ContratoAdopcion contrato);

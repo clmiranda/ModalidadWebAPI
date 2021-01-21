@@ -1,8 +1,10 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using webapi.business.Dtos.Seguimientos;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
@@ -12,9 +14,11 @@ namespace webapi.business.Services.Imp
     public class SeguimientoService : ISeguimientoService
     {
         private IReporteSeguimientoService _reporteSeguimientoService;
+        private readonly IMapper _mapper;
         private IUnitOfWork _unitOfWork;
-        public SeguimientoService(IUnitOfWork unitOfWork, IReporteSeguimientoService reporteSeguimientoService)
+        public SeguimientoService(IUnitOfWork unitOfWork, IReporteSeguimientoService reporteSeguimientoService, IMapper mapper)
         {
+            _mapper = mapper;
             _unitOfWork = unitOfWork;
             _reporteSeguimientoService = reporteSeguimientoService;
         }
@@ -35,6 +39,8 @@ namespace webapi.business.Services.Imp
             Seguimiento seguimiento = new Seguimiento();
             seguimiento.ContratoAdopcion = contrato;
             seguimiento.ContratoAdopcionId = contrato.Id;
+            seguimiento.FechaInicio = DateTime.Now;
+            seguimiento.FechaConclusion = DateTime.Now;
             seguimiento.Estado = "Activo";
             _unitOfWork.SeguimientoRepository.Insert(seguimiento);
             //var obj = _unitOfWork.SeguimientoRepository.FindByCondition(x=>x.Estado.Equals("Activo")).LastOrDefault();
@@ -53,6 +59,16 @@ namespace webapi.business.Services.Imp
             //    reporteSeguimiento.Estado = "Activo";
             //    seguimiento.ReporteSeguimientos.Add(reporteSeguimiento);
             //}
+            return await _unitOfWork.SaveAll();
+        }
+        public async Task<bool> UpdateFecha(FechaReporteDto dto) {
+            var objeto = await _unitOfWork.SeguimientoRepository.GetById(dto.Id);
+            //objeto.FechaInicio = dto.FechaInicio;
+            //objeto.FechaConclusion = dto.FechaConclusion;
+            objeto.FechaInicio = Convert.ToDateTime(dto.RangoFechas[0]);
+            objeto.FechaConclusion = Convert.ToDateTime(dto.RangoFechas[1]);
+            //var model = _mapper.Map<Seguimiento>(dto);
+            _unitOfWork.SeguimientoRepository.Update(objeto);
             return await _unitOfWork.SaveAll();
         }
 
