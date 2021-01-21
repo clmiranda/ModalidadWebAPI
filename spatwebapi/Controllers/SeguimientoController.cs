@@ -70,6 +70,23 @@ namespace spatwebapi.Controllers
             return BadRequest("Ocurrio un problema al actualizar los datos.");
         }
         [AllowAnonymous]
+        [HttpPut("UpdateFecha")]
+        public async Task<IActionResult> UpdateFecha([FromBody] FechaReporteDto dto)
+        {
+            //var objeto = await _seguimientoService.GetById(seguimiento.Id);
+            //objeto.CantidadVisitas = seguimiento.CantidadVisitas;
+            var o= await _seguimientoService.GetById(dto.Id);
+            if (o != null) {
+                if (await _seguimientoService.UpdateFecha(dto))
+                {
+                    var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(_seguimientoService.GetAll());
+                    return Ok(mapped);
+                }
+                return BadRequest("Ocurrio un problema al actualizar los datos.");
+            }
+            return BadRequest("No existe el Seguimiento.");
+        }
+        [AllowAnonymous]
         [HttpPut("{id}/User/{idUser}")]
         public async Task<IActionResult> CheckedVoluntarioAsignado(int id, int idUser)
         {

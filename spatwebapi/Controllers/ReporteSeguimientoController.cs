@@ -46,17 +46,30 @@ namespace spatwebapi.Controllers
             var lista = _reporteSeguimientoService.GetReportesForVoluntario(id);
             return lista;
         }
-        [HttpPost("CreateReporteSeguimiento")]
-        public async Task<IActionResult> CreateReporteSeguimiento(ReporteSeguimientoForCreate reporteDto)
+        [HttpPost("CrearReporte")]
+        public async Task<IActionResult> CrearReporte(ReporteSeguimientoForCreate reporteDto)
         {
-            if (await _reporteSeguimientoService.VerifyMaximoReportes(reporteDto.SeguimientoId))
+            var seguimiento = await _reporteSeguimientoService.CreateReporte(reporteDto);
+            if (seguimiento!=null)
             {
-                if (await _reporteSeguimientoService.CreateReporteSeguimiento(reporteDto))
-                    return Ok("El Reporte fue agregado exitosamente.");
+                var mapped = _mapper.Map<ReporteSeguimientoForReturn>(seguimiento);
+                return Ok(mapped);
+            }
+            return BadRequest("No se encuentra el Seguimiento.");
+        }
+        [HttpPost("CreateReporteSeguimiento")]
+        public async Task<IActionResult> CreateReporteSeguimiento(ReporteSeguimiento reporte)
+        {
+            //if (await _reporteSeguimientoService.VerifyMaximoReportes(reporteDto.SeguimientoId))
+            //{
+            if (await _reporteSeguimientoService.CreateReporteSeguimiento(reporte)) {
+                var lista = _reporteSeguimientoService.GetReportesForAdmin(reporte.SeguimientoId);
+                return Ok(lista);
+            }
 
                 return BadRequest("Hubo problemas al agregar el Reporte");
-            }
-            return BadRequest("No se pueden asignar más de 10 Reportes por Seguimiento.");
+            //}
+            //return BadRequest("No se pueden asignar más de 10 Reportes por Seguimiento.");
         }
         [HttpPut("UpdateReporteSeguimientoVoluntario")]
         public async Task<IActionResult> UpdateReporteSeguimientoVoluntario(ReporteSeguimientoForUpdate reporte)

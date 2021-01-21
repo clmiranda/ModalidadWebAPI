@@ -110,6 +110,16 @@ namespace webapi.business.Helpers
                     opt.MapFrom(d => d.UserRoles.Select((role) => new
                     { name = role.Role.Name }).Select(x => x.name));
                 });
+            CreateMap<ReporteSeguimientoForCreateAdmin, ReporteSeguimiento>();
+            CreateMap<FechaReporteDto, Seguimiento>()
+    .ForMember(dest => dest.FechaInicio, opt =>
+    {
+        opt.MapFrom(src => src.RangoFechas[0] == "null" ? (DateTime?)null : Convert.ToDateTime(src.RangoFechas[0]));
+    })
+    .ForMember(dest => dest.FechaConclusion, opt =>
+    {
+        opt.MapFrom(src => src.RangoFechas[1] == "null" ? (DateTime?)null : Convert.ToDateTime(src.RangoFechas[1]));
+    });
         }
     }
 }

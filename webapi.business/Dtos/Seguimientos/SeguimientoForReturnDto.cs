@@ -12,7 +12,7 @@ namespace webapi.business.Dtos.Seguimientos
         public int Id { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaConclusion { get; set; }
-        public int CantidadVisitas { get; set; }
+        //public int CantidadVisitas { get; set; }
         public string Estado { get; set; }
         public virtual ContratoAdopcionForList ContratoAdopcion { get; set; }
         public int ContratoAdopcionId { get; set; }
