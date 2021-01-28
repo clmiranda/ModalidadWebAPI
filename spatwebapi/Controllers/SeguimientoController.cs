@@ -41,13 +41,15 @@ namespace spatwebapi.Controllers
             return mapeado;
         }
         [HttpGet("GetAllVoluntarios")]
-        public async Task<IActionResult> GetAllVoluntarios([FromQuery] VoluntarioParameters voluntarioParameters)
+        public IEnumerable<UserForDetailedDto> GetAllVoluntarios(/*[FromQuery] VoluntarioParameters voluntarioParameters*/)
         {
-            var lista = await _userService.GetAllVoluntarios(voluntarioParameters);
-            var listaToReturn = _mapper.Map<IEnumerable<UserForListDto>>(lista);
+            var lista = _seguimientoService.GetAllVoluntarios();
+            var mapped = _mapper.Map<IEnumerable<UserForDetailedDto>>(lista);
+            return mapped;
+            //var listaToReturn = _mapper.Map<IEnumerable<UserForListDto>>(lista);
 
-            Response.AddPagination(lista.CurrentPage, lista.PageSize, lista.TotalCount, lista.TotalPages);
-            return Ok(listaToReturn);
+            //Response.AddPagination(lista.CurrentPage, lista.PageSize, lista.TotalCount, lista.TotalPages);
+            //return Ok(listaToReturn);
         }
         [AllowAnonymous]
         [HttpGet("GetSeguimiento/{id}")]
@@ -90,10 +92,13 @@ namespace spatwebapi.Controllers
         [HttpPut("{id}/User/{idUser}")]
         public async Task<IActionResult> CheckedVoluntarioAsignado(int id, int idUser)
         {
-            var seguimiento = await _seguimientoService.GetById(id);
-            var user = await _userService.GetUsuario(idUser);
-            if (await _seguimientoService.CheckedVoluntarioAsignado(seguimiento, user))
-                return Ok("La solicitud ha sido enviada, el Voluntario deberá aceptarla o rechazarla.");
+            //var seguimiento = await _seguimientoService.GetById(id);
+            //var user = await _userService.GetUsuario(idUser);
+            if (await _seguimientoService.CheckedVoluntarioAsignado(id, idUser)) {
+                var voluntarios = _seguimientoService.GetAllVoluntarios();
+                var mapper = _mapper.Map<IEnumerable<UserForDetailedDto>>(voluntarios);
+                return Ok(mapper);
+            }
             return BadRequest("Ocurrio un problema.");
         }
 
@@ -106,6 +111,8 @@ namespace spatwebapi.Controllers
             var lista = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(_seguimientoService.GetSeguimientoForVoluntario(int.Parse(id)));
             return lista;
         }
+
+        //Rol Voluntario
         [Authorize(Roles = "Voluntario")]
         [HttpPost("{id}/AsignarSeguimiento")]
         public async Task<IActionResult> AsignarSeguimiento(int id)

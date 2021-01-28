@@ -46,6 +46,7 @@ namespace webapi.business.Services.Imp
             //reporte.Seguimiento = seguimiento;
             //reporteDto.FechaAsignada = DateTime.Now;
             reporte.Estado = "Activo";
+            reporte.FechaRealizada = DateTime.Now;
             //var x = _mapper.Map<ReporteSeguimiento>(reporte);
             _unitOfWork.ReporteSeguimientoRepository.Insert(reporte);
             return await _unitOfWork.SaveAll();
