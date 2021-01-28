@@ -61,6 +61,10 @@ namespace webapi.business.Services.Imp
             //}
             return await _unitOfWork.SaveAll();
         }
+        public IEnumerable<User> GetAllVoluntarios() {
+            var resul = _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario"))).ToList();
+            return resul;
+        }
         public async Task<bool> UpdateFecha(FechaReporteDto dto) {
             var objeto = await _unitOfWork.SeguimientoRepository.GetById(dto.Id);
             //objeto.FechaInicio = dto.FechaInicio;
@@ -77,12 +81,15 @@ namespace webapi.business.Services.Imp
             _unitOfWork.SeguimientoRepository.Delete(seguimiento);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> CheckedVoluntarioAsignado(Seguimiento seguimiento, User user) {
-            seguimiento.User = user;
-            seguimiento.UserId = user.Id;
+        public async Task<bool> CheckedVoluntarioAsignado(int id, int idUser) {
+            var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
+            var user = await _unitOfWork.UserRepository.GetById(idUser);
+            //seguimiento.User = user;
+            seguimiento.UserId = idUser;
             seguimiento.Estado = "Pendiente";
-            user.Seguimientos.Add(seguimiento);
             _unitOfWork.SeguimientoRepository.Update(seguimiento);
+            user.Seguimientos.Add(seguimiento);
+            //_unitOfWork.UserRepository.Update(user);
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> AsignarSeguimiento(int id)
@@ -95,8 +102,8 @@ namespace webapi.business.Services.Imp
         public async Task<bool> RechazarSeguimiento(int id)
         {
             var resul = await _unitOfWork.SeguimientoRepository.GetById(id);
-            resul.User = null;
-            resul.UserId = null;
+            //resul.User = null;
+            resul.UserId = 0;
             resul.Estado = "Activo";
             _unitOfWork.SeguimientoRepository.Update(resul);
             return await _unitOfWork.SaveAll();
