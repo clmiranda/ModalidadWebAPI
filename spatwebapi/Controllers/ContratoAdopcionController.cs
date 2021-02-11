@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -63,7 +64,7 @@ namespace spatwebapi.Controllers
             var mascota = await _mascotaService.GetMascotaById(id);
             if (mascota==null)
                 return NotFound();
-            var resul = await _contratoAdopcionService.FindByCondition(x=>x.Mascota.Id==id).FirstOrDefaultAsync();
+            var resul = await _contratoAdopcionService.FindByCondition(x=>x.MascotaId==id).FirstOrDefaultAsync();
             if (resul==null)
                 return Ok(null);
 
@@ -97,6 +98,7 @@ namespace spatwebapi.Controllers
             }
             return BadRequest("No se pudo encontrar el Contrato.");
         }
+        [Authorize(Roles ="Administrador, Voluntario")]
         [HttpGet("DetailAdopcion/{id}")]
         public async Task<IActionResult> DetailAdopcion(int id) {
             var resul = _mapper.Map<ContratoAdopcionReturnDto>(await _contratoAdopcionService.GetById(id));

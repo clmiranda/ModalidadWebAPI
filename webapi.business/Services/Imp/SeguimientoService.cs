@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Seguimientos;
+using webapi.business.Helpers;
+using webapi.business.Pagination;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
@@ -25,6 +27,36 @@ namespace webapi.business.Services.Imp
         public IEnumerable<Seguimiento> GetAll() {
             var lista= _unitOfWork.SeguimientoRepository.GetAll().ToList();
             return lista;
+        }
+
+        public async Task<PaginationList<Seguimiento>> GetAllSeguimiento(SeguimientoParametros parametros, int idUser)
+        {
+            var resul = _unitOfWork.SeguimientoRepository.GetAll();
+            //var lista = x.OrderByDescending(x => x.Titulo).AsQueryable();
+            //if (String.IsNullOrEmpty(parametros.Busqueda))
+            //    parametros.Busqueda = "";
+            //if (String.IsNullOrEmpty(parametros.Filter))
+            //    parametros.Filter = "";
+
+
+            if (parametros.Filter == "Activo")
+                resul = resul.Where(x => x.Estado.Equals("Activo")/* && x.UserId == idUser*/);
+            else if (parametros.Filter == "Pendiente")
+                resul = resul.Where(x => x.Estado.Equals("Pendiente")/* && x.UserId == idUser*/);
+            else if (parametros.Filter == "Asignado")
+                resul = resul.Where(x => x.Estado.Equals("Asignado")/* && x.UserId== idUser*/);
+            //var x = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>(resul).AsQueryable();
+            var pagination = await PaginationList<Seguimiento>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
+            //PaginationContratoAdopcion paginationReturn = new PaginationContratoAdopcion
+            //{
+            //    Items = pagination,
+            //    CurrentPage = pagination.CurrentPage,
+            //    PageSize = pagination.PageSize,
+            //    TotalPages = pagination.TotalPages,
+            //    TotalCount = pagination.TotalCount
+            //};
+            return pagination;
+            //return resul;
         }
         public async Task<Seguimiento> GetById(int id)
         {
@@ -102,8 +134,8 @@ namespace webapi.business.Services.Imp
         public async Task<bool> RechazarSeguimiento(int id)
         {
             var resul = await _unitOfWork.SeguimientoRepository.GetById(id);
-            //resul.User = null;
-            resul.UserId = 0;
+            resul.User = null;
+            //resul.UserId = 0;
             resul.Estado = "Activo";
             _unitOfWork.SeguimientoRepository.Update(resul);
             return await _unitOfWork.SaveAll();

@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Seguimientos;
+using webapi.business.Helpers;
+using webapi.business.Pagination;
 using webapi.core.Models;
 
 namespace webapi.business.Services.Interf
@@ -12,6 +14,7 @@ namespace webapi.business.Services.Interf
     public interface ISeguimientoService
     {
         IEnumerable<Seguimiento> GetAll();
+        Task<PaginationList<Seguimiento>> GetAllSeguimiento(SeguimientoParametros parametros, int idUser);
         IEnumerable<User> GetAllVoluntarios();
         Task<bool> UpdateFecha(FechaReporteDto dto);
         Task<Seguimiento> GetById(int id);

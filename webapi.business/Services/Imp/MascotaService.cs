@@ -69,7 +69,7 @@ namespace webapi.business.Services.Imp
             if (!String.IsNullOrEmpty(parametros.Busqueda))
                 resul = resul.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
             if(parametros.Filter=="Adopcion")
-                resul = resul.Where(x => x.Nombre != null && x.ContratoAdopcion==null);
+                resul = resul.Where(x => x.Nombre != null && x.ContratoAdopcion==null && x.EstadoSituacion=="Activo");
 
             var pagination = await PaginationList<Mascota>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
             //PaginationMascota paginationMascota = new PaginationMascota

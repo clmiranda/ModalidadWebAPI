@@ -69,7 +69,7 @@ namespace webapi.business.Services.Imp
             //Se usa el GetById para asignar la mascota al contrato, ya que desde el MVC
             //no se esta enviando el Model Mascota del Contrato.
             var mascota = await _unitOfWork.MascotaRepository.GetById(contrato.MascotaId);
-            mascota.EstadoSituacion = "Inactivo";
+            mascota.EstadoSituacion = "En Proceso";
             var modelo = _mapper.Map<ContratoAdopcion>(contrato);
             modelo.Estado = "Pendiente";
             modelo.Mascota = mascota;
@@ -136,7 +136,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork.ContratoAdopcionRepository.Update(contrato);
             var mascota = await _unitOfWork.MascotaRepository.GetById(contrato.MascotaId);
             mascota.EstadoSituacion = "Inactivo";
-            //mascota.ContratoAdopcion = null;
+            mascota.ContratoAdopcion = null;
             _unitOfWork.MascotaRepository.Update(mascota);
             //_unitOfWork.SeguimientoRepository.Delete(contrato.Seguimiento);
             //_unitOfWork.ContratoAdopcionRepository.Delete(contrato);

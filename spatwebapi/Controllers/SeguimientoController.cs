@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.business.Dtos.Seguimientos;
 using webapi.business.Dtos.Usuario;
 using webapi.business.Helpers;
+using webapi.business.Pagination;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
@@ -21,17 +22,31 @@ namespace spatwebapi.Controllers
     [ApiController]
     public class SeguimientoController : ControllerBase
     {
+        private readonly HttpContext _httpContext;
         private ISeguimientoService _seguimientoService;
         private IReporteSeguimientoService _reporteSeguimientoService;
         private IUserService _userService;
         private readonly IMapper _mapper;
         public SeguimientoController(ISeguimientoService seguimientoService, IMapper mapper,
-            IUserService userService, IReporteSeguimientoService reporteSeguimientoService)
+            IUserService userService, IReporteSeguimientoService reporteSeguimientoService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _seguimientoService = seguimientoService;
             _userService = userService;
             _reporteSeguimientoService = reporteSeguimientoService;
             _mapper = mapper;
+            _httpContext = httpContextAccessor.HttpContext;
+        }
+        [AllowAnonymous]
+        [HttpGet("GetAllSeguimiento")]
+        public async Task<ActionResult> GetAllSeguimiento([FromQuery] SeguimientoParametros parametros)
+        {
+            int idUser = int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var resul = await _seguimientoService.GetAllSeguimiento(parametros, idUser);
+            var lista = _mapper.Map<List<SeguimientoForReturnDto>>(resul.ToList());
+            Response.AddPagination(resul.CurrentPage, resul.PageSize,
+                 resul.TotalCount, resul.TotalPages);
+            return Ok(lista);
         }
         [AllowAnonymous]
         [HttpGet("ListSeguimiento")]
@@ -53,12 +68,13 @@ namespace spatwebapi.Controllers
         }
         [AllowAnonymous]
         [HttpGet("GetSeguimiento/{id}")]
-        public async Task<ActionResult<SeguimientoForReturnDto>> GetSeguimiento(int id)
+        public async Task<ActionResult> GetSeguimiento(int id)
         {
             var aux = await _seguimientoService.GetById(id);
             if (aux==null)
                 return NotFound("Seguimiento no encontrado.");
-            return Ok( _mapper.Map<SeguimientoForReturnDto>(aux));
+            var seg = _mapper.Map<SeguimientoForReturnDto>(aux);
+            return Ok(seg);
         }
         [AllowAnonymous]
         [HttpPut("SaveSeguimiento")]
@@ -105,11 +121,17 @@ namespace spatwebapi.Controllers
 
         [Authorize(Roles ="Voluntario")]
         [HttpGet("ListVoluntarioSeguimientos")]
-        public IEnumerable<SeguimientoForReturnDto> ListVoluntarioSeguimientos()
+        public async Task<IActionResult> ListVoluntarioSeguimientos([FromQuery] SeguimientoParametros parametros)
         {
-            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var lista = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(_seguimientoService.GetSeguimientoForVoluntario(int.Parse(id)));
-            return lista;
+            //var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var lista = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(_seguimientoService.GetSeguimientoForVoluntario(int.Parse(id)));
+            //return lista;
+            int idUser = int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var resul = await _seguimientoService.GetAllSeguimiento(parametros, idUser);
+            var lista = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(resul);
+            Response.AddPagination(resul.CurrentPage, resul.PageSize,
+                 resul.TotalCount, resul.TotalPages);
+            return Ok(lista);
         }
 
         //Rol Voluntario

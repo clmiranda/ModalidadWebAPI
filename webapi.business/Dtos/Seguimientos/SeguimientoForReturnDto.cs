@@ -18,7 +18,7 @@ namespace webapi.business.Dtos.Seguimientos
         public int ContratoAdopcionId { get; set; }
         public virtual UserForDetailedDto User { get; set; }
         public int UserId { get; set; }
-        //public virtual ICollection<ReporteSeguimientoForReturn> ReporteSeguimientos { get; set; }
+        public virtual List<ReporteSeguimientoForList> ReporteSeguimientos { get; set; }
         //public virtual IEnumerable<UserForListDto> ListaVoluntarios { get; set; }
     }
 }
