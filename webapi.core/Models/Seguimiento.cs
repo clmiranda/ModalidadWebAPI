@@ -16,7 +16,7 @@ namespace webapi.core.Models
         //public int? IdReporteSeguimiento { get; set; }
         public virtual ContratoAdopcion ContratoAdopcion { get; set; }
         public int ContratoAdopcionId { get; set; }
-        public virtual ICollection<ReporteSeguimiento> ReporteSeguimientos { get; set; }
+        public virtual List<ReporteSeguimiento> ReporteSeguimientos { get; set; }
         //public virtual ReporteSeguimiento ReporteSeguimiento { get; set; }
     }
 }

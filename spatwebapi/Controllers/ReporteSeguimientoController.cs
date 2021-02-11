@@ -26,11 +26,13 @@ namespace spatwebapi.Controllers
             _reporteSeguimientoService = reporteSeguimientoService;
             _mapper = mapper;
         }
-        [HttpGet("{id}/GetById")]
-        public async Task<ReporteSeguimientoForReturn> GetById(int id)
+        [HttpGet("GetById/{id}")]
+        public async Task<ActionResult> GetById(int id)
         {
             var reporte = _mapper.Map<ReporteSeguimientoForReturn>(await _reporteSeguimientoService.GetById(id));
-            return reporte;
+            if (reporte == null)
+                return BadRequest("No se encontro el Reporte, el Id es incorrecto.");
+            return Ok(reporte);
         }
         [Authorize(Roles ="Administrador")]
         [HttpGet("{id}/GetReportesForAdmin")]
