@@ -7,7 +7,7 @@ namespace webapi.business.Dtos.ReportesSeguimientos
 {
     public class ReporteSeguimientoForUpdateAdmin: BaseEntity
     {
-        public DateTime FechaReporte { get; set; }
+        public DateTime Fecha { get; set; }
         public string Estado { get; }
         public ReporteSeguimientoForUpdateAdmin()
         {

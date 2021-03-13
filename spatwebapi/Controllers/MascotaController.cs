@@ -66,15 +66,15 @@ namespace spatwebapi.Controllers
             return Ok(resul);
         }
 
-        [HttpGet("GetLastRegister")]
-        public MascotaForDetailedDto GetLastRegister()
-        {
-            var obj = _mascotaService.GetAllMascotas().Result.LastOrDefault();
-            if (obj == null)
-                return null;
-            var resul = _mapper.Map<MascotaForDetailedDto>(obj);
-            return resul;
-        }
+        //[HttpGet("GetLastRegister")]
+        //public MascotaForDetailedDto GetLastRegister()
+        //{
+        //    var obj = _mascotaService.GetAllMascotas().Result.LastOrDefault();
+        //    if (obj == null)
+        //        return null;
+        //    var resul = _mapper.Map<MascotaForDetailedDto>(obj);
+        //    return resul;
+        //}
 
         //Retornar el nombre de la mascota con su foto principal la cual tiene q establecerse
         //desde la vista de agregar mascota la principal
@@ -92,12 +92,12 @@ namespace spatwebapi.Controllers
 
         // POST: api/CasoMascota
         [HttpPost("CreateMascota")]
-        public async Task<IActionResult> CreateMascota([FromBody] Mascota mascotaDto)
+        public async Task<IActionResult> CreateMascota([FromBody] Mascota mascota)
         {
-            var mascota = await _mascotaService.CreateMascota(mascotaDto);
+            var m = await _mascotaService.CreateMascota(mascota);
             if (mascota.Equals(null))
-                return BadRequest("Hubo problemas al crear la Mascota.");
-            var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+                return BadRequest(new { mensaje = "Hubo problemas al crear la Mascota." });
+            var mapped = _mapper.Map<MascotaForDetailedDto>(m);
             return Ok(mapped);
             //if (await _mascotaService.CreateMascota(mascota))
             //{
@@ -113,7 +113,7 @@ namespace spatwebapi.Controllers
             //if (m == null) return null;
             var update = await _mascotaService.UpdateMascota(mascota);
             if (update.Equals(null))
-                return BadRequest("Hubo problemas al Modificar el Registro de la Mascota.");
+                return BadRequest(new { mensaje = "Hubo problemas al actualizar los datos." });
             var mapped = _mapper.Map<MascotaForDetailedDto>(update);
             return Ok(mapped);
         }
@@ -123,22 +123,22 @@ namespace spatwebapi.Controllers
             var mascota = await _mascotaService.GetMascotaById(id);
             //mascota.EstadoSituacion = estado;
             if (mascota == null)
-                return NotFound("No se encontro la Mascota.");
+                return NotFound(new { mensaje = "No se encontro la Mascota." });
             if (await _mascotaService.ChangeEstado(estado, id))
-                return Ok("El estado de la Mascota " + mascota.Nombre + " se modifico correctamente.");
+                return Ok();
             else
-                return BadRequest("Hubo problemas al modificar el estado de la Mascota " + mascota.Nombre + ".");
+                return BadRequest(new { mensaje = "Hubo problemas al modificar el estado de la mascota." });
         }
         [HttpDelete("DeleteMascota/{id}")]
         public async Task<IActionResult> DeleteMascota(int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
             if (mascota == null)
-                return NotFound("La Mascota no fue encontrada.");
+                return NotFound(new { mensaje = "La mascota no fue encontrada." });
             if (await _mascotaService.DeleteMascota(mascota))
-                return Ok(/*new { mensaje = */"El Registro de la Mascota fue eliminado de manera exitosa."/*, idcaso = valor }*/);
+                return Ok();
             else
-                return BadRequest("Hubo problemas al Eliminar el Registro de la Mascota.");
+                return BadRequest(new { mensaje = "Hubo problemas al eliminar el registro." });
         }
     }
 }

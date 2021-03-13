@@ -32,9 +32,10 @@ namespace spatwebapi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userforLogin)
         {
+            //throw new Exception(message:"Error Interno del Servidor.");
             var user = await _userService.Login(userforLogin);
             if (user == null)
-                return Unauthorized("Error, debe confirmar su email o asegurarse de que los datos ingresados sean los correctos.");
+                return Unauthorized(new { mensaje = "Error, debe confirmar su email o asegurarse de que los datos ingresados sean los correctos." });
             var aux = await _userService.GenerateJwtToken(user, _config.GetSection("AppSettings:Token").Value);
 
             return Ok(aux);
@@ -51,10 +52,10 @@ namespace spatwebapi.Controllers
                 string subject = "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.";
                 string body = "Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.";
                 SendEmail.SendEmailConfirmation(subject, body, confirmationLink, userforRegisterDto.Email);
-                return Ok(/*"Un Email de confirmacion de la cuenta ha sido enviado al Correo Electronico."*/);
+                return Ok();
             }
             else
-                return BadRequest(result.Errors);
+                return BadRequest(new { mensaje=result.Errors.FirstOrDefault().Description });
         }
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
@@ -68,16 +69,16 @@ namespace spatwebapi.Controllers
                 return Ok("Su Email fue confirmado de manera correcta.");
             }
             else
-                return BadRequest(result.Errors);
+                return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
         }
         [HttpPost("forgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDto email)
         {
             var token = await _userService.ForgotPassword(email);
             if (token.Equals("ErrorUser"))
-                return BadRequest("El email ingresado no ha sido registrado en el sistema.");
+                return BadRequest(new { mensaje = "El email ingresado no ha sido registrado en el sistema." });
             else if (token.Equals("ErrorEmail"))
-                return BadRequest("El email ingresado aún no ha sido confirmado.");
+                return BadRequest(new { mensaje = "El email ingresado aún no ha sido confirmado." });
             else
             {
                 var linkReseteo = Url.Action("ValidateResetPassword", "Auth",
@@ -86,7 +87,7 @@ namespace spatwebapi.Controllers
                 string subject = "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.";
                 string body = "Accede a este enlace para poder reestablecer tu contraseña.";
                 SendEmail.SendEmailConfirmation(subject, body, linkReseteo, email.Email);
-                return Ok(/*"Un Email ha sido enviado a su Correo Electrónico, debe ingresar al enlace enviado para reestablecer su Contraseña."*/);
+                return Ok();
             }
         }
         [HttpGet("ValidateResetPassword")]
@@ -99,10 +100,10 @@ namespace spatwebapi.Controllers
         {
             var result = await _userService.ResetPasswordExterno(reset);
             if (reset == null)
-                return BadRequest("El Usuario o Token es inválido.");
+                return BadRequest(new { mensaje = "El Usuario o Token es inválido." });
             if (result.Succeeded)
-                return Ok(/*"Su contraseña se ha restaurado de manera correcta."*/);
-            else return BadRequest(result.Errors);
+                return Ok();
+            else return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
         }
     }
 }

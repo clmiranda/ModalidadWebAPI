@@ -16,9 +16,9 @@ namespace webapi.business.Services.Imp
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<IEnumerable<string>> PutRolesUser(string nombreUsuario, string[] rolesUserDto)
+        public async Task<IEnumerable<string>> PutRolesUser(int id, string[] rolesUserDto)
         {
-            var user = await _unitOfWork.UserRepository.FindByName(nombreUsuario);
+            var user = await _unitOfWork.UserRepository.FindById(id.ToString());
 
             var userRoles = await _unitOfWork.RolUserRepository.GetRolesUser(user);
 

@@ -65,7 +65,7 @@ namespace spatwebapi.Controllers
         {
             var d = await _denunciaService.CreateDenuncia(denuncia);
             if (d.Equals(null))
-                return BadRequest("Hubo problemas al crear la denuncia.");
+                return BadRequest(new { mensaje = "Hubo problemas al crear la denuncia." });
             return Ok();
         }
         [HttpPut("UpdateDenuncia")]
@@ -73,7 +73,7 @@ namespace spatwebapi.Controllers
         {
             var d=await _denunciaService.UpdateDenuncia(denuncia);
             if (d.Equals(null))
-                return BadRequest("Hubo problemas al modificar la denuncia.");
+                return BadRequest(new { mensaje = "Hubo problemas al modificar la denuncia." });
 
             return Ok();
         }
@@ -84,7 +84,7 @@ namespace spatwebapi.Controllers
             if (await _denunciaService.DeleteDenuncia(denuncia))
                 return Ok();
             else
-                return BadRequest("Hubo problemas al eliminar el registro.");
+                return BadRequest(new { mensaje = "Hubo problemas al eliminar el registro." });
         }
     }
 }

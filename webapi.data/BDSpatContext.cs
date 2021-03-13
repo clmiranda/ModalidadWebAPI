@@ -28,7 +28,7 @@ namespace webapi.data
         //public virtual DbSet<DetalleAdopcion> DetalleAdopcion { get; set; }
         //public virtual DbSet<EstadoAdopcion> EstadoAdopcion { get; set; }
         public virtual DbSet<Mascota> Mascota { get; set; }
-        public virtual DbSet<Notificacion> Notificacion { get; set; }
+        //public virtual DbSet<Notificacion> Notificacion { get; set; }
         public virtual DbSet<ReporteSeguimiento> ReporteSeguimiento { get; set; }
         public virtual DbSet<Seguimiento> Seguimiento { get; set; }
         //public virtual DbSet<TipoMascota> TipoMascota { get; set; }

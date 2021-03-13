@@ -50,7 +50,7 @@ namespace webapi.business.Services.Imp
         //    return _unitOfWork.MascotaRepository.GetAllMascotaAdopcion();
         //}
 
-        public async Task<IEnumerable<Mascota>> GetAllMascotas()
+        public IEnumerable<Mascota> GetAllMascotas()
         {
             var resul = _unitOfWork.MascotaRepository.GetAll();
             return resul;

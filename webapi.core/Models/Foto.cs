@@ -14,6 +14,8 @@ namespace webapi.core.Models
         //public int? UserId { get; set; }
         public virtual Mascota Mascota { get; set; }
         public int? MascotaId { get; set; }
+        public virtual ReporteSeguimiento ReporteSeguimiento { get; set; }
+        public int? ReporteSeguimientoId { get; set; }
         //public virtual ContratoAdopcion ContratoAdopcion { get; set; }
         //public int? ContratoAdopcionId { get; set; }
     }

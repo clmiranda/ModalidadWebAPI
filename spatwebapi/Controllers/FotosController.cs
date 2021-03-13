@@ -84,12 +84,15 @@ namespace spatwebapi.Controllers
         [HttpPost("Mascota/{id}/SetFotoPrincipalMascota/{idfoto}")]
         public async Task<IActionResult> SetFotoPrincipalMascota(int id, int idfoto)
         {
-            if (await _fotoService.SetFotoPrincipalMascota(id, idfoto)) {
+            if (await _fotoService.SetFotoPrincipalMascota(id, idfoto))
+            {
                 var model = await _fotoService.GetMascota(id);
                 var mascota = _mapper.Map<MascotaForReturn>(model);
                 return Ok(mascota);
             }
-            return BadRequest("Hubo un conflicto al asignar la Foto Principal.");
+            //var model2 = await _fotoService.GetMascota(id);
+            //var mascota2 = _mapper.Map<MascotaForReturn>(model2);
+            return BadRequest(new { mensaje = "Hubo un conflicto al asignar la Foto Principal." });
         }
         [HttpDelete("Mascota/{mascotaId}/EliminarFotoMascota/{idfoto}")]
         public async Task<IActionResult> EliminarFotoMascota(int mascotaId, int idfoto)
@@ -99,7 +102,7 @@ namespace spatwebapi.Controllers
                 var mapped = _mapper.Map<MascotaForReturn>(mascota);
                 return Ok(mapped);
             }
-            return BadRequest("La foto no se pudo eliminar.");
+            return BadRequest(new { mensaje = "La foto no se pudo eliminar." });
         }
     }
 }
