@@ -29,7 +29,7 @@ namespace webapi.business.Services.Imp
             return lista;
         }
 
-        public async Task<PaginationList<Seguimiento>> GetAllSeguimiento(SeguimientoParametros parametros, int idUser)
+        public async Task<PaginationList<Seguimiento>> GetAllSeguimiento(SeguimientoParametros parametros)
         {
             var resul = _unitOfWork.SeguimientoRepository.GetAll();
             //var lista = x.OrderByDescending(x => x.Titulo).AsQueryable();

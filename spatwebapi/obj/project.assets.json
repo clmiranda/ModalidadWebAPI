@@ -3225,7 +3225,10 @@
         },
         "runtime": {
           "bin/placeholder/webapi.business.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "webapi.core/1.0.0": {
         "type": "project",
@@ -3242,7 +3245,10 @@
         },
         "runtime": {
           "bin/placeholder/webapi.core.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "webapi.data/1.0.0": {
         "type": "project",
@@ -3258,7 +3264,10 @@
         },
         "runtime": {
           "bin/placeholder/webapi.data.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "webapi.root/1.0.0": {
         "type": "project",
@@ -10010,7 +10019,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -83,7 +83,7 @@ namespace spatwebapi.Controllers
                 //if(await _contratoAdopcionService.ContratoEstadoMascota(mascota))
                 //return Ok();
                 //return BadRequest("El contrato fue enviado, pero hubo un conflicto guardando algunos datos.");
-            return BadRequest("Ha ocurrido un error guardando los datos.");
+            return BadRequest(new { mensaje = "Ha ocurrido un error guardando los datos." });
         }
         [HttpPut("UpdateFecha")]
         public async Task<IActionResult> UpdateFecha([FromBody] ContratoAdopcion contrato) {
@@ -94,9 +94,9 @@ namespace spatwebapi.Controllers
                     var res = _mapper.Map<ContratoAdopcionReturnDto>(modelo);
                     return Ok(res);
                 }
-                return BadRequest("Ha ocurrido un error actualizando los datos.");
+                return BadRequest(new { mensaje = "Ha ocurrido un error actualizando los datos." });
             }
-            return BadRequest("No se pudo encontrar el Contrato.");
+            return BadRequest(new { mensaje = "No se pudo encontrar el Contrato." });
         }
         [Authorize(Roles ="Administrador, Voluntario")]
         [HttpGet("DetailAdopcion/{id}")]
@@ -117,9 +117,9 @@ namespace spatwebapi.Controllers
                         return Ok(contrato);
                 }
                 else
-                    return BadRequest("Hubo problemas al guardar los datos.");
+                    return BadRequest(new { mensaje = "Hubo problemas al guardar los datos." });
             }
-            return BadRequest("No se ha encontrado el Contrato.");
+            return BadRequest(new { mensaje = "No se ha encontrado el Contrato." });
         }
         [HttpPut("RechazarAdopcion")]
         public async Task<IActionResult> RechazarAdopcion(ContratoRechazoForCreateDto contratoRechazo) {
@@ -132,12 +132,12 @@ namespace spatwebapi.Controllers
                         var contrato = _mapper.Map<ContratoAdopcionReturnDto>(modelo);
                         return Ok(contrato);
                     }
-                    return BadRequest("Ha ocurrido un problema al tratar de generar el informe de Rechazo");
+                    return BadRequest(new { mensaje = "Ha ocurrido un problema al tratar de generar el informe de Rechazo." });
                 }
 
-                return BadRequest("Ha ocurrido un problema al tratar de rechazar el Contrato.");
+                return BadRequest(new { mensaje = "Ha ocurrido un problema al tratar de rechazar el Contrato." });
             }
-            return BadRequest("No se ha encontrado el Contrato.");
+            return BadRequest(new { mensaje = "No se ha encontrado el Contrato." });
         }
         [HttpPut("CancelarAdopcion")]
         public async Task<IActionResult> CancelarAdopcion(ContratoRechazoForCreateDto contratoRechazo) {
@@ -150,11 +150,11 @@ namespace spatwebapi.Controllers
                         var contrato = _mapper.Map<ContratoAdopcionReturnDto>(modelo);
                         return Ok(contrato);
                     }
-                    return BadRequest("Ha ocurrido un error al cancelar el Contrato");
+                    return BadRequest(new { mensaje = "Ha ocurrido un error al cancelar el Contrato." });
                 }
-                return BadRequest("Ha ocurrido un error al cancelar el Contrato");
+                return BadRequest(new { mensaje = "Ha ocurrido un error al cancelar el Contrato." });
             }
-            return BadRequest("No se ha encontrado el Contrato.");
+            return BadRequest(new { mensaje = "No se ha encontrado el Contrato." });
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.ReportesSeguimientos;
+using webapi.business.Dtos.Seguimientos;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
@@ -30,25 +31,23 @@ namespace webapi.business.Services.Imp
             var lista = _unitOfWork.ReporteSeguimientoRepository.GetAll();
             return lista;
         }
-        public IEnumerable<ReporteSeguimientoForReturn> GetReportesForAdmin(int id)
+        public SeguimientoForReturnDto GetReportesForAdmin(int id)
         {
-            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id).OrderBy(y => y.FechaRealizada.Date).ToList());
-            return lista;
+            var mappeado = _mapper.Map<SeguimientoForReturnDto>(_unitOfWork.SeguimientoRepository.GetById(id).Result);
+            return mappeado;
         }
         public IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id)
         {
-            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id && x.Estado.Equals("Asignado")).ToList().OrderBy(y => y.FechaRealizada.Date));
+            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id && x.Estado.Equals("Asignado")).ToList().OrderBy(y => y.Fecha.Date));
             return lista;
         }
-        public async Task<bool> CreateReporteSeguimiento(ReporteSeguimiento reporte) {
-            //var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(reporteSeguimiento.SeguimientoId);
-            //var reporte = _mapper.Map<ReporteSeguimiento>(reporteDto);
-            //reporte.Seguimiento = seguimiento;
-            //reporteDto.FechaAsignada = DateTime.Now;
-            reporte.Estado = "Activo";
-            reporte.FechaRealizada = DateTime.Now;
+        public async Task<bool> CreateReporteSeguimiento(int id) {
+            ReporteSeguimiento r = new ReporteSeguimiento();
+            r.SeguimientoId = id;
+            r.Estado = "Activo";
+            r.Fecha = DateTime.Now;
             //var x = _mapper.Map<ReporteSeguimiento>(reporte);
-            _unitOfWork.ReporteSeguimientoRepository.Insert(reporte);
+            _unitOfWork.ReporteSeguimientoRepository.Insert(r);
             return await _unitOfWork.SaveAll();
         }
         public async Task<Seguimiento> CreateReporte(ReporteSeguimientoForCreate reporteDto) {
@@ -62,16 +61,16 @@ namespace webapi.business.Services.Imp
                 return seguimiento;
             return null;
         }
-        public async Task<bool> VerifyDate(ReporteSeguimientoForUpdateAdmin reporte) {
+        public async Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporte) {
             var modelo = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporte.Id);
-            if (modelo.Seguimiento.FechaInicio.Date<= reporte.FechaReporte.Date && modelo.Seguimiento.FechaConclusion.Date >= reporte.FechaReporte.Date)
+            if (modelo.Seguimiento.FechaInicio.Date<= reporte.Fecha.Date && modelo.Seguimiento.FechaConclusion.Date >= reporte.Fecha.Date)
             {
-                if (!modelo.Seguimiento.ReporteSeguimientos.Any(x=>x.FechaRealizada.Date== reporte.FechaReporte.Date && !x.Estado.Equals("Activo")))
-                    return true;
+                if (!modelo.Seguimiento.ReporteSeguimientos.Any(x=>x.Fecha.Date== reporte.Fecha.Date && !x.Estado.Equals("Activo")))
+                    return 1;
 
-                return false;
+                return 2;
             }
-            return false;
+            return 3;
         }
         public async Task<bool> VerifyMaximoReportes(int id)
         {
@@ -90,18 +89,21 @@ namespace webapi.business.Services.Imp
             return true;
         }
 
-        public async Task<bool> UpdateReporteSeguimientoVoluntario(ReporteSeguimientoForUpdate reporte)
+        public async Task<ReporteSeguimiento> UpdateReporteSeguimientoVoluntario(ReporteSeguimientoForUpdate reporte)
         {
-            var modelo = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporte.Id);
-            modelo.Observaciones = reporte.Descripcion;
-            modelo.Estado = reporte.Estado;
+            //var modelo = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporte.Id);
+            var modelo = _mapper.Map<ReporteSeguimiento>(reporte);
+            //modelo.Observaciones = reporte.Descripcion;
+            //modelo.Estado = reporte.Estado;
             _unitOfWork.ReporteSeguimientoRepository.Update(modelo);
-            return await _unitOfWork.SaveAll();
+            if (await _unitOfWork.SaveAll())
+                return modelo;
+            return null;
         }
         public async Task<bool> UpdateReporteSeguimientoAdmin(ReporteSeguimientoForUpdateAdmin reporte)
         {
             var modelo = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporte.Id);
-            modelo.FechaRealizada = reporte.FechaReporte.Date;
+            modelo.Fecha = reporte.Fecha.Date;
             modelo.Estado = reporte.Estado;
             _unitOfWork.ReporteSeguimientoRepository.Update(modelo);
             return await _unitOfWork.SaveAll();

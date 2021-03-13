@@ -50,29 +50,27 @@ namespace spatwebapi.Controllers
         [HttpPut("UpdateUser")]
         public async Task<ActionResult> UpdateUser(UserUpdateDto user)
         {
-            if (user.Id!=int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized();
+            if (user.Id!=int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized(new { mensaje = "El id del usuario no existe." });
             var u = await _userService.GetUsuario(user.Id);
             if (u == null)
-                return BadRequest("El Usuario no existe.");
+                return BadRequest(new { mensaje = "El Usuario no existe." });
             var resul = await _userService.UpdateUsuario(user);
             if (resul.Succeeded) {
                 var userToReturn = _mapper.Map<UserForDetailedDto>(u);
                 return Ok(userToReturn);
             }
-            return BadRequest(resul.Errors);
+            return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
         }
         [AllowAnonymous]
         [HttpPut("ResetPassword/{id}")]
         public async Task<ActionResult> ResetPassword(int id, [FromBody]string password) {
-            if (id == int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+            //if (id == int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
                 var resul = await _userService.ResetPassword(id, password);
                 if (resul.Succeeded)
                     return Ok();
-                return BadRequest(resul.Errors);
-            }
-            return BadRequest("Usuario Inválido.");
-            //var id = int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            //var resul = await _userService.ResetPassword();
+                return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
+            //}
+            //return BadRequest("Usuario Inválido.");
         }
 
 
@@ -86,12 +84,12 @@ namespace spatwebapi.Controllers
         }
 
         [Authorize(Roles = "SuperAdministrador")]
-        [HttpPost("PutRolesUser/{userName}")]
-        public async Task<IActionResult> PutRolesUser(string userName,  string[] RolesUsuario)
+        [HttpPost("PutRolesUser/{id}")]
+        public async Task<IActionResult> PutRolesUser(int id,  string[] RolesUsuario)
         {
-            var userRoles = await _roleUserService.PutRolesUser(userName, RolesUsuario);
+            var userRoles = await _roleUserService.PutRolesUser(id, RolesUsuario);
             if (userRoles == null)
-                return BadRequest("Error al editar Roles");
+                return BadRequest(new { mensaje = "Error al editar Roles." });
             return Ok(userRoles);
         }
     }

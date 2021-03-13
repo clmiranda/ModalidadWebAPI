@@ -99,7 +99,7 @@ namespace webapi.business.Helpers
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
             CreateMap<ReporteSeguimientoForCreate, ReporteSeguimiento>();
             CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
-            CreateMap<MascotaForCreationDto, Mascota>();
+            //CreateMap<MascotaForCreationDto, Mascota>();
             CreateMap<ContratoRechazo, ContratoRechazoForReturnDto>();
             CreateMap<User, UserRolesForReturn>()
                 .ForMember(dest => dest.Edad, opt =>

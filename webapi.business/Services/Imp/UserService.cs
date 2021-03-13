@@ -79,8 +79,8 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IdentityResult> PostUsuario(UserForRegisterDto userforRegisterDto)
         {
-            userforRegisterDto.FechaCreacion = DateTime.Now;
-            userforRegisterDto.Estado = "Activo";
+            //userforRegisterDto.FechaCreacion = DateTime.Now;
+            //userforRegisterDto.Estado = "Activo";
             var userToCreate = _mapper.Map<User>(userforRegisterDto);
             var result = await _unitOfWork.UserRepository.PostUsuario(userToCreate, userforRegisterDto.Password);
             //if (result.Succeeded)

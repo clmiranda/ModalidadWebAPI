@@ -28,6 +28,11 @@ namespace webapi.business.Dtos.Usuario
         //[Required]
         public DateTime FechaNacimiento { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public string Estado { get; set; }
+        public string Estado { get;  }
+        public UserForRegisterDto()
+        {
+            FechaCreacion = DateTime.Now;
+            Estado = "Activo";
+        }
     }
 }

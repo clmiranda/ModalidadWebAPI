@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -137,6 +138,34 @@ namespace webapi.business.Services.Imp
             if (foto.IdPublico == null)
                 _unitOfWork.FotoRepository.Delete(foto);
 
+            return await _unitOfWork.SaveAll();
+        }
+        public async Task<bool> AgregarFotoReporte(int id, IFormFile archivo)
+        {
+            var reporteRepo = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
+            Foto foto = new Foto();
+
+                var resultUpload = new ImageUploadResult();
+
+                if (archivo.Length > 0)
+                {
+                    using (var stream = archivo.OpenReadStream())
+                    {
+                        var parametros = new ImageUploadParams()
+                        {
+                            File = new FileDescription(archivo.Name, stream),
+                            Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
+                        };
+                        resultUpload = _cloudinary.Upload(parametros);
+                    }
+                }
+            //Uri en desuso, reemplazado por Url
+            foto.Url = resultUpload.SecureUrl.ToString();
+            foto.IdPublico = resultUpload.PublicId;
+            foto.ReporteSeguimientoId = id;
+
+            reporteRepo.Fotos.Add(foto);
+            foto.IsPrincipal = true;
             return await _unitOfWork.SaveAll();
         }
     }
