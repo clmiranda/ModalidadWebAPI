@@ -347,9 +347,6 @@ namespace webapi.data.Migrations
                     b.Property<string>("EstadoHogarMascota")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EstadoMascota")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 

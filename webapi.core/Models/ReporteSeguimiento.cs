@@ -11,9 +11,9 @@ namespace webapi.core.Models
         //    Seguimientos = new HashSet<Seguimiento>();
         //}
         //public string Descripcion { get; set; }
-        public string EstadoMascota { get; set; }
-        public string EstadoHogarMascota { get; set; }
+        //public string EstadoMascota { get; set; }
         public string Observaciones { get; set; }
+        public string EstadoHogarMascota { get; set; }
         //public DateTime FechaAsignada { get; set; }
         public DateTime Fecha { get; set; }
         //public DateTime FechaReporte { get; set; }

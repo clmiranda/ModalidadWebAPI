@@ -56,14 +56,18 @@ namespace webapi.data.Repositories.Imp
             var obj =  entities.ToList().LastOrDefault();
             return obj;
         }
-        //public async  Task<IEnumerable<T>> FindByCondition(Expression<Func<T, bool>> expression)
-        //{
-        //    return await entities.Where(expression).ToListAsync();
-        //}
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
             //return entities.Where(expression).AsNoTracking();
             return entities.Where(expression).AsQueryable();
+        }
+        public IQueryable<T> GetAllNoTraking()
+        {
+            return entities.AsNoTracking();
+        }
+        public async Task<T> GetByIdNoTraking(int id)
+        {
+            return await entities.AsNoTracking().SingleOrDefaultAsync(s => s.Id == id);
         }
     }
 }

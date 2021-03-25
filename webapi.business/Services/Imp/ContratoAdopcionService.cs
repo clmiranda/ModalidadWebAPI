@@ -97,11 +97,13 @@ namespace webapi.business.Services.Imp
         //    return _unitOfWork.ContratoAdopcionRepository.GetContratoByIdMascota(id);
         //}
         public async Task<bool> CreateContratoRechazo(ContratoRechazoForCreateDto contratoRechazo) {
-            var contrato= await _unitOfWork.ContratoAdopcionRepository.GetById(contratoRechazo.ContratoAdopcionId);
+            //var contrato= await _unitOfWork.ContratoAdopcionRepository.GetById(contratoRechazo.ContratoAdopcionId);
+            //contrato.Mascota = null;
+            //_unitOfWork.ContratoAdopcionRepository.Update(contrato);
             ContratoRechazo c = new ContratoRechazo();
             c.RazonRechazo = contratoRechazo.RazonRechazo;
-            c.ContratoAdopcion = contrato;
-            c.ContratoAdopcionId = contrato.Id;
+            //c.ContratoAdopcion = contrato;
+            c.ContratoAdopcionId = contratoRechazo.ContratoAdopcionId;
             _unitOfWork.ContratoRechazoRepository.Insert(c);
             return await _unitOfWork.SaveAll();
         }
@@ -132,11 +134,12 @@ namespace webapi.business.Services.Imp
         public async Task<bool> RechazarAdopcion(int id)
         {
             var contrato = await _unitOfWork.ContratoAdopcionRepository.GetById(id);
+            contrato.Mascota = null;
             contrato.Estado = "Rechazado";
             _unitOfWork.ContratoAdopcionRepository.Update(contrato);
             var mascota = await _unitOfWork.MascotaRepository.GetById(contrato.MascotaId);
             mascota.EstadoSituacion = "Inactivo";
-            mascota.ContratoAdopcion = null;
+            //mascota.ContratoAdopcion = null;
             _unitOfWork.MascotaRepository.Update(mascota);
             //_unitOfWork.SeguimientoRepository.Delete(contrato.Seguimiento);
             //_unitOfWork.ContratoAdopcionRepository.Delete(contrato);

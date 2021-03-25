@@ -9,7 +9,9 @@ namespace webapi.business.Dtos.ReportesSeguimientos
 {
     public class ReporteSeguimientoForReturn: BaseEntity
     {
-        public string Descripcion { get; set; }
+        public string Observaciones { get; set; }
+        //public string EstadoMascota { get; set; }
+        public string EstadoHogarMascota { get; set; }
         public string Estado { get; set; }
         public DateTime FechaRealizada { get; set; }
         //public DateTime FechaAsignada { get; set; }

@@ -103,7 +103,7 @@ namespace spatwebapi.Controllers
         public async Task<IActionResult> DetailAdopcion(int id) {
             var resul = _mapper.Map<ContratoAdopcionReturnDto>(await _contratoAdopcionService.GetById(id));
             if (resul==null)
-                return BadRequest("No se ha encontrado el Contrato.");
+                return BadRequest();
             return Ok(resul);
         }
         [HttpPut("{id}/AprobarAdopcion")]

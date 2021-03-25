@@ -1,0 +1,15 @@
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Release\netcoreapp3.1\webapi.data.deps.json
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Release\netcoreapp3.1\webapi.data.runtimeconfig.json
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Release\netcoreapp3.1\webapi.data.runtimeconfig.dev.json
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Release\netcoreapp3.1\webapi.data.dll
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Release\netcoreapp3.1\webapi.data.pdb
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Release\netcoreapp3.1\webapi.core.dll
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Release\netcoreapp3.1\webapi.core.pdb
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Release\netcoreapp3.1\webapi.data.csprojAssemblyReference.cache
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Release\netcoreapp3.1\webapi.data.AssemblyInfoInputs.cache
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Release\netcoreapp3.1\webapi.data.AssemblyInfo.cs
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Release\netcoreapp3.1\webapi.data.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Release\netcoreapp3.1\webapi.data.csproj.CopyComplete
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Release\netcoreapp3.1\webapi.data.dll
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Release\netcoreapp3.1\webapi.data.pdb
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Release\netcoreapp3.1\webapi.data.genruntimeconfig.cache

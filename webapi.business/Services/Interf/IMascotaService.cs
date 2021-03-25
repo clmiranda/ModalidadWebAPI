@@ -13,8 +13,8 @@ namespace webapi.business.Services.Interf
     public interface IMascotaService
     {
         IQueryable<Mascota> FindByCondition(Expression<Func<Mascota, bool>> expression);
-        IEnumerable<Mascota> GetAllMascotas();
-        Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros);
+        IEnumerable<MascotaForDetailedDto> GetAll();
+        Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros, string opcion);
         //IEnumerable<Mascota> GetAllMascotaAdopcion();
         Task<Mascota> GetMascotaById(int id);
         //int GetIdLastMascota();

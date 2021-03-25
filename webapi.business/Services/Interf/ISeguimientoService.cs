@@ -16,13 +16,14 @@ namespace webapi.business.Services.Interf
         IEnumerable<Seguimiento> GetAll();
         Task<PaginationList<Seguimiento>> GetAllSeguimiento(SeguimientoParametros parametros);
         IEnumerable<User> GetAllVoluntarios();
-        Task<bool> UpdateFecha(FechaReporteDto dto);
+        Task<Seguimiento> UpdateFecha(FechaReporteDto dto);
         Task<Seguimiento> GetById(int id);
         Task<Seguimiento> GetByIdContrato(int id);
         void CreateSeguimiento(ContratoAdopcion contrato);
         Task<bool> UpdateSeguimiento(Seguimiento seguimiento);
         Task<bool> DeleteSeguimiento(Seguimiento seguimiento);
         Task<bool> CheckedVoluntarioAsignado(int id, int idUser);
+        Task<bool> RemoveVoluntarioChecked(int id, int idUser);
         Task<bool> AsignarSeguimiento(int id);
         Task<bool> RechazarSeguimiento(int id);
         IEnumerable<Seguimiento> GetSeguimientoForVoluntario(int userId);

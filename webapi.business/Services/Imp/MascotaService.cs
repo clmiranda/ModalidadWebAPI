@@ -22,6 +22,12 @@ namespace webapi.business.Services.Imp
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        public IEnumerable<MascotaForDetailedDto> GetAll()
+        {
+            var lista = _unitOfWork.MascotaRepository.GetAll().ToList();
+            var mapped = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
+            return mapped;
+        }
         public async Task<Mascota> CreateMascota(Mascota mascota)
         {
             //var denuncia = await _unitOfWork.DenunciaRepository.GetById(mascota.DenunciaId);
@@ -50,38 +56,21 @@ namespace webapi.business.Services.Imp
         //    return _unitOfWork.MascotaRepository.GetAllMascotaAdopcion();
         //}
 
-        public IEnumerable<Mascota> GetAllMascotas()
+        public async Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros, string opcion)
         {
             var resul = _unitOfWork.MascotaRepository.GetAll();
-            return resul;
-        }
-
-        public async Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros)
-        {
-            var resul = _unitOfWork.MascotaRepository.GetAll()/*.Include(x=>x.CasoMascotas).ToListAsync()*/;
-            //var x = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(resul);
-            //var lista = x.OrderByDescending(x => x.Nombre).AsQueryable();
-            //if (String.IsNullOrEmpty(parametros.Busqueda))
-            //    parametros.Busqueda = "";
-            //if (String.IsNullOrEmpty(parametros.Filter))
-            //    parametros.Filter = "";
 
             if (!String.IsNullOrEmpty(parametros.Busqueda))
                 resul = resul.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
-            if(parametros.Filter=="Adopcion")
-                resul = resul.Where(x => x.Nombre != null && x.ContratoAdopcion==null && x.EstadoSituacion=="Activo");
+            if (parametros.Filter == "Adopcion") {
+                if (opcion.Equals("Admin"))
+                    resul = resul.Where(x => x.ContratoAdopcion == null);
+                else
+                    resul = resul.Where(x => x.Nombre != null && x.ContratoAdopcion == null && x.EstadoSituacion == "Activo");
+            }
 
             var pagination = await PaginationList<Mascota>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
-            //PaginationMascota paginationMascota = new PaginationMascota
-            //{
-            //    Items = pagination,
-            //    CurrentPage = pagination.CurrentPage,
-            //    PageSize = pagination.PageSize,
-            //    TotalPages = pagination.TotalPages,
-            //    TotalCount = pagination.TotalCount
-            //};
             return pagination;
-            //return await _unitOfWork.MascotaRepository.GetAll();
         }
         public async Task<Mascota> GetMascotaById(int id)
         {
