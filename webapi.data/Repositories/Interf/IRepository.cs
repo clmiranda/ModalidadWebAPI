@@ -19,5 +19,7 @@ namespace webapi.data.Repositories.Interf
         T GetFirst();
         T GetLast();
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
+        IQueryable<T> GetAllNoTraking();
+        Task<T> GetByIdNoTraking(int id);
     }
 }

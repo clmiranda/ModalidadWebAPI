@@ -27,16 +27,22 @@ namespace spatwebapi.Controllers
             _denunciaService = denunciaService;
             _mapper = mapper;
         }
-        [HttpGet("GetAllMascotas")]
-        public async Task<ActionResult> GetAllMascotas([FromQuery] MascotaParametros parametros)
+        [HttpGet("GetAll")]
+        public ActionResult GetAll()
         {
-            var resul = await _mascotaService.GetAllMascotas(parametros);
-            //var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
-            var lista = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(resul);
-            Response.AddPagination(resul.CurrentPage, resul.PageSize,
-                 resul.TotalCount, resul.TotalPages);
+            var lista = _mascotaService.GetAll();
             return Ok(lista);
         }
+        //[HttpGet("GetAllMascotas")]
+        //public async Task<ActionResult> GetAllMascotas([FromQuery] MascotaParametros parametros)
+        //{
+        //    var resul = await _mascotaService.GetAllMascotas(parametros);
+        //    //var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
+        //    var lista = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(resul);
+        //    Response.AddPagination(resul.CurrentPage, resul.PageSize,
+        //         resul.TotalCount, resul.TotalPages);
+        //    return Ok(lista);
+        //}
 
         //[HttpGet("GetMascota/{id}")]
         //public ActionResult<Mascota> GetMascota(int id)
@@ -82,9 +88,20 @@ namespace spatwebapi.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> GetAllMascotaAdopcion([FromQuery] MascotaParametros parametros)
         {
-            var resul = await _mascotaService.GetAllMascotas(parametros);
+            var resul = await _mascotaService.GetAllMascotas(parametros, "");
             //var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
             var lista = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(resul);
+            Response.AddPagination(resul.CurrentPage, resul.PageSize,
+                 resul.TotalCount, resul.TotalPages);
+            return Ok(lista);
+        }
+        [HttpGet("GetAllMascotaAdmin")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetAllMascotaAdmin([FromQuery] MascotaParametros parametros)
+        {
+            var resul = await _mascotaService.GetAllMascotas(parametros,"Admin");
+            //var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
+            var lista = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(resul);
             Response.AddPagination(resul.CurrentPage, resul.PageSize,
                  resul.TotalCount, resul.TotalPages);
             return Ok(lista);

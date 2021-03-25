@@ -10,7 +10,7 @@ using webapi.data;
 namespace webapi.data.Migrations
 {
     [DbContext(typeof(BDSpatContext))]
-    [Migration("20210313011928_ChangesSeguimiento_Reportes")]
+    [Migration("20210317005356_ChangesSeguimiento_Reportes")]
     partial class ChangesSeguimiento_Reportes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -347,9 +347,6 @@ namespace webapi.data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EstadoHogarMascota")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EstadoMascota")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Fecha")

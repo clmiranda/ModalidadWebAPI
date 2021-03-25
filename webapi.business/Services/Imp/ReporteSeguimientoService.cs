@@ -62,10 +62,10 @@ namespace webapi.business.Services.Imp
             return null;
         }
         public async Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporte) {
-            var modelo = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporte.Id);
-            if (modelo.Seguimiento.FechaInicio.Date<= reporte.Fecha.Date && modelo.Seguimiento.FechaConclusion.Date >= reporte.Fecha.Date)
+            var modelo = await _unitOfWork.SeguimientoRepository.GetById(reporte.SeguimientoId);
+            if (modelo.FechaInicio.Date<= reporte.Fecha.Date && modelo.FechaConclusion.Date >= reporte.Fecha.Date)
             {
-                if (!modelo.Seguimiento.ReporteSeguimientos.Any(x=>x.Fecha.Date== reporte.Fecha.Date && !x.Estado.Equals("Activo")))
+                if (!modelo.ReporteSeguimientos.Any(x=>x.Fecha.Date.ToShortDateString()== reporte.Fecha.Date.ToShortDateString()/* && !x.Estado.Equals("Activo")*/))
                     return 1;
 
                 return 2;
@@ -89,16 +89,14 @@ namespace webapi.business.Services.Imp
             return true;
         }
 
-        public async Task<ReporteSeguimiento> UpdateReporteSeguimientoVoluntario(ReporteSeguimientoForUpdate reporte)
+        public async Task<bool> UpdateReporteSeguimientoVoluntario(ReporteSeguimientoForUpdate reporte)
         {
             //var modelo = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporte.Id);
             var modelo = _mapper.Map<ReporteSeguimiento>(reporte);
             //modelo.Observaciones = reporte.Descripcion;
             //modelo.Estado = reporte.Estado;
             _unitOfWork.ReporteSeguimientoRepository.Update(modelo);
-            if (await _unitOfWork.SaveAll())
-                return modelo;
-            return null;
+            return await _unitOfWork.SaveAll();
         }
         public async Task<bool> UpdateReporteSeguimientoAdmin(ReporteSeguimientoForUpdateAdmin reporte)
         {
@@ -113,6 +111,11 @@ namespace webapi.business.Services.Imp
             var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
             _unitOfWork.ReporteSeguimientoRepository.Delete(reporte);
             return await _unitOfWork.SaveAll();
+        }
+
+        public async Task<ReporteSeguimiento> GetByIdNotracking(int id)
+        {
+            return await _unitOfWork.ReporteSeguimientoRepository.GetByIdNoTraking(id);
         }
     }
 }

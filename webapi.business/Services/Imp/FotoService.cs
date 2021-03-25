@@ -91,6 +91,7 @@ namespace webapi.business.Services.Imp
                 fotoMascota.MascotaId = id;
 
                 fotoMap = _mapper.Map<Foto>(fotoMascota);
+                mascotaRepo.Fotos = new List<Foto>();
                 mascotaRepo.Fotos.Add(fotoMap);
                 if (!mascotaRepo.Fotos.Any(x => x.IsPrincipal))
                     fotoMap.IsPrincipal = true;
@@ -163,9 +164,11 @@ namespace webapi.business.Services.Imp
             foto.Url = resultUpload.SecureUrl.ToString();
             foto.IdPublico = resultUpload.PublicId;
             foto.ReporteSeguimientoId = id;
-
-            reporteRepo.Fotos.Add(foto);
+            foto.FechaAgregado = DateTime.Now;
             foto.IsPrincipal = true;
+
+            reporteRepo.Fotos = new List<Foto>();
+            reporteRepo.Fotos.Add(foto);
             return await _unitOfWork.SaveAll();
         }
     }

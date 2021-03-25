@@ -104,5 +104,15 @@ namespace spatwebapi.Controllers
             }
             return BadRequest(new { mensaje = "La foto no se pudo eliminar." });
         }
+        //[HttpPost("Reporte/{reporteId}/AgregarFotoReporte")]
+        //public async Task<IActionResult> AgregarFotoReporte(int id, IFormFile foto)
+        //{
+        //    var fotomascota = await _fotoService.AgregarFotoReporte(id, foto);
+        //    if (fotomascota)
+        //        return Ok(fotomascota);
+        //    return BadRequest("No se pudo agregar la foto.");
+        //    //var photoToReturn = _mapper.Map<PhotoForReturnDto>(fotomascota);
+        //    //return CreatedAtRoute("GetPhoto", new { userId = noticiaId, id = photo.Id }, photoToReturn);
+        //}
     }
 }

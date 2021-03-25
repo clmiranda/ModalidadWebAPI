@@ -79,6 +79,8 @@
     <Compile Remove="Migrations\20210308225523_ChangesSeguimiento.Designer.cs" />
     <Compile Remove="Migrations\20210312020646_ChangesSeguimiento_Reportes.cs" />
     <Compile Remove="Migrations\20210312020646_ChangesSeguimiento_Reportes.Designer.cs" />
+    <Compile Remove="Migrations\20210313011928_ChangesSeguimiento_Reportes.cs" />
+    <Compile Remove="Migrations\20210313011928_ChangesSeguimiento_Reportes.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

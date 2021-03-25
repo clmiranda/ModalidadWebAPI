@@ -27,6 +27,10 @@ namespace webapi.data.Migrations
                 table: "Seguimiento");
 
             migrationBuilder.DropColumn(
+                name: "EstadoMascota",
+                table: "ReporteSeguimiento");
+
+            migrationBuilder.DropColumn(
                 name: "FechaAsignada",
                 table: "ReporteSeguimiento");
 
@@ -171,6 +175,12 @@ namespace webapi.data.Migrations
                 type: "int",
                 nullable: true,
                 oldClrType: typeof(int));
+
+            migrationBuilder.AddColumn<string>(
+                name: "EstadoMascota",
+                table: "ReporteSeguimiento",
+                type: "nvarchar(max)",
+                nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "FechaAsignada",

@@ -29,6 +29,12 @@ namespace spatwebapi.Controllers
             _denunciaService = denunciaService;
             _mapper = mapper;
         }
+        [HttpGet("GetAll")]
+        public ActionResult GetAll()
+        {
+            var lista = _denunciaService.GetAll();
+            return Ok(lista);
+        }
         [HttpGet("GetAllDenuncias")]
         public async Task<ActionResult> GetAllDenuncias([FromQuery]DenunciaParametros parametros) {
             //var resul= await _denunciaService.GetAllDenuncias();
