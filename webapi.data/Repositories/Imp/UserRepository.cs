@@ -140,23 +140,23 @@ namespace webapi.data.Repositories.Imp
             return _context.Users.Where(expression).AsQueryable();
         }
 
-        public async Task<IEnumerable<User>> GetRolesUsuarios()
-        {
-            //var lista = await _context.Users
-            //    .Select(x => new
-            //    {
-            //        Id = x.Id,
-            //        UserName = x.UserName,
-            //        Roles = (from RolUsuario in x.UserRoles
-            //                 join Rol in _context.Roles
-            //                 on RolUsuario.RoleId
-            //                 equals Rol.Id
-            //                 select Rol.Name).ToList()
+        //public async Task<IEnumerable<User>> GetRolesUsuarios()
+        //{
+        //    //var lista = await _context.Users
+        //    //    .Select(x => new
+        //    //    {
+        //    //        Id = x.Id,
+        //    //        UserName = x.UserName,
+        //    //        Roles = (from RolUsuario in x.UserRoles
+        //    //                 join Rol in _context.Roles
+        //    //                 on RolUsuario.RoleId
+        //    //                 equals Rol.Id
+        //    //                 select Rol.Name).ToList()
 
-            //    }).ToListAsync();
-            var listado = await _userManager.Users.ToListAsync();
-            return listado;
-        }
+        //    //    }).ToListAsync();
+        //    var listado = await _userManager.Users.ToListAsync();
+        //    return listado;
+        //}
         //public IEnumerable<User> GetAllVoluntarios()
         //{
         //    var lista =_context.Users.Where(x=>x.UserRoles.Any(y=>y.Role.Name.Equals("Voluntario"))).ToList();

@@ -37,6 +37,14 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
             _httpContext = httpContextAccessor.HttpContext;
         }
+        [AllowAnonymous]
+        [HttpGet("GetAll")]
+        public IEnumerable<SeguimientoForReturnDto> GetAll()
+        {
+            var lista = _seguimientoService.GetAll();
+            var mapeado = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(lista);
+            return mapeado;
+        }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpGet("GetAllSeguimiento")]
         public async Task<ActionResult> GetAllSeguimiento([FromQuery] SeguimientoParametros parametros)
@@ -47,13 +55,6 @@ namespace spatwebapi.Controllers
             Response.AddPagination(resul.CurrentPage, resul.PageSize,
                  resul.TotalCount, resul.TotalPages);
             return Ok(lista);
-        }
-        [AllowAnonymous]
-        [HttpGet("ListSeguimiento")]
-        public IEnumerable<SeguimientoForReturnDto> ListSeguimiento() {
-            var lista = _seguimientoService.GetAll();
-            var mapeado= _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(lista);
-            return mapeado;
         }
         [HttpGet("GetAllVoluntarios")]
         public IEnumerable<UserForDetailedDto> GetAllVoluntarios(/*[FromQuery] VoluntarioParameters voluntarioParameters*/)

@@ -22,8 +22,8 @@ namespace webapi.business.Services.Interf
         Task<IdentityResult> ResetPassword(int id, string password);
         Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto reset);
         Task<User> GetUsuario(int id);
-        IEnumerable<User> GetAll();
-        Task<IEnumerable<User>> GetRolesUsuarios();
+        //Task<IEnumerable<User>> GetAll();
+        Task<IEnumerable<User>> GetUsers();
         //Task<bool> UpdateUser(int id, UserForUpdateDto userForUpdateDto);
         //Task<PagedList<User>> GetUsers(UserParams userParams);
     }

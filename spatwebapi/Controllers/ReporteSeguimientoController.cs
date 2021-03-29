@@ -32,6 +32,13 @@ namespace spatwebapi.Controllers
             _fotoService = fotoService;
             _mapper = mapper;
         }
+        [HttpGet("GetAll")]
+        public ActionResult GetAll()
+        {
+            var lista = _reporteSeguimientoService.GetAll();
+            var mapped = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(lista);
+            return Ok(mapped);
+        }
         [HttpGet("GetById/{id}")]
         public async Task<ActionResult> GetById(int id)
         {

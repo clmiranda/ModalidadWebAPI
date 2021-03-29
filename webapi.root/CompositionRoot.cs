@@ -66,6 +66,9 @@ namespace webapi.root
 
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.Configure<SmtpSettings>(configuration.GetSection("SmtpSettings"));
+            services.AddSingleton<IEmailService, EmailService>();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddCors();
             services.Configure<ConfigurationCloudinary>(configuration.GetSection("CloudinarySettings"));
@@ -83,6 +86,9 @@ namespace webapi.root
                 opt.SignIn.RequireConfirmedEmail = true;
                 opt.User.RequireUniqueEmail = false;
             }).AddDefaultTokenProviders().AddErrorDescriber<CustomIdentityErrorDescriber>();
+            ////Token de reset password duracion 1 day
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+    options.TokenLifespan = TimeSpan.FromHours(3));
 
             builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
             builder.AddEntityFrameworkStores<BDSpatContext>();

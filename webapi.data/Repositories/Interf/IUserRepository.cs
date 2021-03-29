@@ -29,7 +29,7 @@ namespace webapi.data.Repositories.Interf
         void DeleteFoto(int id);
         void AddRole(User user);
 
-        Task<IEnumerable<User>> GetRolesUsuarios();
+        //Task<IEnumerable<User>> GetRolesUsuarios();
 
 
         //crud

@@ -14,7 +14,9 @@ namespace webapi.business.Services.Interf
 {
     public interface IContratoAdopcionService
     {
-        Task<PaginationList<ContratoAdopcion>> GetAll(ContratoAdopcionParametros parametros);
+        IEnumerable<ContratoAdopcion> GetAll();
+        IEnumerable<ContratoRechazo> GetAllRechazoCancelado();
+        Task<PaginationList<ContratoAdopcion>> GetAllContratos(ContratoAdopcionParametros parametros);
         Task<ContratoAdopcion> GetById(int id);
         //Task<IEnumerable<ContratoAdopcion>> GetAllAdopcionesPendientes();
         Task<ContratoAdopcion> CreateContratoAdopcion(ContratoAdopcionForCreate contrato);
