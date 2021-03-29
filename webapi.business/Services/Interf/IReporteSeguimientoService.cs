@@ -14,6 +14,7 @@ namespace webapi.business.Services.Interf
         Task<ReporteSeguimiento> GetByIdNotracking(int id);
         Task<Seguimiento> CreateReporte(ReporteSeguimientoForCreate reporteDto);
         IEnumerable<ReporteSeguimiento> GetAll();
+        IEnumerable<ReporteSeguimiento> GetAll(int id);
         SeguimientoForReturnDto GetReportesForAdmin(int id);
         IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id);
         Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporte);

@@ -9,5 +9,6 @@ namespace webapi.business.Dtos.ContratoRechazo
     {
         public int Id { get; set; }
         public string RazonRechazo { get; set; }
+        public int ContratoAdopcionId { get; set; }
     }
 }

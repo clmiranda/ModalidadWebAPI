@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -19,15 +20,19 @@ namespace spatwebapi.Controllers
     [AllowAnonymous]
     public class AuthController : Controller
     {
+        private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
         private IUserService _userService;
+        private readonly IEmailService _emailService;
         private IMapper _mapper;
         public AuthController(IConfiguration config, IUserService userService,
-            IMapper mapper)
+            IMapper mapper, IEmailService emailService, UserManager<User> userManager)
         {
             _config = config;
             _userService = userService;
             _mapper = mapper;
+            _emailService = emailService;
+            _userManager = userManager;
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userforLogin)
@@ -49,9 +54,10 @@ namespace spatwebapi.Controllers
                 var userToCreate = await _userService.GetEmailToken(userforRegisterDto.Email);
                 var confirmationLink = Url.Action("ConfirmEmail", "Auth",
                     new { userId = userToCreate.Id, token = userToCreate.Token }, Request.Scheme);
-                string subject = "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.";
-                string body = "Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.";
-                SendEmail.SendEmailConfirmation(subject, body, confirmationLink, userforRegisterDto.Email);
+                await _emailService.SendEmailAsync(userforRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href="+ confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
+                //string subject = "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.";
+                //string body = "Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.";
+                //SendEmail.SendEmailConfirmation(subject, body, confirmationLink, userforRegisterDto.Email);
                 return Ok();
             }
             else
@@ -65,9 +71,7 @@ namespace spatwebapi.Controllers
                 return BadRequest("Ha ocurrido un error, Id o Token inválido.");
 
             if (result.Succeeded)
-            {
-                return Ok("Su Email fue confirmado de manera correcta.");
-            }
+                return Redirect("https://localhost:44363/Cuenta/ConfirmEmail");
             else
                 return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
         }
@@ -78,29 +82,33 @@ namespace spatwebapi.Controllers
             if (token.Equals("ErrorUser"))
                 return BadRequest(new { mensaje = "El email ingresado no ha sido registrado en el sistema." });
             else if (token.Equals("ErrorEmail"))
-                return BadRequest(new { mensaje = "El email ingresado aún no ha sido confirmado." });
+                return BadRequest(new { mensaje = "El email ingresado aún no ha sido verificado." });
             else
             {
                 var linkReseteo = Url.Action("ValidateResetPassword", "Auth",
                         new { email = email.Email, token = token }, Request.Scheme);
 
-                string subject = "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.";
-                string body = "Accede a este enlace para poder reestablecer tu contraseña.";
-                SendEmail.SendEmailConfirmation(subject, body, linkReseteo, email.Email);
+                //string subject = "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.";
+                //string body = "Accede a este enlace para poder reestablecer tu contraseña.";
+                //SendEmail.SendEmailConfirmation(subject, body, linkReseteo, email.Email);
+                await _emailService.SendEmailAsync(email.Email, "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.", "<a href=" + linkReseteo + "><h5>Accede a este enlace para reestablecer tu contraseña.</h5></a>");
                 return Ok();
             }
         }
         [HttpGet("ValidateResetPassword")]
         public RedirectResult ValidateResetPassword(string email, string token)
         {
-            return Redirect("https://localhost:44382/Cuenta/ResetPassword?email=" + email + "&token=" + token);
+            return Redirect("https://localhost:44363/Cuenta/ResetPassword?email=" + email + "&token=" + token);
         }
         [HttpPost("ResetPasswordExterno")]
         public async Task<IActionResult> ResetPasswordExterno(ResetPasswordDto reset)
         {
+            var user = await _userManager.FindByEmailAsync(reset.Email);
+            if (user == null)
+                return NotFound(new { mensaje = "El email no se encuentra registrado." });
             var result = await _userService.ResetPasswordExterno(reset);
-            if (reset == null)
-                return BadRequest(new { mensaje = "El Usuario o Token es inválido." });
+            //if (reset == null)
+            //    return BadRequest(new { mensaje = "El Usuario o Token es inválido." });
             if (result.Succeeded)
                 return Ok();
             else return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });

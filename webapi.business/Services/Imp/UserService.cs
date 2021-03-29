@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using webapi.business.Dtos.Usuario;
 using webapi.business.Helpers;
 using webapi.business.Services.Interf;
@@ -98,11 +100,11 @@ namespace webapi.business.Services.Imp
             //var userToReturn = _mapper.Map<UserForDetailedDto>(user);
             //return userToReturn;
         }
-        public IEnumerable<User> GetAll()
-        {
-            var lista = _unitOfWork.UserRepository.FindByCondition(x=>x.UserRoles.Any(y=>y.RoleId!=7));
-            return lista;
-        }
+        //public async Task<IEnumerable<User>> GetAll()
+        //{
+        //    var lista = await _unitOfWork.UserRepository.GetAll();
+        //    return lista;
+        //}
         public async Task<IdentityResult> UpdateUsuario(UserUpdateDto userDto) {
             var usuario = await _unitOfWork.UserRepository.GetById(userDto.Id);
             var modelo= _mapper.Map(userDto, usuario);
@@ -130,7 +132,12 @@ namespace webapi.business.Services.Imp
             {
                 if (await _unitOfWork.UserRepository.IsEmailConfirmed(user))
                 {
-                    return Base64UrlEncoder.Encode(await _unitOfWork.UserRepository.GeneratePasswordResetToken(user));
+                    string token = await _unitOfWork.UserRepository.GeneratePasswordResetToken(user);
+                    byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(token);
+                    var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+                    //token = token.Replace(' ','+');
+                    return codeEncoded;
+                    //return Base64UrlEncoder.Encode(await _unitOfWork.UserRepository.GeneratePasswordResetToken(user));
                 }
                 else return "ErrorEmail";
             }
@@ -161,12 +168,14 @@ namespace webapi.business.Services.Imp
         public async Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto reset)
         {
             var usuario = await _unitOfWork.UserRepository.FindByEmail(reset.Email);
-            string token = await _unitOfWork.UserRepository.GeneratePasswordResetToken(usuario);
+            var codeDecodedBytes = WebEncoders.Base64UrlDecode(reset.Token);
+            var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
+            //string token = await _unitOfWork.UserRepository.GeneratePasswordResetToken(usuario);
             //reset.Token = Base64UrlEncoder.Decode(reset.Token);
             //var user = await _unitOfWork.UserRepository.FindByEmail(reset.Email);
             //if (user != null)
             //{
-            var result = await _unitOfWork.UserRepository.ResetPassword(usuario, token, reset.Password);
+            var result = await _unitOfWork.UserRepository.ResetPassword(usuario, codeDecoded, reset.Password);
             return result;
             //}
             //else
@@ -181,9 +190,9 @@ namespace webapi.business.Services.Imp
             return await PaginationList<User>.ToPagedList(voluntarios, voluntarioParameters.PageNumber, voluntarioParameters.PageSize);
         }
 
-        public async Task<IEnumerable<User>> GetRolesUsuarios()
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            var users = await _unitOfWork.UserRepository.GetRolesUsuarios();
+            var users = await _unitOfWork.UserRepository.GetAll();
             return users;
         }
     }

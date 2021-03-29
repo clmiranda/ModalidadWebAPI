@@ -34,18 +34,18 @@ namespace spatwebapi.Controllers
         {
             var user = await _userService.GetUsuario(id);
             if (user == null)
-                return BadRequest("El Usuario no existe.");
+                return NotFound("El Usuario no existe.");
             var userToReturn = _mapper.Map<UserForDetailedDto>(user);
             return Ok(userToReturn);
         }
-        [AllowAnonymous]
-        [HttpGet("GetUser")]
-        public ActionResult GetUser()
-        {
-            var user = _userService.GetAll();
-            var userToReturn = _mapper.Map<IEnumerable<UserForDetailedDto>>(user);
-            return Ok(userToReturn);
-        }
+        //[AllowAnonymous]
+        //[HttpGet("GetUser")]
+        //public async Task<ActionResult> GetUser()
+        //{
+        //    var user = await _userService.GetAll();
+        //    var userToReturn = _mapper.Map<IEnumerable<UserRolesForReturn>>(user);
+        //    return Ok(userToReturn);
+        //}
         [AllowAnonymous]
         [HttpPut("UpdateUser")]
         public async Task<ActionResult> UpdateUser(UserUpdateDto user)
@@ -75,10 +75,10 @@ namespace spatwebapi.Controllers
 
 
         [Authorize(Roles = "SuperAdministrador")]
-        [HttpGet("GetRolesUsuarios")]
-        public async Task<IActionResult> GetRolesUsuarios()
+        [HttpGet("GetUsers")]
+        public async Task<IActionResult> GetUsers()
         {
-            var x = await _userService.GetRolesUsuarios();
+            var x = await _userService.GetUsers();
             var lista = _mapper.Map<IEnumerable<UserRolesForReturn>>(x);
             return Ok(lista);
         }

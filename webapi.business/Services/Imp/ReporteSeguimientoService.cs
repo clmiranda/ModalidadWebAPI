@@ -28,7 +28,12 @@ namespace webapi.business.Services.Imp
         }
         public IEnumerable<ReporteSeguimiento> GetAll()
         {
-            var lista = _unitOfWork.ReporteSeguimientoRepository.GetAll();
+            var lista = _unitOfWork.ReporteSeguimientoRepository.GetAll().ToList();
+            return lista;
+        }
+        public IEnumerable<ReporteSeguimiento> GetAll(int id)
+        {
+            var lista = _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x=>x.SeguimientoId==id).ToList();
             return lista;
         }
         public SeguimientoForReturnDto GetReportesForAdmin(int id)

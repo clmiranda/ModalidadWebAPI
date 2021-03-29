@@ -48,11 +48,25 @@ namespace spatwebapi.Controllers
             var modelo = _mapper.Map<ContratoAdopcionForDetailDto>(resul);
             return Ok(modelo);
         }
-        [HttpGet("GetAllAdopcionesPendientes")]
-        public async Task<ActionResult> GetAllAdopcionesPendientes([FromQuery] ContratoAdopcionParametros parametros) {
+        [HttpGet("GetAll")]
+        public ActionResult GetAll()
+        {
+            var lista = _contratoAdopcionService.GetAll();
+            var mapped = _mapper.Map<IEnumerable<ContratoAdopcionForDetailDto>>(lista);
+            return Ok(mapped);
+        }
+        [HttpGet("GetAllRechazoCancelado")]
+        public ActionResult GetAllRechazoCancelado()
+        {
+            var lista = _contratoAdopcionService.GetAllRechazoCancelado();
+            var mapped = _mapper.Map<IEnumerable<ContratoRechazoForReturnDto>>(lista);
+            return Ok(mapped);
+        }
+        [HttpGet("GetAllContratos")]
+        public async Task<ActionResult> GetAllContratos([FromQuery] ContratoAdopcionParametros parametros) {
             //var lista = await _contratoAdopcionService.FindByCondition(x=> x.Estado.Equals("Pendiente") || x.Estado.Equals("Aprobado")).ToListAsync();
             //var resul = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>(lista);
-            var resul = await _contratoAdopcionService.GetAll(parametros);
+            var resul = await _contratoAdopcionService.GetAllContratos(parametros);
             var lista = _mapper.Map<IEnumerable<ContratoAdopcionForList>>(resul);
             Response.AddPagination(resul.CurrentPage, resul.PageSize,
                  resul.TotalCount, resul.TotalPages);
