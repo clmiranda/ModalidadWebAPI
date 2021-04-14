@@ -78,7 +78,7 @@ namespace spatwebapi.Controllers
         [HttpGet("GetUsers")]
         public async Task<IActionResult> GetUsers()
         {
-            var x = await _userService.GetUsers();
+            var x = await _userService.GetAll();
             var lista = _mapper.Map<IEnumerable<UserRolesForReturn>>(x);
             return Ok(lista);
         }

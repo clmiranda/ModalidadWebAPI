@@ -84,6 +84,7 @@ namespace webapi.business.Helpers
             CreateMap<ContratoAdopcionReturnDto, ContratoAdopcion>();
             CreateMap<ContratoAdopcion, ContratoAdopcionReturnDto>();
             CreateMap<ContratoAdopcionForCreate, ContratoAdopcion>();
+            CreateMap<FechaContratoForUpdateDto, ContratoAdopcion>();
             CreateMap<Seguimiento, SeguimientoForReturnDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForList>();
             //.ForMember(d=>d.CantidadReportes, options=>
@@ -93,7 +94,7 @@ namespace webapi.business.Helpers
             CreateMap<ContratoAdopcion, ContratoAdopcionForList>()
                 .ForMember(d => d.RazonAdopcion, options =>
                 {
-                    options.MapFrom(s => s.Pregunta1);
+                    options.MapFrom(s => s.Respuesta1);
                 });
             CreateMap<ContratoAdopcion, ContratoAdopcionForDetailDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
@@ -101,6 +102,7 @@ namespace webapi.business.Helpers
             CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
             //CreateMap<MascotaForCreationDto, Mascota>();
             CreateMap<ContratoRechazo, ContratoRechazoForReturnDto>();
+            CreateMap<ContratoRechazoForCreateDto, ContratoRechazo>();
             CreateMap<User, UserRolesForReturn>()
                 .ForMember(dest => dest.Edad, opt =>
                 {

@@ -171,7 +171,7 @@ namespace webapi.data.Migrations
                     b.Property<DateTime>("FechaSolicitudAdopcion")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MascotaId")
+                    b.Property<int?>("MascotaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombres")
@@ -180,31 +180,32 @@ namespace webapi.data.Migrations
                     b.Property<string>("NumeroCelular")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Pregunta1")
+                    b.Property<string>("Respuesta1")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Pregunta2")
+                    b.Property<string>("Respuesta2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Pregunta3")
+                    b.Property<string>("Respuesta3")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Pregunta4")
+                    b.Property<string>("Respuesta4")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Pregunta5")
+                    b.Property<string>("Respuesta5")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Pregunta6")
+                    b.Property<string>("Respuesta6")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Pregunta7")
+                    b.Property<string>("Respuesta7")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MascotaId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[MascotaId] IS NOT NULL");
 
                     b.ToTable("ContratoAdopcion");
                 });
@@ -582,9 +583,7 @@ namespace webapi.data.Migrations
                 {
                     b.HasOne("webapi.core.Models.Mascota", "Mascota")
                         .WithOne("ContratoAdopcion")
-                        .HasForeignKey("webapi.core.Models.ContratoAdopcion", "MascotaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("webapi.core.Models.ContratoAdopcion", "MascotaId");
                 });
 
             modelBuilder.Entity("webapi.core.Models.ContratoRechazo", b =>

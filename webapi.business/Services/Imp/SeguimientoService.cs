@@ -126,7 +126,7 @@ namespace webapi.business.Services.Imp
             //_unitOfWork.UserRepository.Update(user);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> RemoveVoluntarioChecked(int id, int idUser)
+        public async Task<bool> RemoveVoluntario(int id, int idUser)
         {
             var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
             var user = await _unitOfWork.UserRepository.GetById(idUser);

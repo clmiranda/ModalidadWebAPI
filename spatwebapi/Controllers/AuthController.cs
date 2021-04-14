@@ -22,28 +22,25 @@ namespace spatwebapi.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
-        private IUserService _userService;
+        private readonly IUserService _userService;
         private readonly IEmailService _emailService;
-        private IMapper _mapper;
         public AuthController(IConfiguration config, IUserService userService,
-            IMapper mapper, IEmailService emailService, UserManager<User> userManager)
+             IEmailService emailService, UserManager<User> userManager)
         {
             _config = config;
             _userService = userService;
-            _mapper = mapper;
             _emailService = emailService;
             _userManager = userManager;
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userforLogin)
         {
-            //throw new Exception(message:"Error Interno del Servidor.");
             var user = await _userService.Login(userforLogin);
             if (user == null)
                 return Unauthorized(new { mensaje = "Error, debe confirmar su email o asegurarse de que los datos ingresados sean los correctos." });
-            var aux = await _userService.GenerateJwtToken(user, _config.GetSection("AppSettings:Token").Value);
+            var token = await _userService.GenerateJwtToken(user, _config.GetSection("AppSettings:Token").Value);
 
-            return Ok(aux);
+            return Ok(token);
         }
         [HttpPost("PostUsuario")]
         public async Task<IActionResult> PostUsuario([FromBody]UserForRegisterDto userforRegisterDto)
@@ -54,10 +51,8 @@ namespace spatwebapi.Controllers
                 var userToCreate = await _userService.GetEmailToken(userforRegisterDto.Email);
                 var confirmationLink = Url.Action("ConfirmEmail", "Auth",
                     new { userId = userToCreate.Id, token = userToCreate.Token }, Request.Scheme);
+
                 await _emailService.SendEmailAsync(userforRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href="+ confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
-                //string subject = "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.";
-                //string body = "Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.";
-                //SendEmail.SendEmailConfirmation(subject, body, confirmationLink, userforRegisterDto.Email);
                 return Ok();
             }
             else
@@ -88,9 +83,6 @@ namespace spatwebapi.Controllers
                 var linkReseteo = Url.Action("ValidateResetPassword", "Auth",
                         new { email = email.Email, token = token }, Request.Scheme);
 
-                //string subject = "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.";
-                //string body = "Accede a este enlace para poder reestablecer tu contraseña.";
-                //SendEmail.SendEmailConfirmation(subject, body, linkReseteo, email.Email);
                 await _emailService.SendEmailAsync(email.Email, "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.", "<a href=" + linkReseteo + "><h5>Accede a este enlace para reestablecer tu contraseña.</h5></a>");
                 return Ok();
             }
@@ -107,8 +99,6 @@ namespace spatwebapi.Controllers
             if (user == null)
                 return NotFound(new { mensaje = "El email no se encuentra registrado." });
             var result = await _userService.ResetPasswordExterno(reset);
-            //if (reset == null)
-            //    return BadRequest(new { mensaje = "El Usuario o Token es inválido." });
             if (result.Succeeded)
                 return Ok();
             else return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });

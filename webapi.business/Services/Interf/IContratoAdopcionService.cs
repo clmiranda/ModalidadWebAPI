@@ -20,14 +20,11 @@ namespace webapi.business.Services.Interf
         Task<ContratoAdopcion> GetById(int id);
         //Task<IEnumerable<ContratoAdopcion>> GetAllAdopcionesPendientes();
         Task<ContratoAdopcion> CreateContratoAdopcion(ContratoAdopcionForCreate contrato);
-        Task<bool> UpdateContratoAdopcion(ContratoAdopcion contrato);
-        int GetLast();
-        //ContratoAdopcion GetContratoByIdMascota(int id);
-        //Task<bool> ContratoEstadoMascota(Mascota mascota);
+        Task<bool> UpdateContratoAdopcion(FechaContratoForUpdateDto dto);
         Task<bool> CreateContratoRechazo(ContratoRechazoForCreateDto contratoRechazo);
-        Task<bool> AprobarAdopcion(int id);
-        Task<bool> RechazarAdopcion(int id);
-        Task<bool> CancelarAdopcion(int id);
+        Task<bool> AprobarAdopcion(int id, int mascotaId);
+        Task<bool> RechazarAdopcion(int id, int mascotaId);
+        Task<bool> CancelarAdopcion(int id, int mascotaId);
         IQueryable<ContratoAdopcion> FindByCondition(Expression<Func<ContratoAdopcion, bool>> expression);
     }
 }
