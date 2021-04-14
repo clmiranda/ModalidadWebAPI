@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace webapi.data.Migrations
 {
-    public partial class ChangesSeguimiento_Reportes : Migration
+    public partial class ChangeSeguimiento_Reportes_Adopciones : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_ContratoAdopcion_Mascota_MascotaId",
+                table: "ContratoAdopcion");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Mascota_Denuncia_DenunciaId",
                 table: "Mascota");
@@ -21,6 +25,10 @@ namespace webapi.data.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Mascota_DenunciaId",
                 table: "Mascota");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ContratoAdopcion_MascotaId",
+                table: "ContratoAdopcion");
 
             migrationBuilder.DropColumn(
                 name: "CantidadVisitas",
@@ -41,6 +49,34 @@ namespace webapi.data.Migrations
             migrationBuilder.DropColumn(
                 name: "Descripcion",
                 table: "Mascota");
+
+            migrationBuilder.DropColumn(
+                name: "Pregunta1",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Pregunta2",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Pregunta3",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Pregunta4",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Pregunta5",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Pregunta6",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Pregunta7",
+                table: "ContratoAdopcion");
 
             migrationBuilder.AlterColumn<int>(
                 name: "SeguimientoId",
@@ -83,6 +119,48 @@ namespace webapi.data.Migrations
                 table: "Foto",
                 nullable: true);
 
+            migrationBuilder.AlterColumn<int>(
+                name: "MascotaId",
+                table: "ContratoAdopcion",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
+
+            migrationBuilder.AddColumn<string>(
+                name: "Respuesta1",
+                table: "ContratoAdopcion",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Respuesta2",
+                table: "ContratoAdopcion",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Respuesta3",
+                table: "ContratoAdopcion",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Respuesta4",
+                table: "ContratoAdopcion",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Respuesta5",
+                table: "ContratoAdopcion",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Respuesta6",
+                table: "ContratoAdopcion",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Respuesta7",
+                table: "ContratoAdopcion",
+                nullable: true);
+
             migrationBuilder.CreateIndex(
                 name: "IX_Mascota_DenunciaId",
                 table: "Mascota",
@@ -94,6 +172,21 @@ namespace webapi.data.Migrations
                 name: "IX_Foto_ReporteSeguimientoId",
                 table: "Foto",
                 column: "ReporteSeguimientoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContratoAdopcion_MascotaId",
+                table: "ContratoAdopcion",
+                column: "MascotaId",
+                unique: true,
+                filter: "[MascotaId] IS NOT NULL");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ContratoAdopcion_Mascota_MascotaId",
+                table: "ContratoAdopcion",
+                column: "MascotaId",
+                principalTable: "Mascota",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Foto_ReporteSeguimiento_ReporteSeguimientoId",
@@ -123,6 +216,10 @@ namespace webapi.data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                name: "FK_ContratoAdopcion_Mascota_MascotaId",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Foto_ReporteSeguimiento_ReporteSeguimientoId",
                 table: "Foto");
 
@@ -141,6 +238,10 @@ namespace webapi.data.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Foto_ReporteSeguimientoId",
                 table: "Foto");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ContratoAdopcion_MascotaId",
+                table: "ContratoAdopcion");
 
             migrationBuilder.DropColumn(
                 name: "Fecha",
@@ -161,6 +262,34 @@ namespace webapi.data.Migrations
             migrationBuilder.DropColumn(
                 name: "ReporteSeguimientoId",
                 table: "Foto");
+
+            migrationBuilder.DropColumn(
+                name: "Respuesta1",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Respuesta2",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Respuesta3",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Respuesta4",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Respuesta5",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Respuesta6",
+                table: "ContratoAdopcion");
+
+            migrationBuilder.DropColumn(
+                name: "Respuesta7",
+                table: "ContratoAdopcion");
 
             migrationBuilder.AddColumn<int>(
                 name: "CantidadVisitas",
@@ -210,6 +339,56 @@ namespace webapi.data.Migrations
                 type: "nvarchar(max)",
                 nullable: true);
 
+            migrationBuilder.AlterColumn<int>(
+                name: "MascotaId",
+                table: "ContratoAdopcion",
+                type: "int",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldNullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Pregunta1",
+                table: "ContratoAdopcion",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Pregunta2",
+                table: "ContratoAdopcion",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Pregunta3",
+                table: "ContratoAdopcion",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Pregunta4",
+                table: "ContratoAdopcion",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Pregunta5",
+                table: "ContratoAdopcion",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Pregunta6",
+                table: "ContratoAdopcion",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Pregunta7",
+                table: "ContratoAdopcion",
+                type: "nvarchar(max)",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Notificacion",
                 columns: table => new
@@ -230,6 +409,20 @@ namespace webapi.data.Migrations
                 table: "Mascota",
                 column: "DenunciaId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContratoAdopcion_MascotaId",
+                table: "ContratoAdopcion",
+                column: "MascotaId",
+                unique: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ContratoAdopcion_Mascota_MascotaId",
+                table: "ContratoAdopcion",
+                column: "MascotaId",
+                principalTable: "Mascota",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Mascota_Denuncia_DenunciaId",

@@ -11,7 +11,6 @@ namespace webapi.business.Services.Interf
 {
     public interface IUserService
     {
-        Task<PaginationList<User>> GetAllVoluntarios(VoluntarioParameters voluntarioParameters);
         Task<User> Login(UserForLoginDto userforLogin);
         Task<object> GenerateJwtToken(User user, string security);
         Task<IdentityResult> PostUsuario(UserForRegisterDto user);
@@ -23,7 +22,7 @@ namespace webapi.business.Services.Interf
         Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto reset);
         Task<User> GetUsuario(int id);
         //Task<IEnumerable<User>> GetAll();
-        Task<IEnumerable<User>> GetUsers();
+        Task<IEnumerable<User>> GetAll();
         //Task<bool> UpdateUser(int id, UserForUpdateDto userForUpdateDto);
         //Task<PagedList<User>> GetUsers(UserParams userParams);
     }

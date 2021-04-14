@@ -17,7 +17,7 @@ namespace webapi.business.Helpers
 
         //public int UserId { get; set; }
         public string Busqueda { get; set; } = "";
-        public string Filter { get; set; } = "Adopcion";
+        public string Filter { get; set; } = "All";
         public string OrderBy { get; set; } = "";
         //public MascotaParametros()
         //{

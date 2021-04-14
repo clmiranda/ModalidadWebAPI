@@ -125,7 +125,21 @@ namespace spatwebapi.Controllers
         {
             //var seguimiento = await _seguimientoService.GetById(id);
             //var user = await _userService.GetUsuario(idUser);
-            if (await _seguimientoService.RemoveVoluntarioChecked(id, idUser))
+            if (await _seguimientoService.RemoveVoluntario(id, idUser))
+            {
+                var voluntarios = _seguimientoService.GetAllVoluntarios();
+                var mapper = _mapper.Map<IEnumerable<UserForDetailedDto>>(voluntarios);
+                return Ok(mapper);
+            }
+            return BadRequest(new { mensaje = "Ocurrio un problema al guardar los datos." });
+        }
+        [AllowAnonymous]
+        [HttpPut("{id}/RemoveVoluntarioPendiente/{idUser}")]
+        public async Task<IActionResult> RemoveVoluntarioPendiente(int id, int idUser)
+        {
+            //var seguimiento = await _seguimientoService.GetById(id);
+            //var user = await _userService.GetUsuario(idUser);
+            if (await _seguimientoService.RemoveVoluntario(id, idUser))
             {
                 var voluntarios = _seguimientoService.GetAllVoluntarios();
                 var mapper = _mapper.Map<IEnumerable<UserForDetailedDto>>(voluntarios);

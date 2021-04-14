@@ -14,11 +14,8 @@ namespace webapi.business.Services.Interf
     {
         IQueryable<Mascota> FindByCondition(Expression<Func<Mascota, bool>> expression);
         IEnumerable<MascotaForDetailedDto> GetAll();
-        Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros, string opcion);
-        //IEnumerable<Mascota> GetAllMascotaAdopcion();
+        Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros);
         Task<Mascota> GetMascotaById(int id);
-        //int GetIdLastMascota();
-        //Task<Mascota> GetMascotaByIdCaso(int id);
         Task<Mascota> CreateMascota(Mascota mascota);
         Task<Mascota> UpdateMascota(Mascota mascota);
         Task<bool> DeleteMascota(Mascota mascota);

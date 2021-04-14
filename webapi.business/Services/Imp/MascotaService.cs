@@ -15,7 +15,7 @@ namespace webapi.business.Services.Imp
 {
     public class MascotaService : IMascotaService
     {
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public MascotaService(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -30,12 +30,8 @@ namespace webapi.business.Services.Imp
         }
         public async Task<Mascota> CreateMascota(Mascota mascota)
         {
-            //var denuncia = await _unitOfWork.DenunciaRepository.GetById(mascota.DenunciaId);
-            //var m = _mapper.Map<Mascota>(mascota);
             mascota.FechaAgregado = DateTime.Now;
             mascota.EstadoSituacion = "Inactivo";
-            //m.Denuncia = denuncia;
-            //m.DenunciaId = denuncia.Id;
             _unitOfWork.MascotaRepository.Insert(mascota);
             if (await _unitOfWork.SaveAll())
                 return mascota;
@@ -51,23 +47,15 @@ namespace webapi.business.Services.Imp
         {
             return _unitOfWork.MascotaRepository.FindByCondition(expression).AsQueryable();
         }
-        //public IEnumerable<Mascota> GetAllMascotaAdopcion()
-        //{
-        //    return _unitOfWork.MascotaRepository.GetAllMascotaAdopcion();
-        //}
 
-        public async Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros, string opcion)
+        public async Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros)
         {
             var resul = _unitOfWork.MascotaRepository.GetAll();
 
             if (!String.IsNullOrEmpty(parametros.Busqueda))
                 resul = resul.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
-            if (parametros.Filter == "Adopcion") {
-                if (opcion.Equals("Admin"))
-                    resul = resul.Where(x => x.ContratoAdopcion == null);
-                else
+            if (parametros.Filter == "Adopcion")
                     resul = resul.Where(x => x.Nombre != null && x.ContratoAdopcion == null && x.EstadoSituacion == "Activo");
-            }
 
             var pagination = await PaginationList<Mascota>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
             return pagination;
@@ -76,16 +64,8 @@ namespace webapi.business.Services.Imp
         {
             return await _unitOfWork.MascotaRepository.GetById(id);
         }
-
-        //public Task<Mascota> GetMascotaByIdCaso(int id)
-        //{
-        //    return _unitOfWork.MascotaRepository.GetMascotaByIdCaso(id);
-        //}
-
         public async Task<Mascota> UpdateMascota(Mascota mascota)
         {
-            //_unitOfWork.MascotaRepository.Update(mascota);
-            //return await _unitOfWork.SaveAll();
             _unitOfWork.MascotaRepository.Update(mascota);
             if (await _unitOfWork.SaveAll())
                 return mascota;

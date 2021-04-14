@@ -16,13 +16,13 @@ namespace webapi.business.Dtos.Adopciones
         public string NumeroCelular { get; set; }
 
         //preguntas
-        public string Pregunta1 { get; set; }
-        public string Pregunta2 { get; set; }
-        public string Pregunta3 { get; set; }
-        public string Pregunta4 { get; set; }
-        public string Pregunta5 { get; set; }
-        public string Pregunta6 { get; set; }
-        public string Pregunta7 { get; set; }
+        public string Respuesta1 { get; set; }
+        public string Respuesta2 { get; set; }
+        public string Respuesta3 { get; set; }
+        public string Respuesta4 { get; set; }
+        public string Respuesta5 { get; set; }
+        public string Respuesta6 { get; set; }
+        public string Respuesta7 { get; set; }
         public string Estado { get; set; }
         public DateTime FechaSolicitudAdopcion { get; set; }
         public MascotaForReturn Mascota { get; set; }

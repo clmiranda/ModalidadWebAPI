@@ -22,16 +22,23 @@ namespace spatwebapi.Controllers
     public class ContratoAdopcionController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private IContratoAdopcionService _contratoAdopcionService;
-        private IMascotaService _mascotaService;
-        private ISeguimientoService _seguimientoService;
-        public ContratoAdopcionController(IContratoAdopcionService contratoAdopcionService, IMapper mapper,
-            ISeguimientoService seguimientoService, IMascotaService mascotaService)
+        private readonly IContratoAdopcionService _contratoAdopcionService;
+        private readonly IMascotaService _mascotaService;
+        public ContratoAdopcionController(IContratoAdopcionService contratoAdopcionService,
+            IMapper mapper, IMascotaService mascotaService)
         {
             _contratoAdopcionService = contratoAdopcionService;
             _mapper = mapper;
-            _seguimientoService = seguimientoService;
             _mascotaService = mascotaService;
+        }
+        [HttpGet("GetAllContratos")]
+        public async Task<ActionResult> GetAllContratos([FromQuery] ContratoAdopcionParametros parametros)
+        {
+            var resul = await _contratoAdopcionService.GetAllContratos(parametros);
+            var lista = _mapper.Map<IEnumerable<ContratoAdopcionForList>>(resul);
+            Response.AddPagination(resul.CurrentPage, resul.PageSize,
+                 resul.TotalCount, resul.TotalPages);
+            return Ok(lista);
         }
         [HttpGet("GetById/{id}")]
         public async Task<ContratoAdopcionReturnDto> GetById(int id) {
@@ -44,7 +51,7 @@ namespace spatwebapi.Controllers
         {
             var resul = await _contratoAdopcionService.GetById(id);
             if (resul==null)
-                return BadRequest("Id de contrato no existe.");
+                return NotFound("Id de contrato no existe.");
             var modelo = _mapper.Map<ContratoAdopcionForDetailDto>(resul);
             return Ok(modelo);
         }
@@ -62,48 +69,32 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<IEnumerable<ContratoRechazoForReturnDto>>(lista);
             return Ok(mapped);
         }
-        [HttpGet("GetAllContratos")]
-        public async Task<ActionResult> GetAllContratos([FromQuery] ContratoAdopcionParametros parametros) {
-            //var lista = await _contratoAdopcionService.FindByCondition(x=> x.Estado.Equals("Pendiente") || x.Estado.Equals("Aprobado")).ToListAsync();
-            //var resul = _mapper.Map<IEnumerable<ContratoAdopcionReturnDto>>(lista);
-            var resul = await _contratoAdopcionService.GetAllContratos(parametros);
-            var lista = _mapper.Map<IEnumerable<ContratoAdopcionForList>>(resul);
-            Response.AddPagination(resul.CurrentPage, resul.PageSize,
-                 resul.TotalCount, resul.TotalPages);
-            return Ok(lista);
-        }
         [HttpGet("GetContratoByIdMascota/{id}")]
         public async Task<ActionResult<ContratoAdopcionReturnDto>> GetContratoByIdMascota(int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
             if (mascota==null)
-                return NotFound();
-            var resul = await _contratoAdopcionService.FindByCondition(x=>x.MascotaId==id).FirstOrDefaultAsync();
-            if (resul==null)
-                return Ok(null);
-
+                return NotFound(null);
+            if (!mascota.EstadoSituacion.Equals("Activo"))
+                return BadRequest(null);
+            var resul = await _contratoAdopcionService.FindByCondition(x => x.MascotaId == id).FirstOrDefaultAsync();
             var modelo = _mapper.Map<ContratoAdopcionReturnDto>(resul);
             return Ok(modelo);
         }
         [HttpPost("GenerarContrato")]
         public async Task<IActionResult> GenerarContrato([FromBody] ContratoAdopcionForCreate contrato) {
-            //var modelo = _mapper.Map<ContratoAdopcion>(contrato);
             var c = await _contratoAdopcionService.CreateContratoAdopcion(contrato);
             if (c != null) {
                 var mapeado = _mapper.Map<ContratoAdopcionReturnDto>(c);
                 return Ok(mapeado);
             }
-                //var mascota = await _mascotaService.GetMascotaById(modelo.MascotaId);
-                //if(await _contratoAdopcionService.ContratoEstadoMascota(mascota))
-                //return Ok();
-                //return BadRequest("El contrato fue enviado, pero hubo un conflicto guardando algunos datos.");
             return BadRequest(new { mensaje = "Ha ocurrido un error guardando los datos." });
         }
         [HttpPut("UpdateFecha")]
-        public async Task<IActionResult> UpdateFecha([FromBody] ContratoAdopcion contrato) {
-            var modelo =await _contratoAdopcionService.GetById(contrato.Id);
+        public async Task<IActionResult> UpdateFecha([FromForm] FechaContratoForUpdateDto dto) {
+            var modelo = await _contratoAdopcionService.GetById(dto.Id);
             if (modelo != null) {
-                if (await _contratoAdopcionService.UpdateContratoAdopcion(contrato))
+                if (await _contratoAdopcionService.UpdateContratoAdopcion(dto))
                 {
                     var res = _mapper.Map<ContratoAdopcionReturnDto>(modelo);
                     return Ok(res);
@@ -117,7 +108,7 @@ namespace spatwebapi.Controllers
         public async Task<IActionResult> DetailAdopcion(int id) {
             var resul = _mapper.Map<ContratoAdopcionReturnDto>(await _contratoAdopcionService.GetById(id));
             if (resul==null)
-                return BadRequest();
+                return BadRequest(null);
             return Ok(resul);
         }
         [HttpPut("{id}/AprobarAdopcion")]
@@ -125,8 +116,7 @@ namespace spatwebapi.Controllers
             var modelo = await _contratoAdopcionService.GetById(id);
             if (modelo!=null)
             {
-                if (await _contratoAdopcionService.AprobarAdopcion(id)) {
-                    //otro dto a retornar para incluir todas las preguntas respondidas por el adoptante
+                if (await _contratoAdopcionService.AprobarAdopcion(id, modelo.Mascota.Id)) {
                     var contrato = _mapper.Map<ContratoAdopcionReturnDto>(modelo);
                         return Ok(contrato);
                 }
@@ -140,13 +130,13 @@ namespace spatwebapi.Controllers
             var modelo = await _contratoAdopcionService.GetById(contratoRechazo.ContratoAdopcionId);
             if (modelo!=null)
             {
-                if (await _contratoAdopcionService.RechazarAdopcion(contratoRechazo.ContratoAdopcionId)) {
+                if (await _contratoAdopcionService.RechazarAdopcion(contratoRechazo.ContratoAdopcionId, modelo.Mascota.Id)) {
                     if (await _contratoAdopcionService.CreateContratoRechazo(contratoRechazo))
                     {
                         var contrato = _mapper.Map<ContratoAdopcionReturnDto>(modelo);
                         return Ok(contrato);
                     }
-                    return BadRequest(new { mensaje = "Ha ocurrido un problema al tratar de generar el informe de Rechazo." });
+                    return BadRequest(new { mensaje = "Ocurrio un problema al tratar de generar el informe." });
                 }
 
                 return BadRequest(new { mensaje = "Ha ocurrido un problema al tratar de rechazar el Contrato." });
@@ -158,7 +148,7 @@ namespace spatwebapi.Controllers
             var modelo = await _contratoAdopcionService.GetById(contratoRechazo.ContratoAdopcionId);
             if (modelo!=null)
             {
-                if (await _contratoAdopcionService.CancelarAdopcion(contratoRechazo.ContratoAdopcionId))
+                if (await _contratoAdopcionService.CancelarAdopcion(contratoRechazo.ContratoAdopcionId, modelo.Mascota.Id))
                 {
                     if (await _contratoAdopcionService.CreateContratoRechazo(contratoRechazo)) {
                         var contrato = _mapper.Map<ContratoAdopcionReturnDto>(modelo);

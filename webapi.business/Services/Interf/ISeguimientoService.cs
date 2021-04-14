@@ -23,7 +23,7 @@ namespace webapi.business.Services.Interf
         Task<bool> UpdateSeguimiento(Seguimiento seguimiento);
         Task<bool> DeleteSeguimiento(Seguimiento seguimiento);
         Task<bool> CheckedVoluntarioAsignado(int id, int idUser);
-        Task<bool> RemoveVoluntarioChecked(int id, int idUser);
+        Task<bool> RemoveVoluntario(int id, int idUser);
         Task<bool> AsignarSeguimiento(int id);
         Task<bool> RechazarSeguimiento(int id);
         IEnumerable<Seguimiento> GetSeguimientoForVoluntario(int userId);

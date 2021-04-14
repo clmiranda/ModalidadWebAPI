@@ -10,6 +10,7 @@ C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Auto
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Castle.Core.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\CloudinaryDotNet.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\MailKit.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -59,9 +60,11 @@ C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Micr
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\MimeKit.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\System.Composition.AttributedModel.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\System.Composition.Convention.dll
@@ -154,6 +157,3 @@ C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spat
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.pdb
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.genruntimeconfig.cache
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\MailKit.dll
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\MimeKit.dll
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
