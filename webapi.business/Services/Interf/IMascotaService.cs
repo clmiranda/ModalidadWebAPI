@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Mascotas;
 using webapi.business.Helpers;
+using webapi.business.Pagination;
 using webapi.core.Models;
 
 namespace webapi.business.Services.Interf
@@ -16,8 +17,8 @@ namespace webapi.business.Services.Interf
         IEnumerable<MascotaForDetailedDto> GetAll();
         Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros);
         Task<Mascota> GetMascotaById(int id);
-        Task<Mascota> CreateMascota(Mascota mascota);
-        Task<Mascota> UpdateMascota(Mascota mascota);
+        Task<Mascota> CreateMascota(MascotaForCreateDto mascota);
+        Task<Mascota> UpdateMascota(MascotaForUpdateDto mascota);
         Task<bool> DeleteMascota(Mascota mascota);
         Task<bool> ChangeEstado(string estado, int id);
     }

@@ -10,14 +10,16 @@ namespace webapi.business.Dtos.ReportesSeguimientos
         //public string Descripcion { get; set; }
         //public DateTime FechaReporte { get; }
         public string Estado { get; }
-        public DateTime FechaRealizada { get; set; }
+        public DateTime Fecha { get; set; }
+        public DateTime FechaCreacion { get; set; }
         public virtual Seguimiento Seguimiento { get; set; }
         public int SeguimientoId { get; set; }
         public ReporteSeguimientoForCreate()
         {
             //FechaReporte = DateTime.Now;
             Estado = "Activo";
-            FechaRealizada = DateTime.Now;
+            Fecha = DateTime.Now;
+            FechaCreacion = DateTime.Now;
         }
     }
 }

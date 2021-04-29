@@ -92,5 +92,29 @@ namespace spatwebapi.Controllers
                 return BadRequest(new { mensaje = "Error al editar Roles." });
             return Ok(userRoles);
         }
+        [Authorize(Roles = "SuperAdministrador")]
+        [HttpPut("CambiarEstado/{id}")]
+        public async Task<IActionResult> CambiarEstado(int id)
+        {
+            var usuario = await _userService.GetUsuario(id);
+            if (usuario == null)
+                return BadRequest(new { mensaje = "El usuario no existe." });
+            var resultado = await _userService.CambiarEstado(id);
+            if (resultado.Succeeded)
+                return Ok(resultado);
+            return BadRequest(new { mensaje = "Error al modificar estado." });
+        }
+        [Authorize(Roles = "SuperAdministrador")]
+        [HttpDelete("EliminarUsuario/{id}")]
+        public async Task<IActionResult> EliminarUsuario(int id)
+        {
+            var usuario = await _userService.GetUsuario(id);
+            if (usuario == null)
+                return BadRequest(new { mensaje = "El usuario no existe." });
+            var resultado = await _userService.EliminarUsuario(id);
+            if (resultado.Succeeded)
+                return Ok(resultado);
+            return BadRequest(new { mensaje = "Error al eliminar." });
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.Denuncias;
 using webapi.business.Dtos.Fotos;
+using webapi.business.Dtos.ReporteTratamientos;
 using webapi.core.Models;
 
 namespace webapi.business.Dtos.Mascotas
@@ -19,12 +20,9 @@ namespace webapi.business.Dtos.Mascotas
         public string Tamaño { get; set; }
         public bool? Esterilizado { get; set; }
         public string Edad { get; set; }
-        public DateTime FechaAgregado { get; set; }
-        public string EstadoSituacion { get; set; }
-        //public byte[] Imagen { get; set; }
-        //public int IdTipoMascota { get; set; }
-        //public int CasoMascotaId { get; set; }
-        //public string FotoUrl { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public List<ReporteTratamientoForReturnDto> ReporteTratamientos { get; set; }
+        public string Estado { get; set; }
         public virtual DenunciaForDetailedDto Denuncia { get; set; }
         public int DenunciaId { get; set; }
         public virtual ICollection<FotoForReturnDto> Fotos { get; set; }

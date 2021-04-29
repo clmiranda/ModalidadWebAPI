@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Mascotas;
 using webapi.business.Helpers;
+using webapi.business.Pagination;
 using webapi.business.Services.Interf;
-using webapi.core.Models;
 
 namespace spatwebapi.Controllers
 {
@@ -32,17 +32,17 @@ namespace spatwebapi.Controllers
             return Ok(lista);
         }
         [HttpGet("GetMascota/{id}")]
-        public IActionResult GetMascota(int id)
+        public async Task<IActionResult> GetMascota(int id)
         {
-            var obj = _mascotaService.FindByCondition(x => x.Id == id).FirstOrDefault();
-            if (obj == null) return NotFound();
-            var resul = _mapper.Map<MascotaForDetailedDto>(obj);
+            var mascota = await _mascotaService.GetMascotaById(id);
+            if (mascota == null) return NotFound(null);
+            var resul = _mapper.Map<MascotaForDetailedDto>(mascota);
             return Ok(resul);
         }
         [HttpGet("GetMascotaDenuncia/{id}")]
-        public async Task<ActionResult> GetMascotaDenuncia(int id)
+        public async Task<IActionResult> GetMascotaDenuncia(int id)
         {
-            var denuncia =await _denunciaService.GetDenunciaById(id);
+            var denuncia = await _denunciaService.GetDenunciaById(id);
             if (denuncia == null)
                 return NotFound(null);
             var obj = _mascotaService.FindByCondition(x => x.DenunciaId == id).FirstOrDefault();
@@ -69,28 +69,29 @@ namespace spatwebapi.Controllers
             var resul = await _mascotaService.GetAllMascotas(parametros);
             //var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
             var lista = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(resul);
+            lista = lista.OrderByDescending(x=>x.Estado.Equals("Inactivo")).ToList();
             Response.AddPagination(resul.CurrentPage, resul.PageSize,
                  resul.TotalCount, resul.TotalPages);
             return Ok(lista);
         }
 
         [HttpPost("CreateMascota")]
-        public async Task<IActionResult> CreateMascota([FromBody] Mascota mascota)
+        public async Task<IActionResult> CreateMascota([FromBody] MascotaForCreateDto dto)
         {
-            var m = await _mascotaService.CreateMascota(mascota);
+            var mascota = await _mascotaService.CreateMascota(dto);
             if (mascota.Equals(null))
                 return BadRequest(new { mensaje = "Hubo problemas al crear la Mascota." });
-            var mapped = _mapper.Map<MascotaForDetailedDto>(m);
+            var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
             return Ok(mapped);
         }
 
         [HttpPut("UpdateMascota")]
-        public async Task<ActionResult> UpdateMascota([FromBody] Mascota mascota)
+        public async Task<ActionResult> UpdateMascota([FromBody] MascotaForUpdateDto dto)
         {
-            var update = await _mascotaService.UpdateMascota(mascota);
-            if (update.Equals(null))
+            var mascota = await _mascotaService.UpdateMascota(dto);
+            if (mascota.Equals(null))
                 return BadRequest(new { mensaje = "Hubo problemas al actualizar los datos." });
-            var mapped = _mapper.Map<MascotaForDetailedDto>(update);
+            var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
             return Ok(mapped);
         }
 

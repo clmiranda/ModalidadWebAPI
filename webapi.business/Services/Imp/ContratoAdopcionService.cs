@@ -17,7 +17,7 @@ namespace webapi.business.Services.Imp
 {
     public class ContratoAdopcionService : IContratoAdopcionService
     {
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private ISeguimientoService _seguimientoService;
         public ContratoAdopcionService(IUnitOfWork unitOfWork, IMapper mapper, ISeguimientoService seguimientoService)
@@ -57,12 +57,13 @@ namespace webapi.business.Services.Imp
         public async Task<ContratoAdopcion> CreateContratoAdopcion(ContratoAdopcionForCreate dto)
         {
             var mascota = await _unitOfWork.MascotaRepository.GetById(dto.MascotaId);
-            mascota.EstadoSituacion = "En Proceso";
-            _unitOfWork.MascotaRepository.Update(mascota);
+            //mascota.EstadoSituacion = "En Proceso";
+            //_unitOfWork.MascotaRepository.Update(mascota);
 
             var modelo = _mapper.Map<ContratoAdopcion>(dto);
-            modelo.Estado = "Pendiente";
+            //modelo.Estado = "Pendiente";
             modelo.Mascota = mascota;
+            modelo.Mascota.Estado= "En Proceso";
             _unitOfWork.ContratoAdopcionRepository.Insert(modelo);
 
             if (await _unitOfWork.SaveAll())
@@ -73,26 +74,23 @@ namespace webapi.business.Services.Imp
         //here
         public async Task<bool> UpdateContratoAdopcion(FechaContratoForUpdateDto dto) {
             var modelo = await _unitOfWork.ContratoAdopcionRepository.GetById(dto.Id);
-            var m = _mapper.Map(dto, modelo);
-            //modelo.FechaAdopcion = contrato.FechaAdopcion;
-            _unitOfWork.ContratoAdopcionRepository.Update(m);
+            var mapped = _mapper.Map(dto, modelo);
+            _unitOfWork.ContratoAdopcionRepository.Update(mapped);
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> CreateContratoRechazo(ContratoRechazoForCreateDto contratoRechazo) {
             var c = _mapper.Map<ContratoRechazo>(contratoRechazo);
-            //c.RazonRechazo = contratoRechazo.RazonRechazo;
-            //c.ContratoAdopcionId = contratoRechazo.ContratoAdopcionId;
             _unitOfWork.ContratoRechazoRepository.Insert(c);
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> AprobarAdopcion(int id, int mascotaId) {
             var mascota = await _unitOfWork.MascotaRepository.GetById(mascotaId);
-            mascota.EstadoSituacion = "Adoptada";
-            _unitOfWork.MascotaRepository.Update(mascota);
+            //mascota.EstadoSituacion = "Adoptada";
+            //_unitOfWork.MascotaRepository.Update(mascota);
 
             var contrato = await _unitOfWork.ContratoAdopcionRepository.GetById(id);
             contrato.Estado = "Aprobado";
-            contrato.Mascota = mascota;
+            contrato.Mascota.Estado = "Adoptada";
             _unitOfWork.ContratoAdopcionRepository.Update(contrato);
 
             //Create Seguimiento
@@ -119,7 +117,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork.ContratoAdopcionRepository.Update(contrato);
 
             var mascota = await _unitOfWork.MascotaRepository.GetById(mascotaId);
-            mascota.EstadoSituacion = "Inactivo";
+            mascota.Estado = "Inactivo";
             //mascota.ContratoAdopcion = null;
             _unitOfWork.MascotaRepository.Update(mascota);
             //_unitOfWork.SeguimientoRepository.Delete(contrato.Seguimiento);
@@ -135,7 +133,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork.ContratoAdopcionRepository.Update(contrato);
 
             var mascota = await _unitOfWork.MascotaRepository.GetById(mascotaId);
-            mascota.EstadoSituacion = "Inactivo";
+            mascota.Estado = "Inactivo";
             _unitOfWork.MascotaRepository.Update(mascota);
             //_unitOfWork.ContratoAdopcionRepository.Delete(contrato);
             return await _unitOfWork.SaveAll();

@@ -22,6 +22,7 @@ namespace webapi.core.Models
         public string Respuesta6 { get; set; }
         public string Respuesta7 { get; set; }
 
+        public DateTime FechaCreacion { get; set; }
         public DateTime FechaSolicitudAdopcion { get; set; }
         public DateTime FechaAdopcion { get; set; }
         public string Estado { get; set; }

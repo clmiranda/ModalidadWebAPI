@@ -4,13 +4,14 @@ using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Denuncias;
 using webapi.business.Helpers;
+using webapi.business.Pagination;
 using webapi.core.Models;
 
 namespace webapi.business.Services.Interf
 {
     public interface IDenunciaService
     {
-        IEnumerable<DenunciaForListDto> GetAll();
+        Task<IEnumerable<DenunciaForListDto>> GetAll();
          Task<PaginationList<Denuncia>> GetAllDenuncias(DenunciaParametros parametros);
         Task<Denuncia> GetDenunciaById(int id);
         Task<Denuncia> CreateDenuncia(Denuncia denuncia);

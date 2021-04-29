@@ -68,31 +68,23 @@ namespace webapi.business.Services.Imp
         }
         public void CreateSeguimiento(ContratoAdopcion contrato)
         {
-            Seguimiento seguimiento = new Seguimiento();
-            seguimiento.ContratoAdopcion = contrato;
-            seguimiento.ContratoAdopcionId = contrato.Id;
-            seguimiento.FechaInicio = DateTime.Now;
-            seguimiento.FechaConclusion = DateTime.Now;
-            seguimiento.Estado = "Activo";
+            Seguimiento seguimiento = new Seguimiento
+            {
+                //seguimiento.ContratoAdopcion = contrato;
+                ContratoAdopcionId = contrato.Id,
+                FechaInicio = DateTime.Now,
+                FechaConclusion = DateTime.Now,
+                Estado = "Activo"
+            };
             _unitOfWork.SeguimientoRepository.Insert(seguimiento);
             //var obj = _unitOfWork.SeguimientoRepository.FindByCondition(x=>x.Estado.Equals("Activo")).LastOrDefault();
         }
-        public async Task<bool> UpdateSeguimiento(Seguimiento seguimiento)
-        {
-            var objeto = await _unitOfWork.SeguimientoRepository.GetById(seguimiento.Id);
-            //objeto.CantidadVisitas = seguimiento.CantidadVisitas;
-            _unitOfWork.SeguimientoRepository.Update(objeto);
-            //for (int i = 0; i < seguimiento.CantidadVisitas; i++)
-            //{
-            //    ReporteSeguimiento reporteSeguimiento = new ReporteSeguimiento();
-            //    //FechaReporte = DateTime.Now.Date,
-            //    reporteSeguimiento.Seguimiento = objeto;
-            //    reporteSeguimiento.SeguimientoId = seguimiento.Id;
-            //    reporteSeguimiento.Estado = "Activo";
-            //    seguimiento.ReporteSeguimientos.Add(reporteSeguimiento);
-            //}
-            return await _unitOfWork.SaveAll();
-        }
+        //public async Task<bool> UpdateSeguimiento(Seguimiento seguimiento)
+        //{
+        //    var objeto = await _unitOfWork.SeguimientoRepository.GetById(seguimiento.Id);
+        //    _unitOfWork.SeguimientoRepository.Update(objeto);
+        //    return await _unitOfWork.SaveAll();
+        //}
         public IEnumerable<User> GetAllVoluntarios() {
             var resul = _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario"))).ToList();
             return resul;
@@ -115,7 +107,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork.SeguimientoRepository.Delete(seguimiento);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> CheckedVoluntarioAsignado(int id, int idUser) {
+        public async Task<bool> AsignarSeguimiento(int id, int idUser) {
             var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
             var user = await _unitOfWork.UserRepository.GetById(idUser);
             //seguimiento.User = user;
@@ -126,7 +118,7 @@ namespace webapi.business.Services.Imp
             //_unitOfWork.UserRepository.Update(user);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> RemoveVoluntario(int id, int idUser)
+        public async Task<bool> QuitarAsignacion(int id, int idUser)
         {
             var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
             var user = await _unitOfWork.UserRepository.GetById(idUser);
@@ -136,14 +128,14 @@ namespace webapi.business.Services.Imp
             user.Seguimientos.Remove(seguimiento);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> AsignarSeguimiento(int id)
+        public async Task<bool> AceptarSeguimientoVoluntario(int id)
         {
             var resul = await _unitOfWork.SeguimientoRepository.GetById(id);
             resul.Estado = "Asignado";
             _unitOfWork.SeguimientoRepository.Update(resul);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> RechazarSeguimiento(int id)
+        public async Task<bool> RechazarSeguimientoVoluntario(int id)
         {
             var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
             seguimiento.User = null;

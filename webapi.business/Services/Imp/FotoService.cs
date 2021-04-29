@@ -2,6 +2,7 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -17,12 +18,12 @@ using webapi.data.Repositories.Interf;
 
 namespace webapi.business.Services.Imp
 {
-    public class FotoService:IFotoService
+    public class FotoService : IFotoService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOptions<ConfigurationCloudinary> _cloudinaryConfig;
         private readonly IMapper _mapper;
-        private Cloudinary _cloudinary;
+        private readonly Cloudinary _cloudinary;
 
         public FotoService(IUnitOfWork unitOfWork,
              IOptions<ConfigurationCloudinary> cloudinaryConfig,
@@ -55,16 +56,16 @@ namespace webapi.business.Services.Imp
 
             var foto = await _unitOfWork.FotoRepository.GetById(idfoto);
             if (foto.IsPrincipal)
-                return true;
+                return false;
 
-            var getPrincipal = await _unitOfWork.FotoRepository.GetPhotoPrincipalMascota(id);
-            getPrincipal.IsPrincipal = false;
+            var principal = await _unitOfWork.FotoRepository.FindByCondition(x => x.Mascota.Id == id && x.IsPrincipal).FirstOrDefaultAsync();
+            principal.IsPrincipal = false;
+
             foto.IsPrincipal = true;
-
             return await _unitOfWork.SaveAll();
         }
 
-        public async Task<string> AgregarFotoMascota(int id, FotoForCreationDto fotoMascota)
+        public async Task<bool> AgregarFotoMascota(int id, FotoForCreationDto fotoMascota)
         {
             var mascotaRepo = await _unitOfWork.MascotaRepository.GetById(id);
             Foto fotoMap = new Foto();
@@ -85,7 +86,6 @@ namespace webapi.business.Services.Imp
                         resultUpload = _cloudinary.Upload(parametros);
                     }
                 }
-                //Uri en desuso, reemplazado por Url
                 fotoMascota.Url = resultUpload.SecureUrl.ToString();
                 fotoMascota.IdPublico = resultUpload.PublicId;
                 fotoMascota.MascotaId = id;
@@ -96,35 +96,15 @@ namespace webapi.business.Services.Imp
                 if (!mascotaRepo.Fotos.Any(x => x.IsPrincipal))
                     fotoMap.IsPrincipal = true;
             }
-            if (await _unitOfWork.SaveAll())
-            {
-                var lista = _mapper.Map<IEnumerable<FotoForReturnDto>>(mascotaRepo.Fotos);
-                string jsonReturn = JsonConvert.SerializeObject(lista, Formatting.Indented);
-                return jsonReturn;
-            }
-            return null;
+            return await _unitOfWork.SaveAll();
         }
 
-        public async Task<bool> EliminarFoto(int id, int idfoto, string valor)
+        public async Task<bool> EliminarFoto(int id, int idfoto)
         {
-            if (valor.Equals("mascota"))
-            {
-                var mascota = await _unitOfWork.MascotaRepository.GetById(id);
-
-                if (!mascota.Fotos.Any(p => p.Id == idfoto))
-                    return false;
-            }
-            else if (valor.Equals("noticia"))
-            {
-                //var noticia = await _unitOfWork.NoticiaRepository.GetById(id);
-
-                //if (!noticia.Fotos.Any(p => p.Id == idfoto))
-                //    return false;
-            }
-
-
             var foto = await _unitOfWork.FotoRepository.GetById(idfoto);
 
+            if (foto == null)
+                return false;
             if (foto.IsPrincipal)
                 return false;
 
@@ -136,8 +116,8 @@ namespace webapi.business.Services.Imp
                 if (x.Result.Equals("ok"))
                     _unitOfWork.FotoRepository.Delete(foto);
             }
-            if (foto.IdPublico == null)
-                _unitOfWork.FotoRepository.Delete(foto);
+            else
+                return false;
 
             return await _unitOfWork.SaveAll();
         }
@@ -145,22 +125,20 @@ namespace webapi.business.Services.Imp
         {
             var reporteRepo = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
             Foto foto = new Foto();
+            var resultUpload = new ImageUploadResult();
 
-                var resultUpload = new ImageUploadResult();
-
-                if (archivo.Length > 0)
+            if (archivo.Length > 0)
+            {
+                using (var stream = archivo.OpenReadStream())
                 {
-                    using (var stream = archivo.OpenReadStream())
+                    var parametros = new ImageUploadParams()
                     {
-                        var parametros = new ImageUploadParams()
-                        {
-                            File = new FileDescription(archivo.Name, stream),
-                            Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
-                        };
-                        resultUpload = _cloudinary.Upload(parametros);
-                    }
+                        File = new FileDescription(archivo.Name, stream),
+                        Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
+                    };
+                    resultUpload = _cloudinary.Upload(parametros);
                 }
-            //Uri en desuso, reemplazado por Url
+            }
             foto.Url = resultUpload.SecureUrl.ToString();
             foto.IdPublico = resultUpload.PublicId;
             foto.ReporteSeguimientoId = id;

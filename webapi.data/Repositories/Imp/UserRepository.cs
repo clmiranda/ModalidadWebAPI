@@ -98,24 +98,26 @@ namespace webapi.data.Repositories.Imp
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void Insert(User u)
-        {
-            if (u == null) throw new ArgumentNullException("entity");
-            _context.Users.Add(u);
-        }
+        //public void Insert(User u)
+        //{
+        //    if (u == null) throw new ArgumentNullException("entity");
+        //    _context.Users.Add(u);
+        //}
 
-        public void Update(User u)
-        {
-            if (u == null) throw new ArgumentNullException("entity");
-            _context.Users.Update(u);
-        }
+        //public void Update(User u)
+        //{
+        //    if (u == null) throw new ArgumentNullException("entity");
+        //    _context.Users.Update(u);
+        //}
 
-        public void Delete(int id)
+        //public void Delete(User user)
+        //{
+        //    if (user == null) throw new ArgumentNullException("entity");
+        //    _context.Users.Remove(user);
+        //}
+        public async Task<IdentityResult> DeleteUsuario(User u)
         {
-            var u = _context.Users.FirstOrDefault(x => x.Id == id);
-            if (u != null)
-                _context.Users.Remove(u);
-            throw new ArgumentNullException("Id no encontrado.");
+            return await _userManager.DeleteAsync(u);
         }
         public async Task<bool> SaveAll()
         { return await _context.SaveChangesAsync() > 0; }

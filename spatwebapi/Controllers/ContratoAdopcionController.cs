@@ -75,9 +75,9 @@ namespace spatwebapi.Controllers
             var mascota = await _mascotaService.GetMascotaById(id);
             if (mascota==null)
                 return NotFound(null);
-            if (!mascota.EstadoSituacion.Equals("Activo"))
+            if (!mascota.Estado.Equals("Activo"))
                 return BadRequest(null);
-            var resul = await _contratoAdopcionService.FindByCondition(x => x.MascotaId == id).FirstOrDefaultAsync();
+            var resul = await _contratoAdopcionService.FindByCondition(x => x.Mascota.Id == id).FirstOrDefaultAsync();
             var modelo = _mapper.Map<ContratoAdopcionReturnDto>(resul);
             return Ok(modelo);
         }

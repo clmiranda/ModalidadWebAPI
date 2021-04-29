@@ -14,16 +14,15 @@ namespace webapi.data.Repositories.Imp
         private readonly UserManager<User> _userManejador;
         private readonly SignInManager<User> _signInManejador;
         private IUserRepository _userRepository;
-        private IAuthorRepository _authorRepository;
-        private IRepository<Book> _bookRepository;
         private IRepository<Denuncia> _denunciaRepository;
         //private ICasoMascotaRepository _casoMascotaRepository;
         private IRepository<Mascota> _mascotaRepository;
+        private IRepository<Foto> _fotoRepository;
         private IRepository<ContratoAdopcion> _contratoAdopcionRepository;
         private ISeguimientoRepository _seguimientoRepository;
         private IReporteSeguimientoRepository _reporteSeguimientoRepository;
         private IRepository<ContratoRechazo> _contratoRechazoRepository;
-        private IFotoRepository _fotoRepository;
+        private IRepository<ReporteTratamiento> _reporteTratamientoRepository;
         private IRolUserRepository _rolUserRepository;
         public UnitOfWork(BDSpatContext databaseContext,
             SignInManager<User> signInManager, UserManager<User> userManager)
@@ -32,16 +31,6 @@ namespace webapi.data.Repositories.Imp
             _signInManejador = signInManager;
             _userManejador = userManager;
 
-        }
-
-        public IAuthorRepository AuthorRepository
-        {
-            get { return _authorRepository = _authorRepository ?? new AuthorRepository(_databaseContext); }
-        }
-
-        public IRepository<Book> BookRepository
-        {
-            get { return _bookRepository = _bookRepository ?? new Repository<Book>(_databaseContext); }
         }
 
         public IUserRepository UserRepository
@@ -59,6 +48,10 @@ namespace webapi.data.Repositories.Imp
         public IRepository<Mascota> MascotaRepository
         {
             get { return _mascotaRepository = _mascotaRepository ?? new Repository<Mascota>(_databaseContext); }
+        }
+        public IRepository<Foto> FotoRepository
+        {
+            get { return _fotoRepository = _fotoRepository ?? new Repository<Foto>(_databaseContext); }
         }
         public IRepository<ContratoAdopcion> ContratoAdopcionRepository
         {
@@ -78,14 +71,14 @@ namespace webapi.data.Repositories.Imp
             get { return _contratoRechazoRepository = _contratoRechazoRepository ?? new Repository<ContratoRechazo>(_databaseContext); }
         }
 
-        public IFotoRepository FotoRepository
-        {
-            get { return _fotoRepository = _fotoRepository ?? new FotoRepository(_databaseContext); }
-        }
-
         public IRolUserRepository RolUserRepository
         {
             get { return _rolUserRepository = _rolUserRepository ?? new RolUserRepository(_userManejador); }
+        }
+
+        public IRepository<ReporteTratamiento> ReporteTratamientoRepository
+        {
+            get { return _reporteTratamientoRepository = _reporteTratamientoRepository ?? new Repository<ReporteTratamiento>(_databaseContext); }
         }
 
         public async Task<bool> SaveAll()

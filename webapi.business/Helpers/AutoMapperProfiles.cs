@@ -10,6 +10,7 @@ using webapi.business.Dtos.Denuncias;
 using webapi.business.Dtos.Fotos;
 using webapi.business.Dtos.Mascotas;
 using webapi.business.Dtos.ReportesSeguimientos;
+using webapi.business.Dtos.ReporteTratamientos;
 using webapi.business.Dtos.Seguimientos;
 using webapi.business.Dtos.Usuario;
 using webapi.core.Models;
@@ -76,6 +77,8 @@ namespace webapi.business.Helpers
                 //    options.MapFrom(s => s.CasoMascota.Denuncia.Titulo);
                 //});
             CreateMap<Mascota, MascotaForReturn>();
+            CreateMap<MascotaForCreateDto, Mascota>();
+            CreateMap<MascotaForUpdateDto, Mascota>();
             CreateMap<Mascota, MascotaForAdopcionDto>()
                 .ForMember(d => d.Foto, options =>
                 {
@@ -100,6 +103,10 @@ namespace webapi.business.Helpers
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
             CreateMap<ReporteSeguimientoForCreate, ReporteSeguimiento>();
             CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
+
+            CreateMap<ReporteTratamiento, ReporteTratamientoForReturnDto>();
+            CreateMap<ReporteTratamientoForCreateDto, ReporteTratamiento>();
+            CreateMap<ReporteTratamientoForUpdateDto, ReporteTratamiento>();
             //CreateMap<MascotaForCreationDto, Mascota>();
             CreateMap<ContratoRechazo, ContratoRechazoForReturnDto>();
             CreateMap<ContratoRechazoForCreateDto, ContratoRechazo>();

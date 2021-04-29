@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xhtzuVD4Uo4t9qOirimFG27/xYPukCnJxVPtIuVCPta0eXsabbN7jKPeIvM0N+L7gIWWEX01duWJ5aKnR1FVAQ==",
+  "dgSpecHash": "x8939CJ/qz5keGJbIBJQXlpgXKodyMWwzaAFsJl3RQM1Ien8UJZC2/5DUb0AQxs28rATKXUhGpQfkXnoPYXu0g==",
   "success": true,
   "projectFilePath": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.business\\webapi.business.csproj",
   "expectedPackageFiles": [
@@ -69,7 +69,7 @@
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\mimekit\\2.11.0\\mimekit.2.11.0.nupkg.sha512",
-    "C:\\Users\\Usuario\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\portable.bouncycastle\\1.8.10\\portable.bouncycastle.1.8.10.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",

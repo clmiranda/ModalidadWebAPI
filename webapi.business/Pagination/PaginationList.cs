@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace webapi.business.Helpers
+namespace webapi.business.Pagination
 {
     public class PaginationList<T> : List<T>
-	{
+    {
 		public int CurrentPage { get; private set; }
 		public int TotalPages { get; private set; }
 		public int PageSize { get; private set; }

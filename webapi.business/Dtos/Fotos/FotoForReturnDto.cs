@@ -11,6 +11,7 @@ namespace webapi.business.Dtos.Fotos
         public DateTime FechaAgregado { get; set; }
         public bool IsPrincipal { get; set; }
         public string IdPublico { get; set; }
-        public int MascotaId { get; set; }
+        public int? MascotaId { get; set; }
+        public int? ReporteSeguimientoId { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using webapi.business.Dtos.Fotos;
+using webapi.business.Dtos.ReporteTratamientos;
 
 namespace webapi.business.Dtos.Mascotas
 {
@@ -16,10 +17,9 @@ namespace webapi.business.Dtos.Mascotas
         public string Tamaño { get; set; }
         public bool Esterilizado { get; set; }
         public string Edad { get; set; }
-        public DateTime FechaAgregado { get; set; }
-        public string EstadoSituacion { get; set; }
-        //public virtual CasoMascotaForDetailedDto CasoMascota { get; set; }
-        //public int CasoMascotaId { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public string Estado { get; set; }
+        public List<ReporteTratamientoForReturnDto> ReporteTratamientos { get; set; }
         public virtual ICollection<FotoForReturnDto> Fotos { get; set; }
     }
 }

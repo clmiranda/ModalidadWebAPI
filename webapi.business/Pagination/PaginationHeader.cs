@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace webapi.business.Helpers
+namespace webapi.business.Pagination
 {
     public class PaginationHeader
     {

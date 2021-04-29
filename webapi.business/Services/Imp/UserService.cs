@@ -88,9 +88,26 @@ namespace webapi.business.Services.Imp
             return user;
         }
         public async Task<IdentityResult> UpdateUsuario(UserUpdateDto dto) {
-            //var usuario = await _unitOfWork.UserRepository.GetById(dto.Id);
-            var modelo= _mapper.Map<User>(dto);
-            return await _unitOfWork.UserRepository.UpdateUsuario(modelo);
+            var usuario = await _unitOfWork.UserRepository.GetById(dto.Id);
+            var modelo= _mapper.Map(dto, usuario);
+            var resultado= await _unitOfWork.UserRepository.UpdateUsuario(modelo);
+            return resultado;
+        }
+        public async Task<IdentityResult> CambiarEstado(int id)
+        {
+            var usuario = await _unitOfWork.UserRepository.GetById(id);
+            if (usuario.Estado.Equals("Activo"))
+                usuario.Estado = "Inactivo";
+            else
+                usuario.Estado = "Activo";
+            var resultado = await _unitOfWork.UserRepository.UpdateUsuario(usuario);
+            return resultado;
+        }
+        public async Task<IdentityResult> EliminarUsuario(int id)
+        {
+            var usuario = await _unitOfWork.UserRepository.GetById(id);
+            var resultado = await _unitOfWork.UserRepository.DeleteUsuario(usuario);
+            return resultado;
         }
         public async Task<IdentityResult> ConfirmEmail(string userId, string token)
         {

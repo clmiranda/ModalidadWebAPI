@@ -20,12 +20,11 @@ namespace webapi.business.Services.Interf
         Task<Seguimiento> GetById(int id);
         Task<Seguimiento> GetByIdContrato(int id);
         void CreateSeguimiento(ContratoAdopcion contrato);
-        Task<bool> UpdateSeguimiento(Seguimiento seguimiento);
         Task<bool> DeleteSeguimiento(Seguimiento seguimiento);
-        Task<bool> CheckedVoluntarioAsignado(int id, int idUser);
-        Task<bool> RemoveVoluntario(int id, int idUser);
-        Task<bool> AsignarSeguimiento(int id);
-        Task<bool> RechazarSeguimiento(int id);
+        Task<bool> AsignarSeguimiento(int id, int idUser);
+        Task<bool> QuitarAsignacion(int id, int idUser);
+        Task<bool> AceptarSeguimientoVoluntario(int id);
+        Task<bool> RechazarSeguimientoVoluntario(int id);
         IEnumerable<Seguimiento> GetSeguimientoForVoluntario(int userId);
     }
 }

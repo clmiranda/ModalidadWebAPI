@@ -14,21 +14,12 @@ namespace webapi.core.Models
         public string Tamaño { get; set; }
         public bool? Esterilizado { get; set; }
         public string Edad { get; set; }
-        public DateTime FechaAgregado { get; set; }
-        public string EstadoSituacion { get; set; }
-        //public byte[] Imagen { get; set; }
-        //public int IdTipoMascota { get; set; }
-        //public int IdCasoMascota { get; set; }
-
-        //public virtual TipoMascota TipoMascota { get; set; }
-        //public int TipoMascotaId { get; set; }
-        //public virtual CasoMascota CasoMascota { get; set; }
-        //public int CasoMascotaId { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public string Estado { get; set; }
         public virtual Denuncia Denuncia { get; set; }
         public int? DenunciaId { get; set; }
-        public virtual ICollection<Foto> Fotos { get; set; }
+        public virtual List<Foto> Fotos { get; set; }
+        public virtual List<ReporteTratamiento> ReporteTratamientos { get; set; }
         public virtual ContratoAdopcion ContratoAdopcion { get; set; }
-        //public virtual ICollection<CasoMascota> CasoMascotas { get; set; }
-        //public virtual ICollection<DetalleAdopcion> DetalleAdopciones { get; set; }
     }
 }
