@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using webapi.business.Dtos;
 using webapi.business.Dtos.Denuncias;
 using webapi.business.Helpers;
+using webapi.business.Pagination;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 
@@ -20,52 +16,37 @@ namespace spatwebapi.Controllers
     [AllowAnonymous]
     public class DenunciaController : ControllerBase
     {
-        private readonly IConfiguration _config;
-        private IDenunciaService _denunciaService;
+        private readonly IDenunciaService _denunciaService;
         private readonly IMapper _mapper;
-        public DenunciaController(IConfiguration config, IDenunciaService denunciaService, IMapper mapper)
+        public DenunciaController(IDenunciaService denunciaService, IMapper mapper)
         {
-            _config = config;
             _denunciaService = denunciaService;
             _mapper = mapper;
         }
         [HttpGet("GetAll")]
-        public ActionResult GetAll()
+        public async Task<ActionResult> GetAll()
         {
-            var lista = _denunciaService.GetAll();
+            var lista = await _denunciaService.GetAll();
             return Ok(lista);
         }
         [HttpGet("GetAllDenuncias")]
         public async Task<ActionResult> GetAllDenuncias([FromQuery]DenunciaParametros parametros) {
-            //var resul= await _denunciaService.GetAllDenuncias();
-            //var lista = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul);
-            //return lista;
             var resul = await _denunciaService.GetAllDenuncias(parametros);
             var lista = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul);
             Response.AddPagination(resul.CurrentPage, resul.PageSize,
                  resul.TotalCount, resul.TotalPages);
-            //_mapper.Map<IEnumerable<DenunciaForListDto>>(resul.Items);
             return Ok(lista);
 
         }
-        //[HttpGet("GetAllDenunciasFilter")]
-        //public async Task<IEnumerable<DenunciaFilterDto>> GetAllDenunciasFilter()
-        //{
-        //    var lista= await _denunciaService.GetAllDenuncias();
-        //    var resul = _mapper.Map<IEnumerable<DenunciaFilterDto>>(lista);
-        //    return resul;
-        //}
         [HttpGet("GetDenuncia/{id}")]
-        public async Task<DenunciaForListDto> GetDenuncia(int id)
+        public async Task<IActionResult> GetDenuncia(int id)
         {
-            //var obj= await _denunciaService.GetDenunciaById(id);
-            //var resul = _mapper.Map<DenunciaForDetailedDto>(obj);
-            //return resul;
             var obj= await _denunciaService.GetDenunciaById(id);
-            if (obj == null) return null;
+            if (obj == null) return NotFound(null);
             var resul = _mapper.Map<DenunciaForListDto>(obj);
-            return resul;
+            return Ok(resul);
         }
+        //here
         [HttpPost("CreateDenuncia")]
         public async Task<IActionResult> CreateDenuncia(Denuncia denuncia)
         {

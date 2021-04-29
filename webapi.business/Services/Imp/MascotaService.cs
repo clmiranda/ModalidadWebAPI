@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Mascotas;
 using webapi.business.Helpers;
+using webapi.business.Pagination;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
@@ -22,22 +22,33 @@ namespace webapi.business.Services.Imp
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        public async Task<Mascota> GetMascotaById(int id)
+        {
+            return await _unitOfWork.MascotaRepository.GetById(id);
+        }
         public IEnumerable<MascotaForDetailedDto> GetAll()
         {
             var lista = _unitOfWork.MascotaRepository.GetAll().ToList();
             var mapped = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
             return mapped;
         }
-        public async Task<Mascota> CreateMascota(Mascota mascota)
+        public async Task<Mascota> CreateMascota(MascotaForCreateDto dto)
         {
-            mascota.FechaAgregado = DateTime.Now;
-            mascota.EstadoSituacion = "Inactivo";
+            var mascota = _mapper.Map<Mascota>(dto);
             _unitOfWork.MascotaRepository.Insert(mascota);
             if (await _unitOfWork.SaveAll())
                 return mascota;
             return null;
         }
-
+        public async Task<Mascota> UpdateMascota(MascotaForUpdateDto dto)
+        {
+            var mascota = await _unitOfWork.MascotaRepository.GetById(dto.Id);
+            var mapped = _mapper.Map(dto, mascota);
+            _unitOfWork.MascotaRepository.Update(mapped);
+            if (await _unitOfWork.SaveAll())
+                return mapped;
+            return null;
+        }
         public async Task<bool> DeleteMascota(Mascota mascota)
         {
             _unitOfWork.MascotaRepository.Delete(mascota);
@@ -53,28 +64,17 @@ namespace webapi.business.Services.Imp
             var resul = _unitOfWork.MascotaRepository.GetAll();
 
             if (!String.IsNullOrEmpty(parametros.Busqueda))
-                resul = resul.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
+                resul = resul.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Denuncia.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()));
             if (parametros.Filter == "Adopcion")
-                    resul = resul.Where(x => x.Nombre != null && x.ContratoAdopcion == null && x.EstadoSituacion == "Activo");
+                    resul = resul.Where(x => x.Nombre != null && x.ContratoAdopcion == null && x.Estado == "Activo");
 
             var pagination = await PaginationList<Mascota>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
             return pagination;
         }
-        public async Task<Mascota> GetMascotaById(int id)
-        {
-            return await _unitOfWork.MascotaRepository.GetById(id);
-        }
-        public async Task<Mascota> UpdateMascota(Mascota mascota)
-        {
-            _unitOfWork.MascotaRepository.Update(mascota);
-            if (await _unitOfWork.SaveAll())
-                return mascota;
-            return null;
-        }
         public async Task<bool> ChangeEstado(string estado,int id)
         {
             var mascota = await _unitOfWork.MascotaRepository.GetById(id);
-            mascota.EstadoSituacion = estado;
+            mascota.Estado = estado;
             _unitOfWork.MascotaRepository.Update(mascota);
             return await _unitOfWork.SaveAll();
         }

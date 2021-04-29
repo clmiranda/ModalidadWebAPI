@@ -16,6 +16,7 @@ namespace webapi.core.Models
         public string EstadoHogarMascota { get; set; }
         //public DateTime FechaAsignada { get; set; }
         public DateTime Fecha { get; set; }
+        public DateTime FechaCreacion { get; set; }
         //public DateTime FechaReporte { get; set; }
         public string Estado { get; set; }
         //public int IdUsuario { get; set; }

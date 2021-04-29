@@ -15,6 +15,7 @@ namespace webapi.data.Repositories.Interf
         //IEnumerable<User> GetAllVoluntarios();
         Task<IdentityResult> PostUsuario(User u, string password);
         Task<IdentityResult> UpdateUsuario(User u);
+        Task<IdentityResult> DeleteUsuario(User u);
         Task<string> GenerateEmailToken(User u);
         Task<string> GeneratePasswordResetToken(User usuario);
         Task<User> FindById(string userId);
@@ -35,9 +36,6 @@ namespace webapi.data.Repositories.Interf
         //crud
         Task<IEnumerable<User>> GetAll();
         Task<User> GetById(int id);
-        void Insert(User u);
-        void Update(User u);
-        void Delete(int id);
         public Task<bool> SaveAll();
         public void Rollback();
     }

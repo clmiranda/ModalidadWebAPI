@@ -22,34 +22,25 @@ namespace spatwebapi.Controllers
     [ApiController]
     public class SeguimientoController : ControllerBase
     {
-        private readonly HttpContext _httpContext;
-        private ISeguimientoService _seguimientoService;
-        private IReporteSeguimientoService _reporteSeguimientoService;
-        private IUserService _userService;
+        private readonly ISeguimientoService _seguimientoService;
         private readonly IMapper _mapper;
-        public SeguimientoController(ISeguimientoService seguimientoService, IMapper mapper,
-            IUserService userService, IReporteSeguimientoService reporteSeguimientoService,
-            IHttpContextAccessor httpContextAccessor)
+        public SeguimientoController(ISeguimientoService seguimientoService, IMapper mapper)
         {
             _seguimientoService = seguimientoService;
-            _userService = userService;
-            _reporteSeguimientoService = reporteSeguimientoService;
             _mapper = mapper;
-            _httpContext = httpContextAccessor.HttpContext;
         }
         [AllowAnonymous]
         [HttpGet("GetAll")]
-        public IEnumerable<SeguimientoForReturnDto> GetAll()
+        public IActionResult GetAll()
         {
             var lista = _seguimientoService.GetAll();
             var mapeado = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(lista);
-            return mapeado;
+            return Ok(mapeado);
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpGet("GetAllSeguimiento")]
         public async Task<ActionResult> GetAllSeguimiento([FromQuery] SeguimientoParametros parametros)
         {
-            //int idUser = int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var resul = await _seguimientoService.GetAllSeguimiento(parametros);
             var lista = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(resul.ToList());
             Response.AddPagination(resul.CurrentPage, resul.PageSize,
@@ -57,49 +48,59 @@ namespace spatwebapi.Controllers
             return Ok(lista);
         }
         [HttpGet("GetAllVoluntarios")]
-        public IEnumerable<UserForDetailedDto> GetAllVoluntarios(/*[FromQuery] VoluntarioParameters voluntarioParameters*/)
+        public IEnumerable<UserForDetailedDto> GetAllVoluntarios()
         {
             var lista = _seguimientoService.GetAllVoluntarios();
             var mapped = _mapper.Map<IEnumerable<UserForDetailedDto>>(lista);
             return mapped;
-            //var listaToReturn = _mapper.Map<IEnumerable<UserForListDto>>(lista);
-
-            //Response.AddPagination(lista.CurrentPage, lista.PageSize, lista.TotalCount, lista.TotalPages);
-            //return Ok(listaToReturn);
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpGet("GetSeguimiento/{id}")]
         public async Task<ActionResult> GetSeguimiento(int id)
         {
-            var aux = await _seguimientoService.GetById(id);
-            if (aux==null)
+            var seguimiento = await _seguimientoService.GetById(id);
+            if (seguimiento == null)
                 return NotFound(null);
-            var seg = _mapper.Map<SeguimientoForReturnDto>(aux);
-            seg.ReporteSeguimientos = seg.ReporteSeguimientos.OrderByDescending(x => x.Fecha.ToShortDateString().Equals(DateTime.Now.ToShortDateString())).ThenBy(x=>x.Fecha.Date).ToList();
+            var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
+
+            //mapped.ReporteSeguimientos = mapped.ReporteSeguimientos.OrderByDescending(x => x.Fecha.ToShortDateString().Equals(DateTime.Now.ToShortDateString())).ThenBy(x => x.Fecha.Date).ToList();
+            return Ok(mapped);
+        }
+        [Authorize(Roles = "SuperAdministrador, Voluntario")]
+        [HttpGet("GetSeguimientoForVoluntario/{id}")]
+        public async Task<ActionResult> GetSeguimientoForVoluntario(int id)
+        {
+            var seguimiento = await _seguimientoService.GetById(id);
+            if (seguimiento == null)
+                return NotFound(null);
+            if (seguimiento.User == null)
+                return NotFound(null);
+            var seg = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
+
+            seg.ReporteSeguimientos = seg.ReporteSeguimientos.Where(x => x.Fecha.Date >= seg.FechaInicio.Date && x.Fecha.Date <= seg.FechaConclusion.Date).Where(x => !x.Estado.Equals("Enviado")).ToList();
             return Ok(seg);
         }
-        [AllowAnonymous]
-        [HttpPut("SaveSeguimiento")]
-        public async Task<IActionResult> SaveSeguimiento([FromBody] Seguimiento seguimiento)
-        {
-            //var objeto = await _seguimientoService.GetById(seguimiento.Id);
-            //objeto.CantidadVisitas = seguimiento.CantidadVisitas;
-            if (await _seguimientoService.UpdateSeguimiento(seguimiento)) {
-                return Ok("Datos actualizados correctamente, se generaron los reportes respectivos.");
-            }
-            return BadRequest("Ocurrio un problema al actualizar los datos.");
-        }
+        //talvez no se usa esta action
+        //[AllowAnonymous]
+        //[HttpPut("SaveSeguimiento")]
+        //public async Task<IActionResult> SaveSeguimiento([FromBody] Seguimiento seguimiento)
+        //{
+        //    if (await _seguimientoService.UpdateSeguimiento(seguimiento)) {
+        //        return Ok("Datos actualizados correctamente, se generaron los reportes respectivos.");
+        //    }
+        //    return BadRequest("Ocurrio un problema al actualizar los datos.");
+        //}
         [AllowAnonymous]
         [HttpPut("UpdateFecha")]
         public async Task<IActionResult> UpdateFecha([FromBody] FechaReporteDto dto)
         {
-            var o = await _seguimientoService.GetById(dto.Id);
-            if (o != null)
+            var seguimiento = await _seguimientoService.GetById(dto.Id);
+            if (seguimiento != null)
             {
-                var x = await _seguimientoService.UpdateFecha(dto);
-                if (x!=null)
+                var resultado = await _seguimientoService.UpdateFecha(dto);
+                if (resultado != null)
                 {
-                    var mapped = _mapper.Map<SeguimientoForReturnDto>(x);
+                    var mapped = _mapper.Map<SeguimientoForReturnDto>(resultado);
                     return Ok(mapped);
                 }
                 return BadRequest(new { mensaje = "Ocurrio un problema al actualizar los datos." });
@@ -107,39 +108,19 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "No existe el Seguimiento." });
         }
         [AllowAnonymous]
-        [HttpPut("{id}/CheckAsignar/{idUser}")]
-        public async Task<IActionResult> CheckAsignar(int id, int idUser)
+        [HttpPut("{id}/AsignarSeguimiento/{idUser}")]
+        public async Task<IActionResult> AsignarSeguimiento(int id, int idUser)
         {
-            //var seguimiento = await _seguimientoService.GetById(id);
-            //var user = await _userService.GetUsuario(idUser);
-            if (await _seguimientoService.CheckedVoluntarioAsignado(id, idUser)) {
-                //var voluntarios = _seguimientoService.GetAllVoluntarios();
-                //var mapper = _mapper.Map<IEnumerable<UserForDetailedDto>>(voluntarios);
-                return Ok(/*mapper*/);
-            }
+            var resultado = await _seguimientoService.AsignarSeguimiento(id, idUser);
+            if (resultado)
+                return Ok();
             return BadRequest(new { mensaje = "Ocurrio un problema al guardar los datos." });
         }
         [AllowAnonymous]
-        [HttpPut("{id}/RemoveVoluntarioChecked/{idUser}")]
-        public async Task<IActionResult> RemoveVoluntarioChecked(int id, int idUser)
+        [HttpPut("{id}/QuitarAsignacion/{idUser}")]
+        public async Task<IActionResult> QuitarAsignacion(int id, int idUser)
         {
-            //var seguimiento = await _seguimientoService.GetById(id);
-            //var user = await _userService.GetUsuario(idUser);
-            if (await _seguimientoService.RemoveVoluntario(id, idUser))
-            {
-                var voluntarios = _seguimientoService.GetAllVoluntarios();
-                var mapper = _mapper.Map<IEnumerable<UserForDetailedDto>>(voluntarios);
-                return Ok(mapper);
-            }
-            return BadRequest(new { mensaje = "Ocurrio un problema al guardar los datos." });
-        }
-        [AllowAnonymous]
-        [HttpPut("{id}/RemoveVoluntarioPendiente/{idUser}")]
-        public async Task<IActionResult> RemoveVoluntarioPendiente(int id, int idUser)
-        {
-            //var seguimiento = await _seguimientoService.GetById(id);
-            //var user = await _userService.GetUsuario(idUser);
-            if (await _seguimientoService.RemoveVoluntario(id, idUser))
+            if (await _seguimientoService.QuitarAsignacion(id, idUser))
             {
                 var voluntarios = _seguimientoService.GetAllVoluntarios();
                 var mapper = _mapper.Map<IEnumerable<UserForDetailedDto>>(voluntarios);
@@ -148,43 +129,22 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "Ocurrio un problema al guardar los datos." });
         }
 
-
-        //[Authorize(Roles ="Voluntario")]
-        //[HttpGet("GetAllSeguimientoVolun")]
-        //public async Task<IActionResult> GetAllSeguimientoVolun([FromQuery] SeguimientoParametros parametros)
-        //{
-        //    //var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    //var lista = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(_seguimientoService.GetSeguimientoForVoluntario(int.Parse(id)));
-        //    //return lista;
-        //    //int idUser = int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-        //    var resul = await _seguimientoService.GetAllSeguimiento(parametros);
-        //    var lista = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(resul);
-        //    Response.AddPagination(resul.CurrentPage, resul.PageSize,
-        //         resul.TotalCount, resul.TotalPages);
-        //    return Ok(lista);
-        //}
-
-        //Rol Voluntario
         [Authorize(Roles = "Voluntario")]
-        [HttpPost("{id}/AsignarSeguimiento")]
-        public async Task<IActionResult> AsignarSeguimiento(int id)
+        [HttpPost("{id}/AceptarSeguimientoVoluntario")]
+        public async Task<IActionResult> AceptarSeguimientoVoluntario(int id)
         {
-            var resul = await _seguimientoService.AsignarSeguimiento(id);
-            if (resul) {
-                //var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(_seguimientoService.GetAll());
-                return Ok(/*mapped*/);
-            }
+            var resul = await _seguimientoService.AceptarSeguimientoVoluntario(id);
+            if (resul)
+                return Ok();
             return BadRequest(new { mensaje = "Hubo un problema al asignar el seguimiento." });
         }
         [Authorize(Roles = "Voluntario")]
-        [HttpPost("{id}/RechazarSeguimiento")]
-        public async Task<IActionResult> RechazarSeguimiento(int id)
+        [HttpPost("{id}/RechazarSeguimientoVoluntario")]
+        public async Task<IActionResult> RechazarSeguimientoVoluntario(int id)
         {
-            var resul = await _seguimientoService.RechazarSeguimiento(id);
-            if (resul) {
-                //var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(_seguimientoService.GetAll());
-                return Ok(/*mapped*/);
-            }
+            var resul = await _seguimientoService.RechazarSeguimientoVoluntario(id);
+            if (resul)
+                return Ok();
             return BadRequest(new { mensaje = "Hubo un problema al rechazar el seguimiento." });
         }
     }

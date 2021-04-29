@@ -83,6 +83,12 @@
     <Compile Remove="Migrations\20210313011928_ChangesSeguimiento_Reportes.Designer.cs" />
     <Compile Remove="Migrations\20210317005356_ChangesSeguimiento_Reportes.cs" />
     <Compile Remove="Migrations\20210317005356_ChangesSeguimiento_Reportes.Designer.cs" />
+    <Compile Remove="Migrations\20210408233547_ChangeSeguimiento_Reportes_Adopciones.cs" />
+    <Compile Remove="Migrations\20210408233547_ChangeSeguimiento_Reportes_Adopciones.Designer.cs" />
+    <Compile Remove="Migrations\20210415004116_ChangeSeguimiento_Reportes_Adopciones.cs" />
+    <Compile Remove="Migrations\20210415004116_ChangeSeguimiento_Reportes_Adopciones.Designer.cs" />
+    <Compile Remove="Migrations\20210422012748_ChangeSeguimiento_Reportes_Adopciones.cs" />
+    <Compile Remove="Migrations\20210422012748_ChangeSeguimiento_Reportes_Adopciones.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

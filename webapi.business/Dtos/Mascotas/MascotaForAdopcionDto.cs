@@ -11,7 +11,7 @@ namespace webapi.business.Dtos.Mascotas
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public string EstadoSituacion { get; set; }
+        public string Estado { get; set; }
         public virtual FotoForReturnDto Foto { get; set; }
         public virtual ContratoAdopcionReturnDto ContratoAdopcion { get; set; }
     }

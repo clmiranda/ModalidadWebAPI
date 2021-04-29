@@ -23,6 +23,7 @@ namespace webapi.business.Dtos.Adopciones
         public string Respuesta7 { get; set; }
         public DateTime FechaSolicitudAdopcion { get; }
         public DateTime FechaAdopcion { get; }
+        public DateTime FechaCreacion { get; set; }
         //public string RazonRechazoCancelado { get; set; }
         public string Estado { get; }
         public int MascotaId { get; set; }
@@ -30,6 +31,7 @@ namespace webapi.business.Dtos.Adopciones
         {
             FechaSolicitudAdopcion = DateTime.Now;
             FechaAdopcion = DateTime.Now;
+            FechaCreacion = DateTime.Now;
             Estado = "Pendiente";
         }
     }

@@ -37,8 +37,6 @@ namespace webapi.root
         });
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddScoped<IAuthorService, AuthorService>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -59,12 +57,13 @@ namespace webapi.root
             services.AddScoped<IReporteSeguimientoRepository, ReporteSeguimientoRepository>();
 
             services.AddScoped<IFotoService, FotoService>();
-            services.AddScoped<IFotoRepository, FotoRepository>();
+            services.AddScoped<IGraficaService, GraficaService>();
 
             services.AddScoped<IRolUserService, RolUserService>();
             services.AddScoped<IRolUserRepository, RolUserRepository>();
 
-            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IReporteTratamientoService, ReporteTratamientoService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.Configure<SmtpSettings>(configuration.GetSection("SmtpSettings"));
             services.AddSingleton<IEmailService, EmailService>();

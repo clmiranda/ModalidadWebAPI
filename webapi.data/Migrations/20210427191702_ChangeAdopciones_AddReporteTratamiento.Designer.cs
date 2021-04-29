@@ -10,8 +10,8 @@ using webapi.data;
 namespace webapi.data.Migrations
 {
     [DbContext(typeof(BDSpatContext))]
-    [Migration("20210408233547_ChangeSeguimiento_Reportes_Adopciones")]
-    partial class ChangeSeguimiento_Reportes_Adopciones
+    [Migration("20210427191702_ChangeAdopciones_AddReporteTratamiento")]
+    partial class ChangeAdopciones_AddReporteTratamiento
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,47 +107,6 @@ namespace webapi.data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("webapi.core.Models.Author", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("webapi.core.Models.Book", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Year")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.ToTable("Books");
-                });
-
             modelBuilder.Entity("webapi.core.Models.ContratoAdopcion", b =>
                 {
                     b.Property<int>("Id")
@@ -168,6 +127,9 @@ namespace webapi.data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FechaAdopcion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FechaSolicitudAdopcion")
@@ -221,6 +183,9 @@ namespace webapi.data.Migrations
 
                     b.Property<int>("ContratoAdopcionId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("RazonRechazo")
                         .HasColumnType("nvarchar(max)");
@@ -307,13 +272,13 @@ namespace webapi.data.Migrations
                     b.Property<string>("Especie")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EstadoSituacion")
+                    b.Property<string>("Estado")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Esterilizado")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("FechaAgregado")
+                    b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nombre")
@@ -353,6 +318,9 @@ namespace webapi.data.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Observaciones")
                         .HasColumnType("nvarchar(max)");
 
@@ -364,6 +332,32 @@ namespace webapi.data.Migrations
                     b.HasIndex("SeguimientoId");
 
                     b.ToTable("ReporteSeguimiento");
+                });
+
+            modelBuilder.Entity("webapi.core.Models.ReporteTratamiento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MascotaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Titulo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MascotaId");
+
+                    b.ToTable("ReporteTratamiento");
                 });
 
             modelBuilder.Entity("webapi.core.Models.Role", b =>
@@ -574,13 +568,6 @@ namespace webapi.data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("webapi.core.Models.Book", b =>
-                {
-                    b.HasOne("webapi.core.Models.Author", null)
-                        .WithMany("Books")
-                        .HasForeignKey("AuthorId");
-                });
-
             modelBuilder.Entity("webapi.core.Models.ContratoAdopcion", b =>
                 {
                     b.HasOne("webapi.core.Models.Mascota", "Mascota")
@@ -620,6 +607,15 @@ namespace webapi.data.Migrations
                     b.HasOne("webapi.core.Models.Seguimiento", "Seguimiento")
                         .WithMany("ReporteSeguimientos")
                         .HasForeignKey("SeguimientoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("webapi.core.Models.ReporteTratamiento", b =>
+                {
+                    b.HasOne("webapi.core.Models.Mascota", "Mascota")
+                        .WithMany("ReporteTratamientos")
+                        .HasForeignKey("MascotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
