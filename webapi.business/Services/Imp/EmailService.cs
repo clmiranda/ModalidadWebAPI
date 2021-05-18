@@ -4,8 +4,6 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Helpers;
 using webapi.business.Services.Interf;

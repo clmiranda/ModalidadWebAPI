@@ -41,27 +41,25 @@ namespace spatwebapi.Controllers
         [HttpGet("GetDenuncia/{id}")]
         public async Task<IActionResult> GetDenuncia(int id)
         {
-            var obj= await _denunciaService.GetDenunciaById(id);
-            if (obj == null) return NotFound(null);
-            var resul = _mapper.Map<DenunciaForListDto>(obj);
-            return Ok(resul);
+            var denuncia= await _denunciaService.GetDenunciaById(id);
+            if (denuncia == null) return NotFound(null);
+            var mapped = _mapper.Map<DenunciaForListDto>(denuncia);
+            return Ok(mapped);
         }
-        //here
         [HttpPost("CreateDenuncia")]
         public async Task<IActionResult> CreateDenuncia(Denuncia denuncia)
         {
-            var d = await _denunciaService.CreateDenuncia(denuncia);
-            if (d.Equals(null))
+            var resultado = await _denunciaService.CreateDenuncia(denuncia);
+            if (resultado.Equals(null))
                 return BadRequest(new { mensaje = "Hubo problemas al crear la denuncia." });
             return Ok();
         }
         [HttpPut("UpdateDenuncia")]
         public async Task<IActionResult> UpdateDenuncia(Denuncia denuncia)
         {
-            var d=await _denunciaService.UpdateDenuncia(denuncia);
-            if (d.Equals(null))
+            var resultado=await _denunciaService.UpdateDenuncia(denuncia);
+            if (resultado.Equals(null))
                 return BadRequest(new { mensaje = "Hubo problemas al modificar la denuncia." });
-
             return Ok();
         }
         [HttpDelete("DeleteDenuncia/{id}")]

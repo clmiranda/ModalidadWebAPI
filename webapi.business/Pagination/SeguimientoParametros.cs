@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace webapi.business.Pagination
+﻿namespace webapi.business.Pagination
 {
     public class SeguimientoParametros
     {
@@ -14,9 +10,6 @@ namespace webapi.business.Pagination
             get { return pageSize; }
             set { pageSize = (value > MaxPageSize) ? MaxPageSize : value; }
         }
-
-        //public int UserId { get; set; }
-        //public string Busqueda { get; set; } = "";
         public string Filter { get; set; } = "Activo";
     }
 }

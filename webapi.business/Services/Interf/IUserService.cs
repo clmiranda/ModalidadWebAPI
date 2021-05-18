@@ -1,31 +1,25 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Usuario;
-using webapi.business.Helpers;
 using webapi.core.Models;
 
 namespace webapi.business.Services.Interf
 {
     public interface IUserService
     {
-        Task<User> Login(UserForLoginDto userforLogin);
+        Task<User> Login(UserForLoginDto userForLoginDto);
         Task<object> GenerateJwtToken(User user, string security);
-        Task<IdentityResult> PostUsuario(UserForRegisterDto user);
-        Task<IdentityResult> UpdateUsuario(UserUpdateDto userDto);
+        Task<IdentityResult> PostUsuario(UserForRegisterDto userforRegisterDto);
+        Task<IdentityResult> UpdateUsuario(UserUpdateDto userForUpdateDto);
         Task<UserTokenToReturnDto> GetEmailToken(string email);
         Task<IdentityResult> ConfirmEmail(string userId, string token);
-        Task<string> ForgotPassword(ForgotPasswordDto email);
+        Task<string> ForgotPassword(ForgotPasswordDto forgotPasswordDto);
         Task<IdentityResult> ResetPassword(int id, string password);
-        Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto reset);
+        Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto resetPasswordDto);
         Task<User> GetUsuario(int id);
         Task<IdentityResult> CambiarEstado(int id);
-        Task<IdentityResult> EliminarUsuario(int id);
-        //Task<IEnumerable<User>> GetAll();
+        Task<IdentityResult> DeleteUsuario(int id);
         Task<IEnumerable<User>> GetAll();
-        //Task<bool> UpdateUser(int id, UserForUpdateDto userForUpdateDto);
-        //Task<PagedList<User>> GetUsers(UserParams userParams);
     }
 }

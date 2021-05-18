@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.ContratoRechazo;
 using webapi.business.Helpers;
 using webapi.business.Pagination;
 using webapi.business.Services.Interf;
-using webapi.core.Models;
 
 namespace spatwebapi.Controllers
 {

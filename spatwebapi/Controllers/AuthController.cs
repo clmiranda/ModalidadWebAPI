@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using webapi.business.Dtos.Usuario;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
@@ -32,7 +27,7 @@ namespace spatwebapi.Controllers
             _emailService = emailService;
             _userManager = userManager;
         }
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(UserForLoginDto userforLogin)
         {
             var user = await _userService.Login(userforLogin);
@@ -81,7 +76,7 @@ namespace spatwebapi.Controllers
             else
             {
                 var linkReseteo = Url.Action("ValidateResetPassword", "Auth",
-                        new { email = email.Email, token = token }, Request.Scheme);
+                        new { email = email.Email, token }, Request.Scheme);
 
                 await _emailService.SendEmailAsync(email.Email, "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.", "<a href=" + linkReseteo + "><h5>Accede a este enlace para reestablecer tu contraseña.</h5></a>");
                 return Ok();

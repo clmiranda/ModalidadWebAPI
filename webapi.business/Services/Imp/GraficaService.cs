@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Graficas;
@@ -15,15 +13,12 @@ namespace webapi.business.Services.Imp
     public class GraficaService : IGraficaService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public GraficaService(IUnitOfWork unitOfWork, IMapper mapper)
+        public GraficaService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
         public async Task<List<DataGraficaDto>> DatosAdopciones(string filtro)
         {
-            //int a = 0, b = 0, c = 0;
             var datos = new List<ContratoAdopcion>();
             switch (filtro)
             {
@@ -40,27 +35,6 @@ namespace webapi.business.Services.Imp
                     datos = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= DateTime.Today.AddMonths(-12) && x.FechaSolicitudAdopcion.Date <= DateTime.Now.Date).ToListAsync();
                     break;
             }
-            //a = datos.Count(x => x.Estado.Equals("Aprobado"));
-            //b = datos.Count(x => x.Estado.Equals("Rechazado"));
-            //c = datos.Count(x => x.Estado.Equals("Cancelado"));
-            //var lista = new List<DataGraficaDto>
-            //{
-            //    new DataGraficaDto
-            //    {
-            //        Nombre = "Aprobado",
-            //        Cantidad = a
-            //    },
-            //    new DataGraficaDto
-            //    {
-            //        Nombre = "Rechazado",
-            //        Cantidad = b
-            //    },
-            //    new DataGraficaDto
-            //    {
-            //        Nombre = "Cancelado",
-            //        Cantidad = c
-            //    }
-            //};
             var lista = datos.OrderBy(x => x.FechaSolicitudAdopcion.Date)
                 .GroupBy(x => x.FechaSolicitudAdopcion.Date.ToString("MMMM yyyy"))
     .Select(x => new DataGraficaDto()
@@ -124,6 +98,38 @@ namespace webapi.business.Services.Imp
                     Cantidad = x.Count()
                 }).ToList();
             return lista;
+        }
+        public async Task<DataForDashboardDto> GetDataForDashboard() {
+            var dataForDashboardDto = new DataForDashboardDto
+            {
+                ContadorMascotasRegistradas = await _unitOfWork.MascotaRepository.GetAll().CountAsync(),
+                ContadorAdopcionesAprobadas = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.Estado.Equals("Aprobado")).CountAsync(),
+                ContadorAdopcionesRechazadas = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.Estado.Equals("Rechazado")).CountAsync(),
+                ContadorAdopcionesCanceladas = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.Estado.Equals("Cancelado")).CountAsync(),
+                ContadorSeguimientosActuales = await _unitOfWork.SeguimientoRepository.FindByCondition(x => x.Estado.Equals("Activo")).CountAsync(),
+                ContadorVoluntariosRegistrados = await _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario"))).CountAsync(),
+                ContadorReportesSemana = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Estado.Equals("Enviado") && x.Fecha.Date>=DateTime.Today.AddDays(-(int)DayOfWeek.Monday) && x.Fecha.Date <= DateTime.Today.AddDays((int)DayOfWeek.Sunday)).CountAsync(),
+                ContadorDenunciasRegistradas = await _unitOfWork.DenunciaRepository.GetAll().CountAsync()
+            };
+
+            var listaMascotas= await _unitOfWork.MascotaRepository.GetAll().ToListAsync();
+            dataForDashboardDto.DataGraficaMascota= listaMascotas
+                 .GroupBy(x => x.Estado)
+                 .Select(x => new DataGraficaDto()
+                 {
+                     Nombre = x.Key,
+                     Cantidad = x.Count()
+                 }).ToList();
+
+            var listaSeguimientos = await _unitOfWork.SeguimientoRepository.GetAll().ToListAsync();
+            dataForDashboardDto.DataGraficaSeguimiento = listaSeguimientos
+                 .GroupBy(x => x.Estado)
+                 .Select(x => new DataGraficaDto()
+                 {
+                     Nombre = x.Key,
+                     Cantidad = x.Count()
+                 }).ToList();
+            return dataForDashboardDto;
         }
     }
 }

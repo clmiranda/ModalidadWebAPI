@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using webapi.core.Models;
 
 namespace webapi.data.Repositories.Interf
@@ -14,8 +11,8 @@ namespace webapi.data.Repositories.Interf
         IRepository<Foto> FotoRepository { get; }
         IRepository<ReporteTratamiento> ReporteTratamientoRepository { get; }
         IRepository<ContratoAdopcion> ContratoAdopcionRepository { get; }
-        ISeguimientoRepository SeguimientoRepository { get; }
-        IReporteSeguimientoRepository ReporteSeguimientoRepository { get; }
+        IRepository<Seguimiento> SeguimientoRepository { get; }
+        IRepository<ReporteSeguimiento> ReporteSeguimientoRepository { get; }
         IRepository<ContratoRechazo> ContratoRechazoRepository { get; }
         IRolUserRepository RolUserRepository { get; }
         Task<bool> SaveAll();

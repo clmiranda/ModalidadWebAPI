@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.Text;
 using webapi.business.Services.Imp;
 using webapi.business.Services.Interf;
@@ -24,9 +23,8 @@ namespace webapi.root
         {
         }
 
-        public static void injectDependencies(IServiceCollection services, IConfiguration configuration)
+        public static void InjectDependencies(IServiceCollection services, IConfiguration configuration)
         {
-            /*services.AddDbContext<DatabaseContext>(opts => opts.UseInMemoryDatabase("database"));*/
             services.AddScoped<BDSpatContext>();
             //services.AddDbContext<BDSpatContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
@@ -42,19 +40,13 @@ namespace webapi.root
             services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IDenunciaService, DenunciaService>();
-
-            //services.AddScoped<ICasoMascotaService, CasoMascotaService>();
             services.AddScoped<IMascotaService, MascotaService>();
-            //services.AddScoped<IMascotaRepository, MascotaRepository>();
 
             services.AddScoped<IContratoAdopcionService, ContratoAdopcionService>();
-            //services.AddScoped<IContratoAdopcionRepository, ContratoAdopcionRepository>();
 
             services.AddScoped<ISeguimientoService, SeguimientoService>();
-            services.AddScoped<ISeguimientoRepository, SeguimientoRepository>();
 
             services.AddScoped<IReporteSeguimientoService, ReporteSeguimientoService>();
-            services.AddScoped<IReporteSeguimientoRepository, ReporteSeguimientoRepository>();
 
             services.AddScoped<IFotoService, FotoService>();
             services.AddScoped<IGraficaService, GraficaService>();
@@ -85,7 +77,6 @@ namespace webapi.root
                 opt.SignIn.RequireConfirmedEmail = true;
                 opt.User.RequireUniqueEmail = false;
             }).AddDefaultTokenProviders().AddErrorDescriber<CustomIdentityErrorDescriber>();
-            ////Token de reset password duracion 1 day
             services.Configure<DataProtectionTokenProviderOptions>(options =>
     options.TokenLifespan = TimeSpan.FromHours(3));
 

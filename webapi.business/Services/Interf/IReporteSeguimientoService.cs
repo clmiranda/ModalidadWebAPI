@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using webapi.business.Dtos.ReportesSeguimientos;
 using webapi.business.Dtos.Seguimientos;
@@ -13,13 +11,12 @@ namespace webapi.business.Services.Interf
         Task<ReporteSeguimiento> GetById(int id);
         Task<ReporteSeguimiento> GetByIdNotracking(int id);
         IEnumerable<ReporteSeguimiento> GetAll();
-        SeguimientoForReturnDto GetReportesForAdmin(int id);
+        Task<Seguimiento> GetReportesForAdmin(int id);
         IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id);
-        Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporte);
+        Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporteDto);
         Task<bool> CreateReporteSeguimiento(int id);
-        Task<bool> SendReporte(ReporteSeguimientoForUpdate reporte);
-        Task<bool> UpdateFecha(ReporteSeguimientoForUpdateAdmin reporte);
+        Task<bool> SendReporte(ReporteSeguimientoForUpdate reporteDto);
+        Task<bool> UpdateFecha(ReporteSeguimientoForUpdateAdmin reporteDto);
         Task<bool> DeleteReporte(int id);
-        //Task<bool> CreateReporteSeguimiento(ReporteSeguimiento reporteSeguimiento);
     }
 }

@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
 
 namespace webapi.data.Repositories.Imp
 {
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
@@ -28,12 +27,10 @@ namespace webapi.data.Repositories.Imp
         {
             return await _signInManager.CheckPasswordSignInAsync(u, password, f);
         }
-
         public async Task<IdentityResult> ConfirmEmail(User u, string token)
         {
             return await _userManager.ConfirmEmailAsync(u, token);
         }
-
         public async Task<IdentityResult> PostUsuario(User u, string password)
         {
             return await _userManager.CreateAsync(u, password);
@@ -42,127 +39,53 @@ namespace webapi.data.Repositories.Imp
         {
             return await _userManager.UpdateAsync(u);
         }
-
         public async Task<User> FindByEmail(string userEmail)
         {
             return await _userManager.FindByEmailAsync(userEmail);
         }
-
         public async Task<User> FindById(string userId)
         {
             return await _userManager.FindByIdAsync(userId);
         }
-
         public async Task<User> FindByName(string userName)
         {
             return await _userManager.FindByNameAsync(userName);
         }
-
         public async Task<string> GenerateEmailToken(User u)
         {
             return await _userManager.GenerateEmailConfirmationTokenAsync(u);
         }
-
         public async Task<string> GeneratePasswordResetToken(User usuario)
         {
             return await _userManager.GeneratePasswordResetTokenAsync(usuario);
         }
-
         public async Task<IList<string>> GetRoles(User user)
         {
             return await _userManager.GetRolesAsync(user);
         }
-        public void AddRole(User user)
-        {
-             _userManager.AddToRoleAsync(user,"Adoptante").Wait();
-        }
-
         public async Task<bool> IsEmailConfirmed(User u)
         {
             return await _userManager.IsEmailConfirmedAsync(u);
         }
-
         public async Task<IdentityResult> ResetPassword(User u, string token, string password)
         {
             return await _userManager.ResetPasswordAsync(u, token, password);
         }
-
-        //crud
-        public async Task<IEnumerable<User>> GetAll()
+        public IQueryable<User> GetAll()
         {
-            return await _context.Users.ToListAsync();
+            return _context.Users.AsQueryable();
         }
-
         public async Task<User> GetById(int id)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
-
-        //public void Insert(User u)
-        //{
-        //    if (u == null) throw new ArgumentNullException("entity");
-        //    _context.Users.Add(u);
-        //}
-
-        //public void Update(User u)
-        //{
-        //    if (u == null) throw new ArgumentNullException("entity");
-        //    _context.Users.Update(u);
-        //}
-
-        //public void Delete(User user)
-        //{
-        //    if (user == null) throw new ArgumentNullException("entity");
-        //    _context.Users.Remove(user);
-        //}
         public async Task<IdentityResult> DeleteUsuario(User u)
         {
             return await _userManager.DeleteAsync(u);
         }
-        public async Task<bool> SaveAll()
-        { return await _context.SaveChangesAsync() > 0; }
-
-        public void Rollback()
-        { _context.Dispose(); }
-
-        public async Task<Foto> GetFoto(int id)
-        {
-            var photo = await _context.Foto.FirstOrDefaultAsync(p => p.Id == id);
-            return photo;
-        }
-        public void DeleteFoto(int id)
-        {
-            var u = _context.Foto.FirstOrDefaultAsync(x => x.Id == id);
-            if (u != null)
-                _context.Foto.Remove(u.Result);
-        }
         public IQueryable<User> FindByCondition(Expression<Func<User, bool>> expression)
         {
-            //return entities.Where(expression).AsNoTracking();
             return _context.Users.Where(expression).AsQueryable();
         }
-
-        //public async Task<IEnumerable<User>> GetRolesUsuarios()
-        //{
-        //    //var lista = await _context.Users
-        //    //    .Select(x => new
-        //    //    {
-        //    //        Id = x.Id,
-        //    //        UserName = x.UserName,
-        //    //        Roles = (from RolUsuario in x.UserRoles
-        //    //                 join Rol in _context.Roles
-        //    //                 on RolUsuario.RoleId
-        //    //                 equals Rol.Id
-        //    //                 select Rol.Name).ToList()
-
-        //    //    }).ToListAsync();
-        //    var listado = await _userManager.Users.ToListAsync();
-        //    return listado;
-        //}
-        //public IEnumerable<User> GetAllVoluntarios()
-        //{
-        //    var lista =_context.Users.Where(x=>x.UserRoles.Any(y=>y.Role.Name.Equals("Voluntario"))).ToList();
-        //    return lista;
-        //}
     }
 }

@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using webapi.business.Dtos.Mascotas;
 using webapi.business.Dtos.ReporteTratamientos;
-using webapi.business.Services.Imp;
 using webapi.business.Services.Interf;
-using webapi.core.Models;
 
 namespace spatwebapi.Controllers
 {
@@ -24,10 +20,10 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAll/{id}")]
-        public ActionResult GetAll(int id)
+        public async Task<ActionResult> GetAll(int id)
         {
-            var lista = _reporteTratamientoService.GetAll(id);
-            var mapped = _mapper.Map<List<ReporteTratamientoForReturnDto>>(lista);
+            var mascota = await _reporteTratamientoService.GetAll(id);
+            var mapped = _mapper.Map<MascotaForReturn>(mascota);
             return Ok(mapped);
         }
         [HttpGet("GetReporteTratamiento/{id}")]
@@ -44,7 +40,7 @@ namespace spatwebapi.Controllers
             var resultado = await _reporteTratamientoService.CreateReporteTratamiento(reporteTratamientoDto);
             if (resultado)
                 return Ok();
-            return BadRequest(new { mensaje = "Hubo problemas al crear el reporte." });
+            return BadRequest(new { mensaje = "Problemas al crear el reporte." });
         }
         [HttpPut("UpdateReporteTratamiento")]
         public async Task<IActionResult> UpdateReporteTratamiento(ReporteTratamientoForUpdateDto reporteTratamientoDto)
@@ -52,7 +48,7 @@ namespace spatwebapi.Controllers
             var resultado = await _reporteTratamientoService.UpdateReporteTratamiento(reporteTratamientoDto);
             if (resultado)
                 return Ok();
-            return BadRequest(new { mensaje = "Hubo problemas al modificar el reporte." });
+            return BadRequest(new { mensaje = "Problemas al modificar el reporte." });
         }
         [HttpDelete("DeleteReporteTratamiento/{id}")]
         public async Task<IActionResult> DeleteReporteTratamiento(int id)
@@ -62,7 +58,7 @@ namespace spatwebapi.Controllers
             if (await _reporteTratamientoService.DeleteReporteTratamiento(reporteTratamiento))
                 return Ok();
             else
-                return BadRequest(new { mensaje = "Hubo problemas al eliminar el registro." });
+                return BadRequest(new { mensaje = "Problemas al eliminar el registro." });
         }
     }
 }
