@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using webapi.business.Dtos;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.ContratoRechazo;
 using webapi.business.Dtos.Denuncias;
@@ -32,57 +29,17 @@ namespace webapi.business.Helpers
                   options.MapFrom(s => s.FechaNacimiento.CalculoEdad());
               });
             CreateMap<UserUpdateDto, User>();
-
-            //CreateMap<CasoMascota, CasoMascotaForListDto>()
-            //    .ForMember(d => d.TituloDenuncia, options =>
-            //      {
-            //          options.MapFrom(s => s.Denuncia.Titulo);
-            //      });
-            //CreateMap<Denuncia, DenunciaFilterDto>()
-            //    .ForMember(d=>d.Id, options=>
-            //    {
-            //        options.MapFrom(s=>s.CasoMascotas.FirstOrDefault(x=>x.IdDenuncia==s.Id).IdDenuncia);
-            //    })
-            //    .ForMember(d => d.Titulo, options =>
-            //    {
-            //        options.MapFrom(s => s.Titulo);
-            //    })
-            //    .ForMember(d => d.Descripcion, options =>
-            //    {
-            //        options.MapFrom(s => s.Descripcion);
-            //    });
             CreateMap<Denuncia, DenunciaForListDto>();
-                //.ForMember(d => d.CasoMascota, options =>
-                //  {
-                //      options.MapFrom(s => s.CasoMascotas.FirstOrDefault());
-                //  });
             CreateMap<Denuncia, DenunciaForDetailedDto>();
-                //.ForMember(d=>d.CasoMascotas, options=>
-                //{
-                //    options.MapFrom(s=>s.CasoMascotas.FirstOrDefault());
-                //});
             CreateMap<DenunciaForDetailedDto, Denuncia>();
-            //CreateMap<CasoMascota, CasoMascotaForDetailedDto>();
             CreateMap<Mascota, MascotaForDetailedDto>();
-                //.ForMember(d=>d.CasoMascotaId, options=>
-                //{
-                //    options.MapFrom(s=>s.CasoMascotaId);
-                //})
-                //.ForMember(d => d.TituloCaso, options =>
-                //{
-                //    options.MapFrom(s => s.CasoMascota.Titulo);
-                //})
-                //.ForMember(d => d.TituloDenuncia, options =>
-                //{
-                //    options.MapFrom(s => s.CasoMascota.Denuncia.Titulo);
-                //});
             CreateMap<Mascota, MascotaForReturn>();
             CreateMap<MascotaForCreateDto, Mascota>();
             CreateMap<MascotaForUpdateDto, Mascota>();
             CreateMap<Mascota, MascotaForAdopcionDto>()
                 .ForMember(d => d.Foto, options =>
                 {
-                    options.MapFrom(s => s.Fotos.FirstOrDefault(x=>x.IsPrincipal==true));
+                    options.MapFrom(s => s.Fotos.FirstOrDefault(x => x.IsPrincipal == true));
                 });
             CreateMap<ContratoAdopcionReturnDto, ContratoAdopcion>();
             CreateMap<ContratoAdopcion, ContratoAdopcionReturnDto>();
@@ -90,10 +47,6 @@ namespace webapi.business.Helpers
             CreateMap<FechaContratoForUpdateDto, ContratoAdopcion>();
             CreateMap<Seguimiento, SeguimientoForReturnDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForList>();
-            //.ForMember(d=>d.CantidadReportes, options=>
-            //{
-            //    options.MapFrom(s=>s.ReporteSeguimientos.Count());
-            //});
             CreateMap<ContratoAdopcion, ContratoAdopcionForList>()
                 .ForMember(d => d.RazonAdopcion, options =>
                 {
@@ -107,7 +60,6 @@ namespace webapi.business.Helpers
             CreateMap<ReporteTratamiento, ReporteTratamientoForReturnDto>();
             CreateMap<ReporteTratamientoForCreateDto, ReporteTratamiento>();
             CreateMap<ReporteTratamientoForUpdateDto, ReporteTratamiento>();
-            //CreateMap<MascotaForCreationDto, Mascota>();
             CreateMap<ContratoRechazo, ContratoRechazoForReturnDto>();
             CreateMap<ContratoRechazoForCreateDto, ContratoRechazo>();
             CreateMap<User, UserRolesForReturn>()

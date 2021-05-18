@@ -4,11 +4,9 @@ using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Fotos;
 using webapi.business.Helpers;
@@ -68,6 +66,7 @@ namespace webapi.business.Services.Imp
         public async Task<bool> AgregarFotoMascota(int id, FotoForCreationDto fotoMascota)
         {
             var mascotaRepo = await _unitOfWork.MascotaRepository.GetById(id);
+            mascotaRepo.Fotos = new List<Foto>();
             Foto fotoMap = new Foto();
             foreach (var item in fotoMascota.Archivo)
             {
@@ -91,7 +90,6 @@ namespace webapi.business.Services.Imp
                 fotoMascota.MascotaId = id;
 
                 fotoMap = _mapper.Map<Foto>(fotoMascota);
-                mascotaRepo.Fotos = new List<Foto>();
                 mascotaRepo.Fotos.Add(fotoMap);
                 if (!mascotaRepo.Fotos.Any(x => x.IsPrincipal))
                     fotoMap.IsPrincipal = true;

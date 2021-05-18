@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Services.Interf;
 
@@ -32,6 +29,11 @@ namespace spatwebapi.Controllers
         public async Task<IActionResult> GetGraficasReporteSeguimientos(string filtro = "3 meses")
         {
             var resultado = await _graficaService.DatosReporteSeguimientos(filtro);
+            return Ok(resultado);
+        }
+        [HttpGet("GetDataForDashboard")]
+        public async Task<IActionResult> GetDataForDashboard() {
+            var resultado = await _graficaService.GetDataForDashboard();
             return Ok(resultado);
         }
     }

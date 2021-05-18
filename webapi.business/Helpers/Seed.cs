@@ -13,9 +13,6 @@ namespace webapi.business.Helpers
         {
             if (!userManager.Users.Any())
             {
-                //var userData = System.IO.File.ReadAllText("Data/FirstSeed.json");
-                //var users = JsonConvert.DeserializeObject<List<User>>(userData);
-
                 //create roles
                 var roles = new List<Role>
                 {
@@ -30,9 +27,8 @@ namespace webapi.business.Helpers
                     roleManager.CreateAsync(item).Wait();
                 }
 
-                var user = setAdminUser();
+                var user = SetAdminUser();
                 var result = userManager.CreateAsync(user, "admin").Result;
-                //userManager.AddToRoleAsync(user,"Admin");
 
                 if (result.Succeeded)
                 {
@@ -44,16 +40,18 @@ namespace webapi.business.Helpers
                 }
             }
         }
-        private static User setAdminUser()
+        private static User SetAdminUser()
         {
-            var u = new User();
-            u.Nombres = "Admin";
-            u.Apellidos = "Admin";
-            u.Estado = "Activo";
-            u.UserName = "admin";
-            u.Email = "miranda76575@gmail.com";
-            u.EmailConfirmed = true;
-            u.FechaCreacion = DateTime.Now;
+            var u = new User
+            {
+                Nombres = "Admin",
+                Apellidos = "Admin",
+                Estado = "Activo",
+                UserName = "admin",
+                Email = "miranda76575@gmail.com",
+                EmailConfirmed = true,
+                FechaCreacion = DateTime.Now
+            };
 
             return u;
         }

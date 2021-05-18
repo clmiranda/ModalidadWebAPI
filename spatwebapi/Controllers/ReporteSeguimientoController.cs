@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -49,44 +50,34 @@ namespace spatwebapi.Controllers
             var lista = _reporteSeguimientoService.GetReportesForVoluntario(id);
             return lista;
         }
-        //[HttpPost("CrearReporte")]
-        //public async Task<IActionResult> GuardarReporte(ReporteSeguimientoForCreate reporteDto)
-        //{
-        //    var seguimiento = await _reporteSeguimientoService.GuardarReporte(reporteDto);
-        //    if (seguimiento!=null)
-        //    {
-        //        var mapped = _mapper.Map<ReporteSeguimientoForReturn>(seguimiento);
-        //        return Ok(mapped);
-        //    }
-        //    return BadRequest(new { mensaje = "No se encuentra el Seguimiento." });
-        //}
         [HttpPost("CreateReporteSeguimiento/{id}")]
         public async Task<IActionResult> CreateReporteSeguimiento(int id)
         {
             if (await _reporteSeguimientoService.CreateReporteSeguimiento(id))
             {
-                var seg = _reporteSeguimientoService.GetReportesForAdmin(id);
-                return Ok(seg);
+                var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(id);
+                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderBy(x => x.Fecha.ToShortDateString()).ToList();
+                var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
+                return Ok(mapped);
             }
-
             return BadRequest(new { mensaje = "Hubo problemas al agregar el reporte." });
         }
         [HttpPut("SendReporte")]
-        public async Task<IActionResult> SendReporte([FromForm] ReporteSeguimientoForUpdate reporte, IFormFile Foto)
+        public async Task<IActionResult> SendReporte([FromForm] ReporteSeguimientoForUpdate reporteDto, IFormFile Foto)
         {
-            var modelo = await _reporteSeguimientoService.GetByIdNotracking(reporte.Id);
-            if (modelo == null)
+            var reporte = await _reporteSeguimientoService.GetByIdNotracking(reporteDto.Id);
+            if (reporte == null)
                 return NotFound(new { mensaje = "Reporte no encontrado, Id incorrecto." });
-            if (modelo.Estado.Equals("Enviado"))
+            if (reporte.Estado.Equals("Enviado"))
                 return BadRequest(new { mensaje = "El reporte ya fue enviado anteriormente." });
 
-            var resulMascota = await _reporteSeguimientoService.SendReporte(reporte);
-            if (resulMascota)
+            var resultadoMascota = await _reporteSeguimientoService.SendReporte(reporteDto);
+            if (resultadoMascota)
             {
-                var resulFoto = await _fotoService.AgregarFotoReporte(reporte.Id, Foto);
-                if (resulFoto)
+                var resultadoFoto = await _fotoService.AgregarFotoReporte(reporteDto.Id, Foto);
+                if (resultadoFoto)
                 {
-                    var seguimiento = await _seguimientoService.GetById(reporte.SeguimientoId);
+                    var seguimiento = await _seguimientoService.GetById(reporteDto.SeguimientoId);
                     var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                     return Ok(mapped);
                 }
@@ -94,23 +85,25 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "Hubo problemas al generar el Reporte." });
         }
         [HttpPut("UpdateFecha")]
-        public async Task<IActionResult> UpdateFecha(ReporteSeguimientoForUpdateAdmin reporte)
+        public async Task<IActionResult> UpdateFecha(ReporteSeguimientoForUpdateAdmin reporteDto)
         {
-            var modelo = await _reporteSeguimientoService.GetById(reporte.Id);
-            if (modelo.Estado.Equals("Enviado"))
+            var reporte = await _reporteSeguimientoService.GetById(reporteDto.Id);
+            if (reporte.Estado.Equals("Enviado"))
                 return BadRequest(new { mensaje = "El Reporte ya fue enviado." });
-            var valor = await _reporteSeguimientoService.VerifyDate(reporte);
-            if (valor == 1)
+            var verificar = await _reporteSeguimientoService.VerifyDate(reporteDto);
+            if (verificar == 1)
             {
-                var resul = await _reporteSeguimientoService.UpdateFecha(reporte);
-                if (resul)
+                var resultado = await _reporteSeguimientoService.UpdateFecha(reporteDto);
+                if (resultado)
                 {
-                    var seg = _reporteSeguimientoService.GetReportesForAdmin(modelo.SeguimientoId);
-                    return Ok(seg);
+                    var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(reporte.SeguimientoId);
+                    seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderBy(x => x.Fecha.ToShortDateString()).ToList();
+                    var mappeado = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
+                    return Ok(mappeado);
                 }
                 return BadRequest(new { mensaje = "Hubo problemas al actualizar el reporte" });
             }
-            else if (valor == 2)
+            else if (verificar == 2)
                 return BadRequest(new { mensaje = "La fecha no debe ser la misma que la de otro reporte creado." });
             else
                 return BadRequest(new { mensaje = "La fecha debe estar en el rango establecido en el seguimiento." });

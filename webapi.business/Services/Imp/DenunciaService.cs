@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Denuncias;
-using webapi.business.Helpers;
 using webapi.business.Pagination;
 using webapi.business.Services.Interf;
 using webapi.core.Models;

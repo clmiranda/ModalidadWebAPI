@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace webapi.business.Helpers
+﻿namespace webapi.business.Helpers
 {
     public class ConfigurationCloudinary
     {

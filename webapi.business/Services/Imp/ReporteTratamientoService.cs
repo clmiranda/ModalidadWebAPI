@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.ReporteTratamientos;
 using webapi.business.Services.Interf;
@@ -20,9 +16,9 @@ namespace webapi.business.Services.Imp
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public List<ReporteTratamiento> GetAll(int id) {
-            var lista = _unitOfWork.ReporteTratamientoRepository.FindByCondition(x=>x.MascotaId==id).ToList();
-            return lista;
+        public async Task<Mascota> GetAll(int id) {
+            var mascota = await _unitOfWork.MascotaRepository.GetById(id);
+            return mascota;
         }
         public async Task<ReporteTratamiento> GetReporteTratamiento(int id)
         {

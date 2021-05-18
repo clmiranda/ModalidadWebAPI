@@ -45,21 +45,21 @@ namespace spatwebapi.Controllers
             var denuncia = await _denunciaService.GetDenunciaById(id);
             if (denuncia == null)
                 return NotFound(null);
-            var obj = _mascotaService.FindByCondition(x => x.DenunciaId == id).FirstOrDefault();
-            if (obj == null) return Ok(new MascotaForDetailedDto{ DenunciaId=id});
-            var resul = _mapper.Map<MascotaForDetailedDto>(obj);
-            return Ok(resul);
+            var mascota = _mascotaService.FindByCondition(x => x.DenunciaId == id).FirstOrDefault();
+            if (mascota == null) return Ok(new MascotaForDetailedDto { DenunciaId = id });
+            var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+            return Ok(mapped);
         }
 
         [HttpGet("GetAllMascotaAdopcion")]
         [AllowAnonymous]
         public async Task<ActionResult> GetAllMascotaAdopcion([FromQuery] MascotaParametros parametros)
         {
-            var resul = await _mascotaService.GetAllMascotas(parametros);
-            var lista = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(resul);
-            Response.AddPagination(resul.CurrentPage, resul.PageSize,
-                 resul.TotalCount, resul.TotalPages);
-            return Ok(lista);
+            var lista = await _mascotaService.GetAllMascotas(parametros);
+            var mapped = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(lista);
+            Response.AddPagination(lista.CurrentPage, lista.PageSize,
+                 lista.TotalCount, lista.TotalPages);
+            return Ok(mapped);
         }
 
         [HttpGet("GetAllMascotaAdmin")]
@@ -67,9 +67,8 @@ namespace spatwebapi.Controllers
         public async Task<ActionResult> GetAllMascotaAdmin([FromQuery] MascotaParametros parametros)
         {
             var resul = await _mascotaService.GetAllMascotas(parametros);
-            //var lista = _mascotaService.FindByCondition(x => x.ContratoAdopcion == null).ToList();
             var lista = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(resul);
-            lista = lista.OrderByDescending(x=>x.Estado.Equals("Inactivo")).ToList();
+            lista = lista.OrderByDescending(x => x.Estado.Equals("Inactivo")).ToList();
             Response.AddPagination(resul.CurrentPage, resul.PageSize,
                  resul.TotalCount, resul.TotalPages);
             return Ok(lista);
@@ -104,7 +103,7 @@ namespace spatwebapi.Controllers
             if (await _mascotaService.ChangeEstado(estado, id))
                 return Ok();
             else
-                return BadRequest(new { mensaje = "Hubo problemas al modificar el estado de la mascota." });
+                return BadRequest(new { mensaje = "Problemas al modificar el estado de la mascota." });
         }
 
         [HttpDelete("DeleteMascota/{id}")]
@@ -116,7 +115,7 @@ namespace spatwebapi.Controllers
             if (await _mascotaService.DeleteMascota(mascota))
                 return Ok();
             else
-                return BadRequest(new { mensaje = "Hubo problemas al eliminar el registro." });
+                return BadRequest(new { mensaje = "Problemas al eliminar el registro." });
         }
     }
 }

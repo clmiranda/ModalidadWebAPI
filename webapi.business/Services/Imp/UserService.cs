@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using webapi.business.Dtos.Usuario;
-using webapi.business.Helpers;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
@@ -29,21 +27,19 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IEnumerable<User>> GetAll()
         {
-            var users = await _unitOfWork.UserRepository.GetAll();
+            var users = await _unitOfWork.UserRepository.GetAll().ToListAsync();
             return users;
         }
-        public async Task<User> Login(UserForLoginDto userforLogin)
+        public async Task<User> Login(UserForLoginDto userForLoginDto)
         {
-            var user = await _unitOfWork.UserRepository.FindByName(userforLogin.Username);
+            var user = await _unitOfWork.UserRepository.FindByName(userForLoginDto.Username);
             if (user == null)
                 return null;
             if (!await _unitOfWork.UserRepository.IsEmailConfirmed(user))
                 return null;
-
-            var result = await _unitOfWork.UserRepository.CheckPassword(user, userforLogin.Password, false);
+            var result = await _unitOfWork.UserRepository.CheckPassword(user, userForLoginDto.Password, false);
             if (result.Succeeded)
                 return user;
-            
             return null;
         }
         public async Task<object> GenerateJwtToken(User user, string security)
@@ -52,45 +48,39 @@ namespace webapi.business.Services.Imp
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.UserName),
             };
-
             var roles = await _unitOfWork.UserRepository.GetRoles(user);
-
             foreach (var role in roles)
-            {
                 claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(security));
 
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(security));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1), //tiempo de expiracion
+                Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds,
             };
-
             var tokenHandler = new JwtSecurityTokenHandler();
-
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            var appUser = _mapper.Map<UserForDetailedDto>(user);
-
+            var appUser = _mapper.Map<UserRolesForReturn>(user);
             return new { user = appUser, token = tokenHandler.WriteToken(token) };
         }
         public async Task<IdentityResult> PostUsuario(UserForRegisterDto userforRegisterDto)
         {
             var userToCreate = _mapper.Map<User>(userforRegisterDto);
-            var result = await _unitOfWork.UserRepository.PostUsuario(userToCreate, userforRegisterDto.Password);
-            return result;
+            var resultado = await _unitOfWork.UserRepository.PostUsuario(userToCreate, userforRegisterDto.Password);
+            return resultado;
         }
         public async Task<User> GetUsuario(int id)
         {
             var user = await _unitOfWork.UserRepository.GetById(id);
             return user;
         }
-        public async Task<IdentityResult> UpdateUsuario(UserUpdateDto dto) {
-            var usuario = await _unitOfWork.UserRepository.GetById(dto.Id);
-            var modelo= _mapper.Map(dto, usuario);
-            var resultado= await _unitOfWork.UserRepository.UpdateUsuario(modelo);
+        public async Task<IdentityResult> UpdateUsuario(UserUpdateDto userForUpdateDto)
+        {
+            var user = await _unitOfWork.UserRepository.GetById(userForUpdateDto.Id);
+            var mapped = _mapper.Map(userForUpdateDto, user);
+            var resultado = await _unitOfWork.UserRepository.UpdateUsuario(mapped);
             return resultado;
         }
         public async Task<IdentityResult> CambiarEstado(int id)
@@ -103,7 +93,7 @@ namespace webapi.business.Services.Imp
             var resultado = await _unitOfWork.UserRepository.UpdateUsuario(usuario);
             return resultado;
         }
-        public async Task<IdentityResult> EliminarUsuario(int id)
+        public async Task<IdentityResult> DeleteUsuario(int id)
         {
             var usuario = await _unitOfWork.UserRepository.GetById(id);
             var resultado = await _unitOfWork.UserRepository.DeleteUsuario(usuario);
@@ -118,9 +108,9 @@ namespace webapi.business.Services.Imp
                 return null;
             return await _unitOfWork.UserRepository.ConfirmEmail(user, token);
         }
-        public async Task<string> ForgotPassword(ForgotPasswordDto dto)
+        public async Task<string> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
-            var user = await _unitOfWork.UserRepository.FindByEmail(dto.Email);
+            var user = await _unitOfWork.UserRepository.FindByEmail(forgotPasswordDto.Email);
             if (user != null)
             {
                 if (await _unitOfWork.UserRepository.IsEmailConfirmed(user))
@@ -148,12 +138,12 @@ namespace webapi.business.Services.Imp
             var result = await _unitOfWork.UserRepository.ResetPassword(usuario, token, password);
             return result;
         }
-        public async Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto reset)
+        public async Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto resetPasswordDto)
         {
-            var usuario = await _unitOfWork.UserRepository.FindByEmail(reset.Email);
-            var codeDecodedBytes = WebEncoders.Base64UrlDecode(reset.Token);
+            var usuario = await _unitOfWork.UserRepository.FindByEmail(resetPasswordDto.Email);
+            var codeDecodedBytes = WebEncoders.Base64UrlDecode(resetPasswordDto.Token);
             var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
-            var result = await _unitOfWork.UserRepository.ResetPassword(usuario, codeDecoded, reset.Password);
+            var result = await _unitOfWork.UserRepository.ResetPassword(usuario, codeDecoded, resetPasswordDto.Password);
             return result;
         }
     }

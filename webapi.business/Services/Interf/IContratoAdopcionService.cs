@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.ContratoRechazo;
-using webapi.business.Helpers;
 using webapi.business.Pagination;
 using webapi.core.Models;
 
@@ -18,7 +16,6 @@ namespace webapi.business.Services.Interf
         IEnumerable<ContratoRechazo> GetAllRechazoCancelado();
         Task<PaginationList<ContratoAdopcion>> GetAllContratos(ContratoAdopcionParametros parametros);
         Task<ContratoAdopcion> GetById(int id);
-        //Task<IEnumerable<ContratoAdopcion>> GetAllAdopcionesPendientes();
         Task<ContratoAdopcion> CreateContratoAdopcion(ContratoAdopcionForCreate contrato);
         Task<bool> UpdateContratoAdopcion(FechaContratoForUpdateDto dto);
         Task<bool> CreateContratoRechazo(ContratoRechazoForCreateDto contratoRechazo);

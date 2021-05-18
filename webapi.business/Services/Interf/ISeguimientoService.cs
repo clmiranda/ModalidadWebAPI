@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Seguimientos;
-using webapi.business.Helpers;
 using webapi.business.Pagination;
 using webapi.core.Models;
 
@@ -18,13 +13,11 @@ namespace webapi.business.Services.Interf
         IEnumerable<User> GetAllVoluntarios();
         Task<Seguimiento> UpdateFecha(FechaReporteDto dto);
         Task<Seguimiento> GetById(int id);
-        Task<Seguimiento> GetByIdContrato(int id);
-        void CreateSeguimiento(ContratoAdopcion contrato);
+        void CreateSeguimiento(int idContrato);
         Task<bool> DeleteSeguimiento(Seguimiento seguimiento);
         Task<bool> AsignarSeguimiento(int id, int idUser);
         Task<bool> QuitarAsignacion(int id, int idUser);
         Task<bool> AceptarSeguimientoVoluntario(int id);
         Task<bool> RechazarSeguimientoVoluntario(int id);
-        IEnumerable<Seguimiento> GetSeguimientoForVoluntario(int userId);
     }
 }

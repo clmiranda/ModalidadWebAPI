@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace webapi.business.Pagination
@@ -13,8 +12,6 @@ namespace webapi.business.Pagination
 		public int TotalPages { get; private set; }
 		public int PageSize { get; private set; }
 		public int TotalCount { get; private set; }
-		//public bool HasPrevious => CurrentPage > 1;
-		//public bool HasNext => CurrentPage < TotalPages;
 		public PaginationList(List<T> items, int count, int pageNumber, int pageSize)
 		{
 			TotalCount = count;

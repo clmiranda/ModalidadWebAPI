@@ -42,7 +42,7 @@ namespace spatwebapi
             //{
             //    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
             //});
-            CompositionRoot.injectDependencies(services, Configuration);
+            CompositionRoot.InjectDependencies(services, Configuration);
             CompositionRoot.otherDependencies(services, Configuration);
             services.AddControllers();
         }
