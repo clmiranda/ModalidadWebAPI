@@ -13,12 +13,16 @@ namespace webapi.business.Services.Imp
     public class GraficaService : IGraficaService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly List<string> listaFiltro;
         public GraficaService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            listaFiltro = new List<string> { "3 meses", "6 meses", "9 meses", "12 meses" };
         }
         public async Task<List<DataGraficaDto>> DatosAdopciones(string filtro)
         {
+            if (string.IsNullOrEmpty(filtro) || !listaFiltro.Contains(filtro))
+                return null;
             var datos = new List<ContratoAdopcion>();
             switch (filtro)
             {
@@ -46,6 +50,8 @@ namespace webapi.business.Services.Imp
         }
         public async Task<List<DataGraficaDto>> DatosMascotas(string filtro)
         {
+            if (string.IsNullOrEmpty(filtro) || !listaFiltro.Contains(filtro))
+                return null;
             var datos = new List<Mascota>();
             switch (filtro)
             {
@@ -73,6 +79,8 @@ namespace webapi.business.Services.Imp
         }
         public async Task<List<DataGraficaDto>> DatosReporteSeguimientos(string filtro)
         {
+            if (string.IsNullOrEmpty(filtro) || !listaFiltro.Contains(filtro))
+                return null;
             var datos = new List<ReporteSeguimiento>();
             switch (filtro)
             {
@@ -114,6 +122,7 @@ namespace webapi.business.Services.Imp
 
             var listaMascotas= await _unitOfWork.MascotaRepository.GetAll().ToListAsync();
             dataForDashboardDto.DataGraficaMascota= listaMascotas
+                 .OrderBy(x => x.Estado)
                  .GroupBy(x => x.Estado)
                  .Select(x => new DataGraficaDto()
                  {
@@ -123,6 +132,7 @@ namespace webapi.business.Services.Imp
 
             var listaSeguimientos = await _unitOfWork.SeguimientoRepository.GetAll().ToListAsync();
             dataForDashboardDto.DataGraficaSeguimiento = listaSeguimientos
+                 .OrderBy(x => x.Estado)
                  .GroupBy(x => x.Estado)
                  .Select(x => new DataGraficaDto()
                  {

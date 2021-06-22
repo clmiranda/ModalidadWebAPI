@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using webapi.business.Dtos.Fotos;
 using webapi.business.Dtos.ReporteTratamientos;
 

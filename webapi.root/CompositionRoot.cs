@@ -26,13 +26,11 @@ namespace webapi.root
         public static void InjectDependencies(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<BDSpatContext>();
-            //services.AddDbContext<BDSpatContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
             services.AddDbContext<BDSpatContext>(x =>
             {
                 x.UseLazyLoadingProxies();
                 x.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-        });
+            });
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
@@ -78,7 +76,7 @@ namespace webapi.root
                 opt.User.RequireUniqueEmail = false;
             }).AddDefaultTokenProviders().AddErrorDescriber<CustomIdentityErrorDescriber>();
             services.Configure<DataProtectionTokenProviderOptions>(options =>
-    options.TokenLifespan = TimeSpan.FromHours(3));
+            options.TokenLifespan = TimeSpan.FromHours(3));
 
             builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
             builder.AddEntityFrameworkStores<BDSpatContext>();
@@ -86,17 +84,23 @@ namespace webapi.root
             builder.AddRoleManager<RoleManager<Role>>();
             builder.AddSignInManager<SignInManager<User>>();
 
-            services.AddAuthentication(configureOptions: x => {
+            services.AddAuthentication(configureOptions: x =>
+            {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+                .AddJwtBearer(x =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetSection("AppSettings:Token").Value)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetSection("AppSettings:Token").Value)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
                 });
         }
     }

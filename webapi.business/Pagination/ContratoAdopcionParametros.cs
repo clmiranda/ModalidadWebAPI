@@ -11,6 +11,5 @@
             set { pageSize = (value > MaxPageSize) ? MaxPageSize : value; }
         }
         public string Filter { get; set; } = "Pendiente";
-        public string OrderBy { get; set; } = "";
     }
 }

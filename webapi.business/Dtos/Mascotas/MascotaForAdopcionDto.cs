@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using webapi.business.Dtos.Adopciones;
+﻿using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.Fotos;
-using webapi.core.Models;
 
 namespace webapi.business.Dtos.Mascotas
 {

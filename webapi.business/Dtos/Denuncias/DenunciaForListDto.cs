@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using webapi.business.Dtos.Mascotas;
-using webapi.core.Models;
+﻿using webapi.business.Dtos.Mascotas;
 
 namespace webapi.business.Dtos.Denuncias
 {
@@ -13,10 +9,5 @@ namespace webapi.business.Dtos.Denuncias
         public string Descripcion { get; set; }
         public virtual MascotaForDetailedDto Mascota { get; set; }
         public int MascotaId { get; set; }
-        //public virtual CasoMascotaForDetailedDto CasoMascota { get; set; }
-        //public DenunciaForListDto()
-        //{
-        //    CasoMascota = new CasoMascotaForDetailedDto();
-        //}
     }
 }

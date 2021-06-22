@@ -22,7 +22,6 @@ namespace webapi.business.Helpers
             CreateMap<Foto, FotoForReturnDto>();
             CreateMap<UserForRegisterDto, User>();
             CreateMap<User, UserTokenToReturnDto>();
-            CreateMap<User, UserForListDto>();
             CreateMap<User, UserForDetailedDto>()
                 .ForMember(d => d.Edad, options =>
               {
@@ -54,7 +53,6 @@ namespace webapi.business.Helpers
                 });
             CreateMap<ContratoAdopcion, ContratoAdopcionForDetailDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
-            CreateMap<ReporteSeguimientoForCreate, ReporteSeguimiento>();
             CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
 
             CreateMap<ReporteTratamiento, ReporteTratamientoForReturnDto>();
@@ -72,7 +70,6 @@ namespace webapi.business.Helpers
                     opt.MapFrom(d => d.UserRoles.Select((role) => new
                     { name = role.Role.Name }).Select(x => x.name));
                 });
-            CreateMap<ReporteSeguimientoForCreateAdmin, ReporteSeguimiento>();
             CreateMap<FechaReporteDto, Seguimiento>()
     .ForMember(dest => dest.FechaInicio, opt =>
     {

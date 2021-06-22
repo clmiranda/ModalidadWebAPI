@@ -44,7 +44,7 @@ namespace spatwebapi.Controllers
         {
             var denuncia = await _denunciaService.GetDenunciaById(id);
             if (denuncia == null)
-                return NotFound(null);
+                return Ok(null);
             var mascota = _mascotaService.FindByCondition(x => x.DenunciaId == id).FirstOrDefault();
             if (mascota == null) return Ok(new MascotaForDetailedDto { DenunciaId = id });
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
@@ -104,18 +104,6 @@ namespace spatwebapi.Controllers
                 return Ok();
             else
                 return BadRequest(new { mensaje = "Problemas al modificar el estado de la mascota." });
-        }
-
-        [HttpDelete("DeleteMascota/{id}")]
-        public async Task<IActionResult> DeleteMascota(int id)
-        {
-            var mascota = await _mascotaService.GetMascotaById(id);
-            if (mascota == null)
-                return NotFound(new { mensaje = "La mascota no fue encontrada." });
-            if (await _mascotaService.DeleteMascota(mascota))
-                return Ok();
-            else
-                return BadRequest(new { mensaje = "Problemas al eliminar el registro." });
         }
     }
 }

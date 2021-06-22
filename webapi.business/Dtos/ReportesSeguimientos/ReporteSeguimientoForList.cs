@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using webapi.business.Dtos.Seguimientos;
 
 namespace webapi.business.Dtos.ReportesSeguimientos
 {

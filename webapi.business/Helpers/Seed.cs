@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using webapi.core.Models;
 
 namespace webapi.business.Helpers
@@ -13,7 +12,6 @@ namespace webapi.business.Helpers
         {
             if (!userManager.Users.Any())
             {
-                //create roles
                 var roles = new List<Role>
                 {
                     new Role{Name="SuperAdministrador"},
@@ -52,7 +50,6 @@ namespace webapi.business.Helpers
                 EmailConfirmed = true,
                 FechaCreacion = DateTime.Now
             };
-
             return u;
         }
     }

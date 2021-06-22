@@ -18,11 +18,13 @@ namespace webapi.business.Services.Imp
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ISeguimientoService _seguimientoService;
+        private readonly List<string> listaEstado;
         public ContratoAdopcionService(IUnitOfWork unitOfWork, IMapper mapper, ISeguimientoService seguimientoService)
         {
             _unitOfWork = unitOfWork;
             _seguimientoService = seguimientoService;
             _mapper = mapper;
+            listaEstado = new List<string>() { "Aprobado", "Pendiente", "Rechazado", "Cancelado" };
         }
         public IEnumerable<ContratoAdopcion> GetAll()
         {
@@ -40,6 +42,8 @@ namespace webapi.business.Services.Imp
         {
             var resul = _unitOfWork.ContratoAdopcionRepository.GetAll();
 
+            if (string.IsNullOrEmpty(parametros.Filter) || !listaEstado.Contains(parametros.Filter))
+                return null;
             if (parametros.Filter == "Aprobado")
                 resul = resul.Where(x => x.Estado.Equals("Aprobado"));
             else if (parametros.Filter == "Pendiente")
