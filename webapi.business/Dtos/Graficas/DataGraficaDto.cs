@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace webapi.business.Dtos.Graficas
+﻿namespace webapi.business.Dtos.Graficas
 {
     public class DataGraficaDto
     {

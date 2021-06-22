@@ -16,10 +16,12 @@ namespace webapi.business.Services.Imp
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly List<string> listaEstado;
         public MascotaService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            listaEstado = new List<string> { "Activo", "Inactivo", "En Proceso", "Adoptada" };
         }
         public async Task<Mascota> GetMascotaById(int id)
         {
@@ -67,6 +69,8 @@ namespace webapi.business.Services.Imp
         }
         public async Task<bool> ChangeEstado(string estado,int id)
         {
+            if (string.IsNullOrEmpty(estado) || !listaEstado.Contains(estado))
+                return false;
             var mascota = await _unitOfWork.MascotaRepository.GetById(id);
             mascota.Estado = estado;
             _unitOfWork.MascotaRepository.Update(mascota);

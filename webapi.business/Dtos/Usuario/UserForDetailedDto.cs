@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace webapi.business.Dtos.Usuario
 {
@@ -11,14 +9,11 @@ namespace webapi.business.Dtos.Usuario
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public string Domicilio { get; set; }
-        //public string NumeroCelular { get; set; }
         public DateTime FechaNacimiento { get; set; }
         public DateTime FechaCreacion { get; set; }
         public string Edad { get; set; }
         public string Sexo { get; set; }
-        //Datos del IdentityUser
         public string NumeroCelular { get; set; }
         public string Email { get; set; }
-        //Para la foto del Perfil del User y talvez el Created y LastActive
     }
 }

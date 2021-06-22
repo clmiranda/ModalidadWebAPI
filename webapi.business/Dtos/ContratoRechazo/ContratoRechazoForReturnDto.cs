@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using webapi.business.Dtos.Adopciones;
-
-namespace webapi.business.Dtos.ContratoRechazo
+﻿namespace webapi.business.Dtos.ContratoRechazo
 {
     public class ContratoRechazoForReturnDto
     {

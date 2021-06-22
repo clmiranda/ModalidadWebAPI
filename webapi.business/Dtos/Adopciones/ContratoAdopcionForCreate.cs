@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace webapi.business.Dtos.Adopciones
 {
     public class ContratoAdopcionForCreate
     {
-        //datos
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public string Ci { get; set; }
         public string Domicilio { get; set; }
         public string NumeroCelular { get; set; }
 
-        //preguntas
         public string Respuesta1 { get; set; }
         public string Respuesta2 { get; set; }
         public string Respuesta3 { get; set; }
@@ -24,7 +20,6 @@ namespace webapi.business.Dtos.Adopciones
         public DateTime FechaSolicitudAdopcion { get; }
         public DateTime FechaAdopcion { get; }
         public DateTime FechaCreacion { get; set; }
-        //public string RazonRechazoCancelado { get; set; }
         public string Estado { get; }
         public int MascotaId { get; set; }
         public ContratoAdopcionForCreate()

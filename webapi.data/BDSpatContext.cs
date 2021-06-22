@@ -59,14 +59,7 @@ namespace webapi.data
             {
                 entity.Property(e => e.UserName).HasMaxLength(50);
                 entity.HasIndex(e => e.UserName).IsUnique();
-
-
-                //entity.Property(e => e.Nombres).HasMaxLength(200);
-                //entity.Property(e => e.Apellidos).HasMaxLength(200);
-                //entity.Property(e => e.Domicilio).HasMaxLength(3000);
-                //entity.Property(e => e.NumeroCelular).HasMaxLength(30);
                 entity.Property(e => e.Estado).HasMaxLength(50);
-                //entity.Property(e => e.Sexo).HasMaxLength(50);
             });
             OnModelCreatingPartial(modelBuilder);
         }

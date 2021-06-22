@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using webapi.business.Dtos.ContratoRechazo;
 using webapi.business.Dtos.Mascotas;
 

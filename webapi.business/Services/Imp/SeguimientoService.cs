@@ -13,9 +13,11 @@ namespace webapi.business.Services.Imp
     public class SeguimientoService : ISeguimientoService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly List<string> listaEstado;
         public SeguimientoService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            listaEstado = new List<string> { "Activo", "Pendiente", "Asignado" };
         }
         public IEnumerable<Seguimiento> GetAll() {
             var lista= _unitOfWork.SeguimientoRepository.GetAll().ToList();
@@ -24,6 +26,8 @@ namespace webapi.business.Services.Imp
 
         public async Task<PaginationList<Seguimiento>> GetAllSeguimiento(SeguimientoParametros parametros)
         {
+            if (string.IsNullOrEmpty(parametros.Filter) || !listaEstado.Contains(parametros.Filter))
+                return null;
             var resul = _unitOfWork.SeguimientoRepository.GetAll();
             if (parametros.Filter == "Activo")
                 resul = resul.Where(x => x.Estado.Equals("Activo"));

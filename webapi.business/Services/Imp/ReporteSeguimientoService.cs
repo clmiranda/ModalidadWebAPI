@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Dtos.ReportesSeguimientos;
-using webapi.business.Dtos.Seguimientos;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;

@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using webapi.business.Helpers;
 using webapi.root;
 
@@ -32,16 +25,6 @@ namespace spatwebapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddCors(c =>
-            //{
-            //    c.AddPolicy("AllowOrigin", options => options.WithOrigins("https://localhost:44382"));
-            //});
-
-            //Politica de CORS agregada, en caso de problemas quitarla
-            //services.AddCors(c =>
-            //{
-            //    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
-            //});
             CompositionRoot.InjectDependencies(services, Configuration);
             CompositionRoot.otherDependencies(services, Configuration);
             services.AddControllers();
@@ -75,7 +58,6 @@ namespace spatwebapi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            //app.UseCors(options => options.WithOrigins("https://localhost:44382"));
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
