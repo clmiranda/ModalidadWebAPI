@@ -73,7 +73,7 @@ namespace webapi.root
                 opt.Password.RequireUppercase = true;
 
                 opt.SignIn.RequireConfirmedEmail = true;
-                opt.User.RequireUniqueEmail = false;
+                opt.User.RequireUniqueEmail = true;
             }).AddDefaultTokenProviders().AddErrorDescriber<CustomIdentityErrorDescriber>();
             services.Configure<DataProtectionTokenProviderOptions>(options =>
             options.TokenLifespan = TimeSpan.FromHours(3));

@@ -7,7 +7,6 @@ namespace webapi.business.Dtos.Usuario
         [Required(ErrorMessage = "Es campo de Usuario es requerido")]
         public string Username { get; set; }
         [Required(ErrorMessage = "El campo Contraseña es obligatorio")]
-        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

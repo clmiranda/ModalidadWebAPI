@@ -34,11 +34,11 @@ namespace spatwebapi.Controllers
             if (user == null)
                 return Unauthorized(new { mensaje = "Error, debe confirmar su email o asegurarse de que los datos ingresados sean los correctos." });
             var token = await _userService.GenerateJwtToken(user, _config.GetSection("AppSettings:Token").Value);
-
             return Ok(token);
         }
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         [HttpPost("PostUsuario")]
-        public async Task<IActionResult> PostUsuario([FromBody]UserForRegisterDto userforRegisterDto)
+        public async Task<IActionResult> PostUsuario([FromBody] UserForRegisterDto userforRegisterDto)
         {
             var result = await _userService.PostUsuario(userforRegisterDto);
             if (result.Succeeded)
@@ -47,13 +47,13 @@ namespace spatwebapi.Controllers
                 var confirmationLink = Url.Action("ConfirmEmail", "Auth",
                     new { userId = userToCreate.Id, token = userToCreate.Token }, Request.Scheme);
 
-                await _emailService.SendEmailAsync(userforRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href="+ confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
+                await _emailService.SendEmailAsync(userforRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href=" + confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
                 return Ok();
             }
             else
-                return BadRequest(new { mensaje=result.Errors.FirstOrDefault().Description });
+                return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
         }
-        [HttpGet]
+        [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             var result = await _userService.ConfirmEmail(userId, token);
@@ -65,7 +65,7 @@ namespace spatwebapi.Controllers
             else
                 return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
         }
-        [HttpPost("forgotPassword")]
+        [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDto email)
         {
             var token = await _userService.ForgotPassword(email);
@@ -78,7 +78,7 @@ namespace spatwebapi.Controllers
                 var linkReseteo = Url.Action("ValidateResetPassword", "Auth",
                         new { email = email.Email, token }, Request.Scheme);
 
-                await _emailService.SendEmailAsync(email.Email, "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.", "<a href=" + linkReseteo + "><h5>Accede a este enlace para reestablecer tu contraseña.</h5></a>");
+                await _emailService.SendEmailAsync(email.Email, "Enlace para reestablecer la contraseña de la cuenta en el sitio web de S.P.A.T.", "<a href=" + linkReseteo + "><h3>Accede a este enlace para reestablecer tu contraseña.</h3></a>");
                 return Ok();
             }
         }
@@ -88,12 +88,12 @@ namespace spatwebapi.Controllers
             return Redirect("https://localhost:44363/Cuenta/ResetPassword?email=" + email + "&token=" + token);
         }
         [HttpPost("ResetPasswordExterno")]
-        public async Task<IActionResult> ResetPasswordExterno(ResetPasswordDto reset)
+        public async Task<IActionResult> ResetPasswordExterno(ResetPasswordDto resetDto)
         {
-            var user = await _userManager.FindByEmailAsync(reset.Email);
+            var user = await _userManager.FindByEmailAsync(resetDto.Email);
             if (user == null)
                 return NotFound(new { mensaje = "El email no se encuentra registrado." });
-            var result = await _userService.ResetPasswordExterno(reset);
+            var result = await _userService.ResetPasswordExterno(resetDto);
             if (result.Succeeded)
                 return Ok();
             else return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });

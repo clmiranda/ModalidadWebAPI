@@ -11,9 +11,9 @@ using webapi.business.Services.Interf;
 
 namespace spatwebapi.Controllers
 {
-    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdministrador, Administrador")]
     public class ReporteSeguimientoController : Controller
     {
         private readonly ISeguimientoService _seguimientoService;
@@ -35,6 +35,7 @@ namespace spatwebapi.Controllers
             return Ok(mapped);
         }
         [HttpGet("GetById/{id}")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<ActionResult> GetById(int id)
         {
             var reporte = await _reporteSeguimientoService.GetById(id);
@@ -43,8 +44,8 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<ReporteSeguimientoForReturn>(reporte);
             return Ok(mapped);
         }
-        [Authorize(Roles = "Voluntario")]
         [HttpGet("{id}/GetReportesForVoluntario")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id)
         {
             var lista = _reporteSeguimientoService.GetReportesForVoluntario(id);
@@ -63,6 +64,7 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "Hubo problemas al agregar el reporte." });
         }
         [HttpPut("SendReporte")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<IActionResult> SendReporte([FromForm] ReporteSeguimientoForUpdate reporteDto, IFormFile Foto)
         {
             var reporte = await _reporteSeguimientoService.GetByIdNotracking(reporteDto.Id);

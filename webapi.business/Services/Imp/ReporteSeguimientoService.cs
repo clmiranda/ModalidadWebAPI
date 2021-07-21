@@ -64,8 +64,9 @@ namespace webapi.business.Services.Imp
         }
         public async Task<bool> SendReporte(ReporteSeguimientoForUpdate reporteDto)
         {
-            var reporte = _mapper.Map<ReporteSeguimiento>(reporteDto);
-            _unitOfWork.ReporteSeguimientoRepository.Update(reporte);
+            var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporteDto.Id);
+            var resul = _mapper.Map(reporteDto, reporte);
+            _unitOfWork.ReporteSeguimientoRepository.Update(resul);
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> UpdateFecha(ReporteSeguimientoForUpdateAdmin reporteDto)

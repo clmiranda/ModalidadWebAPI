@@ -14,6 +14,7 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdministrador, Administrador")]
     public class ContratoAdopcionController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -64,6 +65,7 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<IEnumerable<ContratoRechazoForReturnDto>>(lista);
             return Ok(mapped);
         }
+        [AllowAnonymous]
         [HttpGet("GetContratoByIdMascota/{id}")]
         public async Task<ActionResult<ContratoAdopcionReturnDto>> GetContratoByIdMascota(int id)
         {
@@ -76,6 +78,7 @@ namespace spatwebapi.Controllers
             var modelo = _mapper.Map<ContratoAdopcionReturnDto>(resul);
             return Ok(modelo);
         }
+        [AllowAnonymous]
         [HttpPost("GenerarContrato")]
         public async Task<IActionResult> GenerarContrato([FromBody] ContratoAdopcionForCreate contrato) {
             var c = await _contratoAdopcionService.CreateContratoAdopcion(contrato);
@@ -98,7 +101,6 @@ namespace spatwebapi.Controllers
             }
             return BadRequest(new { mensaje = "No se pudo encontrar el Contrato." });
         }
-        [Authorize(Roles ="Administrador, Voluntario")]
         [HttpGet("DetailAdopcion/{id}")]
         public async Task<IActionResult> DetailAdopcion(int id) {
             var resul = _mapper.Map<ContratoAdopcionReturnDto>(await _contratoAdopcionService.GetById(id));

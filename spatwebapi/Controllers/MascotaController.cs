@@ -13,6 +13,7 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdministrador, Administrador")]
     public class MascotaController : ControllerBase
     {
         private readonly IMascotaService _mascotaService;
@@ -32,6 +33,7 @@ namespace spatwebapi.Controllers
             return Ok(lista);
         }
         [HttpGet("GetMascota/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetMascota(int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
@@ -63,7 +65,6 @@ namespace spatwebapi.Controllers
         }
 
         [HttpGet("GetAllMascotaAdmin")]
-        [AllowAnonymous]
         public async Task<ActionResult> GetAllMascotaAdmin([FromQuery] MascotaParametros parametros)
         {
             var resul = await _mascotaService.GetAllMascotas(parametros);

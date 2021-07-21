@@ -13,9 +13,11 @@ namespace webapi.data.Repositories.Interf
         IQueryable<User> FindByCondition(Expression<Func<User, bool>> expression);
         Task<IdentityResult> PostUsuario(User u, string password);
         Task<IdentityResult> UpdateUsuario(User u);
+        Task<IdentityResult> UpdateEmail(User u, string newEmail, string token);
         Task<IdentityResult> DeleteUsuario(User u);
         Task<string> GenerateEmailToken(User u);
         Task<string> GeneratePasswordResetToken(User usuario);
+        Task<string> GenerateEmailChangeToken(User usuario, string newEmail);
         Task<User> FindById(string userId);
         Task<User> FindByName(string userName);
         Task<User> FindByEmail(string userEmail);

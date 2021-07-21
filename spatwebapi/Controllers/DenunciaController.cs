@@ -13,7 +13,7 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(Roles = "SuperAdministrador, Administrador")]
     public class DenunciaController : ControllerBase
     {
         private readonly IDenunciaService _denunciaService;

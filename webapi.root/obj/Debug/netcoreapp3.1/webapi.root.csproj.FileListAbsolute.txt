@@ -9,6 +9,7 @@ C:\Users\Usuario\source\repos\spatwebapi\webapi.root\bin\Debug\netcoreapp3.1\web
 C:\Users\Usuario\source\repos\spatwebapi\webapi.root\bin\Debug\netcoreapp3.1\webapi.business.pdb
 C:\Users\Usuario\source\repos\spatwebapi\webapi.root\bin\Debug\netcoreapp3.1\webapi.data.pdb
 C:\Users\Usuario\source\repos\spatwebapi\webapi.root\bin\Debug\netcoreapp3.1\webapi.core.pdb
+C:\Users\Usuario\source\repos\spatwebapi\webapi.root\obj\Debug\netcoreapp3.1\webapi.root.csproj.AssemblyReference.cache
 C:\Users\Usuario\source\repos\spatwebapi\webapi.root\obj\Debug\netcoreapp3.1\webapi.root.AssemblyInfoInputs.cache
 C:\Users\Usuario\source\repos\spatwebapi\webapi.root\obj\Debug\netcoreapp3.1\webapi.root.AssemblyInfo.cs
 C:\Users\Usuario\source\repos\spatwebapi\webapi.root\obj\Debug\netcoreapp3.1\webapi.root.csproj.CoreCompileInputs.cache
@@ -16,4 +17,3 @@ C:\Users\Usuario\source\repos\spatwebapi\webapi.root\obj\Debug\netcoreapp3.1\web
 C:\Users\Usuario\source\repos\spatwebapi\webapi.root\obj\Debug\netcoreapp3.1\webapi.root.dll
 C:\Users\Usuario\source\repos\spatwebapi\webapi.root\obj\Debug\netcoreapp3.1\webapi.root.pdb
 C:\Users\Usuario\source\repos\spatwebapi\webapi.root\obj\Debug\netcoreapp3.1\webapi.root.genruntimeconfig.cache
-C:\Users\Usuario\source\repos\spatwebapi\webapi.root\obj\Debug\netcoreapp3.1\webapi.root.csproj.AssemblyReference.cache

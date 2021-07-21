@@ -13,6 +13,7 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdministrador")]
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -27,7 +28,7 @@ namespace spatwebapi.Controllers
             _roleUserService = roleUserService;
             _httpContext = httpContextAccessor.HttpContext;
         }
-        [AllowAnonymous]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpGet("GetUser/{id}")]
         public async Task<ActionResult> GetUser(int id)
         {
@@ -37,7 +38,6 @@ namespace spatwebapi.Controllers
             var userToReturn = _mapper.Map<UserForDetailedDto>(user);
             return Ok(userToReturn);
         }
-        [AllowAnonymous]
         [HttpPut("UpdateUser")]
         public async Task<ActionResult> UpdateUser(UserUpdateDto userDto)
         {
@@ -52,7 +52,22 @@ namespace spatwebapi.Controllers
             }
             return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
         }
-        [AllowAnonymous]
+        [HttpPut("UpdateEmail")]
+        public async Task<ActionResult> UpdateEmail(UserUpdateDto userDto)
+        {
+            if (userDto.Id != int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized(new { mensaje = "El id del usuario no existe." });
+            var usuario = await _userService.GetUsuario(userDto.Id);
+            if (usuario == null)
+                return BadRequest(new { mensaje = "El Usuario no existe." });
+            var resul = await _userService.UpdateEmail(userDto);
+            if (resul.Succeeded)
+            {
+                var mapped = _mapper.Map<UserForDetailedDto>(usuario);
+                return Ok(mapped);
+            }
+            return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
+        }
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("ResetPassword/{id}")]
         public async Task<ActionResult> ResetPassword(int id, [FromBody]string password) {
                 var resul = await _userService.ResetPassword(id, password);
@@ -60,8 +75,6 @@ namespace spatwebapi.Controllers
                     return Ok();
                 return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
         }
-
-        [Authorize(Roles = "SuperAdministrador")]
         [HttpGet("GetUsers")]
         public async Task<IActionResult> GetUsers()
         {
@@ -69,8 +82,6 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<IEnumerable<UserRolesForReturn>>(listaUsers);
             return Ok(mapped);
         }
-
-        [Authorize(Roles = "SuperAdministrador")]
         [HttpPost("PutRolesUser/{id}")]
         public async Task<IActionResult> PutRolesUser(int id,  string[] RolesUsuario)
         {
@@ -79,7 +90,6 @@ namespace spatwebapi.Controllers
                 return BadRequest(new { mensaje = "Error al editar Roles." });
             return Ok(userRoles);
         }
-        [Authorize(Roles = "SuperAdministrador")]
         [HttpPut("CambiarEstado/{id}")]
         public async Task<IActionResult> CambiarEstado(int id)
         {
@@ -91,7 +101,6 @@ namespace spatwebapi.Controllers
                 return Ok(resultado);
             return BadRequest(new { mensaje = "Error al modificar estado." });
         }
-        [Authorize(Roles = "SuperAdministrador")]
         [HttpDelete("EliminarUsuario/{id}")]
         public async Task<IActionResult> EliminarUsuario(int id)
         {
