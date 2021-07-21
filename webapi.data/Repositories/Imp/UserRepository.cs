@@ -39,6 +39,10 @@ namespace webapi.data.Repositories.Imp
         {
             return await _userManager.UpdateAsync(u);
         }
+        public async Task<IdentityResult> UpdateEmail(User u, string newEmail, string token)
+        {
+            return await _userManager.ChangeEmailAsync(u, newEmail, token);
+        }
         public async Task<User> FindByEmail(string userEmail)
         {
             return await _userManager.FindByEmailAsync(userEmail);
@@ -58,6 +62,10 @@ namespace webapi.data.Repositories.Imp
         public async Task<string> GeneratePasswordResetToken(User usuario)
         {
             return await _userManager.GeneratePasswordResetTokenAsync(usuario);
+        }
+        public async Task<string> GenerateEmailChangeToken(User usuario, string newEmail)
+        {
+            return await _userManager.GenerateChangeEmailTokenAsync(usuario, newEmail);
         }
         public async Task<IList<string>> GetRoles(User user)
         {

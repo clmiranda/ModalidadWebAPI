@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.business.Dtos.Fotos;
 using webapi.business.Dtos.Mascotas;
 using webapi.business.Services.Interf;
-using webapi.data.Repositories.Interf;
 
 namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdministrador, Administrador")]
     public class FotosController : Controller
     {
         private readonly IFotoService _fotoService;
@@ -22,15 +22,14 @@ namespace spatwebapi.Controllers
             _fotoService = fotoService;
             _mascotaService = mascotaService;
         }
-        [AllowAnonymous]
-        [HttpGet("{id}", Name = "GetFoto")]
-        public async Task<IActionResult> GetFoto(int id)
-        {
-            var fotoRepository = await _fotoService.GetFoto(id);
-            var foto = _mapper.Map<FotoForReturnDto>(fotoRepository);
-            return Ok(foto);
-        }
-        [Authorize(Roles = "Administrador")]
+        //[AllowAnonymous]
+        //[HttpGet("{id}", Name = "GetFoto")]
+        //public async Task<IActionResult> GetFoto(int id)
+        //{
+        //    var fotoRepository = await _fotoService.GetFoto(id);
+        //    var foto = _mapper.Map<FotoForReturnDto>(fotoRepository);
+        //    return Ok(foto);
+        //}
         [HttpPost("Mascota/{mascotaId}/AgregarFotoMascota")]
         public async Task<IActionResult> AgregarFotoMascota(int mascotaId, [FromForm] FotoForCreationDto dtoFoto)
         {

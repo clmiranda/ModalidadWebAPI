@@ -83,6 +83,13 @@ namespace webapi.business.Services.Imp
             var resultado = await _unitOfWork.UserRepository.UpdateUsuario(mapped);
             return resultado;
         }
+        public async Task<IdentityResult> UpdateEmail(UserUpdateDto userForUpdateDto)
+        {
+            var user = await _unitOfWork.UserRepository.GetById(userForUpdateDto.Id);
+            var token = await _unitOfWork.UserRepository.GenerateEmailChangeToken(user, userForUpdateDto.Email);
+            var resultado = await _unitOfWork.UserRepository.UpdateEmail(user, userForUpdateDto.Email, token);
+            return resultado;
+        }
         public async Task<IdentityResult> CambiarEstado(int id)
         {
             var usuario = await _unitOfWork.UserRepository.GetById(id);

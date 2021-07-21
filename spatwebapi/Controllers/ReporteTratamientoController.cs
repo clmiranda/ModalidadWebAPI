@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Mascotas;
@@ -9,6 +10,7 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdministrador, Administrador")]
     public class ReporteTratamientoController : Controller
     {
         private readonly IReporteTratamientoService _reporteTratamientoService;

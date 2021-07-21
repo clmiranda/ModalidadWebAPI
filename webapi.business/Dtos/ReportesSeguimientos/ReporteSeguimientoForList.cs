@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using webapi.business.Dtos.Fotos;
 
 namespace webapi.business.Dtos.ReportesSeguimientos
 {
@@ -10,5 +12,6 @@ namespace webapi.business.Dtos.ReportesSeguimientos
         public string Estado { get; set; }
         public DateTime Fecha { get; set; }
         public int SeguimientoId { get; set; }
+        public virtual List<FotoForReturnDto> Fotos { get; set; }
     }
 }
