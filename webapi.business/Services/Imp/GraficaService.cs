@@ -107,21 +107,29 @@ namespace webapi.business.Services.Imp
                 }).ToList();
             return lista;
         }
-        public async Task<DataForDashboardDto> GetDataForDashboard() {
+        public async Task<DataForDashboardDto> GetDataForDashboard()
+        {
             var dataForDashboardDto = new DataForDashboardDto
             {
                 ContadorMascotasRegistradas = await _unitOfWork.MascotaRepository.GetAll().CountAsync(),
+
                 ContadorAdopcionesAprobadas = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.Estado.Equals("Aprobado")).CountAsync(),
+
                 ContadorAdopcionesRechazadas = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.Estado.Equals("Rechazado")).CountAsync(),
+
                 ContadorAdopcionesCanceladas = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.Estado.Equals("Cancelado")).CountAsync(),
-                ContadorSeguimientosActuales = await _unitOfWork.SeguimientoRepository.FindByCondition(x => x.Estado.Equals("Activo")).CountAsync(),
+
+                ContadorSeguimientosActuales = await _unitOfWork.SeguimientoRepository.GetAll().CountAsync(),
+
                 ContadorVoluntariosRegistrados = await _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario"))).CountAsync(),
-                ContadorReportesSemana = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Estado.Equals("Enviado") && x.Fecha.Date>=DateTime.Today.AddDays(-(int)DayOfWeek.Monday) && x.Fecha.Date <= DateTime.Today.AddDays((int)DayOfWeek.Sunday)).CountAsync(),
+
+                ContadorReportesSemana = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Estado.Equals("Enviado") && x.Fecha.Date >= DateTime.Today.AddDays(-(int)DayOfWeek.Monday) && x.Fecha.Date <= DateTime.Today.AddDays((int)DayOfWeek.Sunday)).CountAsync(),
+
                 ContadorDenunciasRegistradas = await _unitOfWork.DenunciaRepository.GetAll().CountAsync()
             };
 
-            var listaMascotas= await _unitOfWork.MascotaRepository.GetAll().ToListAsync();
-            dataForDashboardDto.DataGraficaMascota= listaMascotas
+            var listaMascotas = await _unitOfWork.MascotaRepository.GetAll().ToListAsync();
+            dataForDashboardDto.DataGraficaMascota = listaMascotas
                  .OrderBy(x => x.Estado)
                  .GroupBy(x => x.Estado)
                  .Select(x => new DataGraficaDto()

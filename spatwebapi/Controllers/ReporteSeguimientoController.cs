@@ -99,7 +99,7 @@ namespace spatwebapi.Controllers
                 if (resultado)
                 {
                     var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(reporte.SeguimientoId);
-                    seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderBy(x => x.Fecha.ToShortDateString()).ToList();
+                    seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList();
                     var mappeado = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                     return Ok(mappeado);
                 }

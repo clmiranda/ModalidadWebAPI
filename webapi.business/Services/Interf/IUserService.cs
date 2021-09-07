@@ -12,7 +12,7 @@ namespace webapi.business.Services.Interf
         Task<object> GenerateJwtToken(User user, string security);
         Task<IdentityResult> PostUsuario(UserForRegisterDto userforRegisterDto);
         Task<IdentityResult> UpdateUsuario(UserUpdateDto userForUpdateDto);
-        Task<IdentityResult> UpdateEmail(UserUpdateDto userForUpdateDto);
+        Task<IdentityResult> UpdateEmail(UpdateEmailDto userForUpdateDto);
         Task<UserTokenToReturnDto> GetEmailToken(string email);
         Task<IdentityResult> ConfirmEmail(string userId, string token);
         Task<string> ForgotPassword(ForgotPasswordDto forgotPasswordDto);
