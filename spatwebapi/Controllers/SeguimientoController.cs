@@ -15,7 +15,6 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "SuperAdministrador, Administrador")]
     public class SeguimientoController : ControllerBase
     {
         private readonly ISeguimientoService _seguimientoService;
@@ -26,6 +25,7 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAll")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public IActionResult GetAll()
         {
             var lista = _seguimientoService.GetAll();
@@ -43,6 +43,7 @@ namespace spatwebapi.Controllers
             return Ok(mapped);
         }
         [HttpGet("GetAllVoluntarios")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public IEnumerable<UserForDetailedDto> GetAllVoluntarios()
         {
             var lista = _seguimientoService.GetAllVoluntarios();
@@ -50,6 +51,7 @@ namespace spatwebapi.Controllers
             return mapped;
         }
         [HttpGet("GetSeguimiento/{id}")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<ActionResult> GetSeguimiento(int id)
         {
             var seguimiento = await _seguimientoService.GetById(id);
@@ -59,22 +61,8 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
             return Ok(mapped);
         }
-        //verificar si este metodo ya no se usa
-        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        [HttpGet("GetSeguimientoForVoluntario/{id}")]
-        public async Task<ActionResult> GetSeguimientoForVoluntario(int id)
-        {
-            var seguimiento = await _seguimientoService.GetById(id);
-            if (seguimiento == null)
-                return NotFound(null);
-            if (seguimiento.User == null)
-                return NotFound(null);
-            var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
-
-            mapped.ReporteSeguimientos = mapped.ReporteSeguimientos.Where(x => x.Fecha.Date.ToShortDateString().Equals(DateTime.Now.ToShortDateString()) && !x.Estado.Equals("Enviado")).ToList();
-            return Ok(mapped);
-        }
         [HttpPut("UpdateFecha")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<IActionResult> UpdateFecha([FromBody] FechaReporteDto dto)
         {
             var seguimiento = await _seguimientoService.GetById(dto.Id);
@@ -92,6 +80,7 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "No existe el Seguimiento." });
         }
         [HttpPut("{id}/AsignarSeguimiento/{idUser}")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<IActionResult> AsignarSeguimiento(int id, int idUser)
         {
             var resultado = await _seguimientoService.AsignarSeguimiento(id, idUser);
@@ -100,6 +89,7 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "Problemas al guardar los datos." });
         }
         [HttpPut("{id}/QuitarAsignacion/{idUser}")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<IActionResult> QuitarAsignacion(int id, int idUser)
         {
             var resultado = await _seguimientoService.QuitarAsignacion(id, idUser);

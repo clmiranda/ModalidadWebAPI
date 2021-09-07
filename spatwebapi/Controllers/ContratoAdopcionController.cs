@@ -102,6 +102,7 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "No se pudo encontrar el Contrato." });
         }
         [HttpGet("DetailAdopcion/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DetailAdopcion(int id) {
             var resul = _mapper.Map<ContratoAdopcionReturnDto>(await _contratoAdopcionService.GetById(id));
             if (resul==null)

@@ -53,13 +53,13 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
         }
         [HttpPut("UpdateEmail")]
-        public async Task<ActionResult> UpdateEmail(UserUpdateDto userDto)
+        public async Task<ActionResult> UpdateEmail(UpdateEmailDto updateEmailDto)
         {
-            if (userDto.Id != int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized(new { mensaje = "El id del usuario no existe." });
-            var usuario = await _userService.GetUsuario(userDto.Id);
+            if (updateEmailDto.Id != int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized(new { mensaje = "El id del usuario no existe." });
+            var usuario = await _userService.GetUsuario(updateEmailDto.Id);
             if (usuario == null)
                 return BadRequest(new { mensaje = "El Usuario no existe." });
-            var resul = await _userService.UpdateEmail(userDto);
+            var resul = await _userService.UpdateEmail(updateEmailDto);
             if (resul.Succeeded)
             {
                 var mapped = _mapper.Map<UserForDetailedDto>(usuario);
@@ -69,8 +69,8 @@ namespace spatwebapi.Controllers
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("ResetPassword/{id}")]
-        public async Task<ActionResult> ResetPassword(int id, [FromBody]string password) {
-                var resul = await _userService.ResetPassword(id, password);
+        public async Task<ActionResult> ResetPassword(int id, UpdateUserPassword dto) {
+                var resul = await _userService.ResetPassword(id, dto.Password);
                 if (resul.Succeeded)
                     return Ok();
                 return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
