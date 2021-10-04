@@ -31,8 +31,8 @@ namespace webapi.business.Services.Imp
             var resul = _unitOfWork.SeguimientoRepository.GetAll();
             if (parametros.Filter == "Activo")
                 resul = resul.Where(x => x.Estado.Equals("Activo"));
-            else if (parametros.Filter == "Pendiente")
-                resul = resul.Where(x => x.Estado.Equals("Pendiente"));
+            //else if (parametros.Filter == "Pendiente")
+            //    resul = resul.Where(x => x.Estado.Equals("Pendiente"));
             else if (parametros.Filter == "Asignado")
                 resul = resul.Where(x => x.Estado.Equals("Asignado"));
             var pagination = await PaginationList<Seguimiento>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
@@ -90,20 +90,20 @@ namespace webapi.business.Services.Imp
             user.Seguimientos.Remove(seguimiento);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> AceptarSeguimientoVoluntario(int id)
-        {
-            var resul = await _unitOfWork.SeguimientoRepository.GetById(id);
-            resul.Estado = "Asignado";
-            _unitOfWork.SeguimientoRepository.Update(resul);
-            return await _unitOfWork.SaveAll();
-        }
-        public async Task<bool> RechazarSeguimientoVoluntario(int id)
-        {
-            var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
-            seguimiento.User = null;
-            seguimiento.Estado = "Activo";
-            _unitOfWork.SeguimientoRepository.Update(seguimiento);
-            return await _unitOfWork.SaveAll();
-        }
+        //public async Task<bool> AceptarSeguimientoVoluntario(int id)
+        //{
+        //    var resul = await _unitOfWork.SeguimientoRepository.GetById(id);
+        //    resul.Estado = "Asignado";
+        //    _unitOfWork.SeguimientoRepository.Update(resul);
+        //    return await _unitOfWork.SaveAll();
+        //}
+        //public async Task<bool> RechazarSeguimientoVoluntario(int id)
+        //{
+        //    var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
+        //    seguimiento.User = null;
+        //    seguimiento.Estado = "Activo";
+        //    _unitOfWork.SeguimientoRepository.Update(seguimiento);
+        //    return await _unitOfWork.SaveAll();
+        //}
     }
 }
