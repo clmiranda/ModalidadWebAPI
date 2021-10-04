@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -57,7 +58,7 @@ namespace spatwebapi.Controllers
             if (await _reporteSeguimientoService.CreateReporteSeguimiento(id))
             {
                 var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(id);
-                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderBy(x => x.Fecha.ToShortDateString()).ToList();
+                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderBy(x => x.Estado).ToList();
                 var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                 return Ok(mapped);
             }
@@ -80,6 +81,7 @@ namespace spatwebapi.Controllers
                 if (resultadoFoto)
                 {
                     var seguimiento = await _seguimientoService.GetById(reporteDto.SeguimientoId);
+                    seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha.Date.Equals(DateTime.Now.Date)).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
                     var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                     return Ok(mapped);
                 }
@@ -99,7 +101,7 @@ namespace spatwebapi.Controllers
                 if (resultado)
                 {
                     var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(reporte.SeguimientoId);
-                    seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList();
+                    seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderBy(x => x.Estado).ToList();
                     var mappeado = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                     return Ok(mappeado);
                 }
@@ -107,16 +109,20 @@ namespace spatwebapi.Controllers
             }
             else if (verificar == 2)
                 return BadRequest(new { mensaje = "La fecha no debe ser la misma que la de otro reporte creado." });
-            else
+            else if (verificar == 3)
                 return BadRequest(new { mensaje = "La fecha debe estar en el rango establecido en el seguimiento." });
+            else
+                return BadRequest(new { mensaje = "La fecha no puede ser menor a la fecha actual." });
         }
         [HttpDelete("{idseguimiento}/DeleteReporte/{id}")]
         public async Task<IActionResult> DeleteReporte(int idseguimiento, int id)
         {
             if (await _reporteSeguimientoService.DeleteReporte(id))
             {
-                var seg = _reporteSeguimientoService.GetReportesForAdmin(idseguimiento);
-                return Ok(seg);
+                var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(idseguimiento);
+                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderBy(x => x.Estado).ToList();
+                var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
+                return Ok(mapped);
             }
             return BadRequest(new { mensaje = "Hubo un problema al eliminar el Reporte." });
         }

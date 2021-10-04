@@ -7,7 +7,6 @@ namespace webapi.business.Dtos.ReportesSeguimientos
     public class ReporteSeguimientoForReturn: BaseEntity
     {
         public string Observaciones { get; set; }
-        public string EstadoHogarMascota { get; set; }
         public string Estado { get; set; }
         public DateTime FechaRealizada { get; set; }
         public virtual SeguimientoForReturnDto Seguimiento { get; set; }

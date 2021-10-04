@@ -143,8 +143,8 @@ namespace webapi.business.Services.Imp
             foto.FechaAgregado = DateTime.Now;
             foto.IsPrincipal = true;
 
-            reporteRepo.Fotos = new List<Foto>();
-            reporteRepo.Fotos.Add(foto);
+            reporteRepo.Foto = new Foto();
+            reporteRepo.Foto = foto;
             return await _unitOfWork.SaveAll();
         }
     }

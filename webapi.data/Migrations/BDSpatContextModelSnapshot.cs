@@ -246,7 +246,9 @@ namespace webapi.data.Migrations
 
                     b.HasIndex("MascotaId");
 
-                    b.HasIndex("ReporteSeguimientoId");
+                    b.HasIndex("ReporteSeguimientoId")
+                        .IsUnique()
+                        .HasFilter("[ReporteSeguimientoId] IS NOT NULL");
 
                     b.ToTable("Foto");
                 });
@@ -308,9 +310,6 @@ namespace webapi.data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Estado")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EstadoHogarMascota")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Fecha")
@@ -589,8 +588,8 @@ namespace webapi.data.Migrations
                         .HasForeignKey("MascotaId");
 
                     b.HasOne("webapi.core.Models.ReporteSeguimiento", "ReporteSeguimiento")
-                        .WithMany("Fotos")
-                        .HasForeignKey("ReporteSeguimientoId");
+                        .WithOne("Foto")
+                        .HasForeignKey("webapi.core.Models.Foto", "ReporteSeguimientoId");
                 });
 
             modelBuilder.Entity("webapi.core.Models.Mascota", b =>
