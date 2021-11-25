@@ -8,7 +8,7 @@ namespace webapi.business.Services.Interf
 {
     public interface IUserService
     {
-        Task<User> Login(UserForLoginDto userForLoginDto);
+        Task<User> FindUser(UserForLoginDto userForLoginDto);
         Task<object> GenerateJwtToken(User user, string security);
         Task<IdentityResult> PostUsuario(UserForRegisterDto userforRegisterDto);
         Task<IdentityResult> UpdateUsuario(UserUpdateDto userForUpdateDto);

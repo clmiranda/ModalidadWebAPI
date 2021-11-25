@@ -30,7 +30,7 @@ namespace webapi.business.Services.Imp
             var users = await _unitOfWork.UserRepository.GetAll().ToListAsync();
             return users;
         }
-        public async Task<User> Login(UserForLoginDto userForLoginDto)
+        public async Task<User> FindUser(UserForLoginDto userForLoginDto)
         {
             var user = await _unitOfWork.UserRepository.FindByName(userForLoginDto.Username);
             if (user == null)

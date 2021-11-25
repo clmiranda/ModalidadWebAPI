@@ -46,6 +46,11 @@ namespace webapi.business.Services.Imp
         {
             return await _unitOfWork.MascotaRepository.GetById(id);
         }
+        public bool VerifyFotoIsPrincipal(Foto foto) {
+            if (foto.IsPrincipal)
+                return false;
+            return true;
+        }
         public async Task<bool> SetFotoPrincipalMascota(int id, int idfoto)
         {
             var mascota = await _unitOfWork.MascotaRepository.GetById(id);
@@ -53,17 +58,18 @@ namespace webapi.business.Services.Imp
                 return false;
 
             var foto = await _unitOfWork.FotoRepository.GetById(idfoto);
-            if (foto.IsPrincipal)
-                return false;
 
-            var principal = await _unitOfWork.FotoRepository.FindByCondition(x => x.Mascota.Id == id && x.IsPrincipal).FirstOrDefaultAsync();
-            principal.IsPrincipal = false;
+            if (VerifyFotoIsPrincipal(foto)) {
+                var principal = await _unitOfWork.FotoRepository.FindByCondition(x => x.Mascota.Id == id && x.IsPrincipal).FirstOrDefaultAsync();
+                principal.IsPrincipal = false;
 
-            foto.IsPrincipal = true;
-            return await _unitOfWork.SaveAll();
+                foto.IsPrincipal = true;
+                return await _unitOfWork.SaveAll();
+            }
+            return false;
         }
 
-        public async Task<bool> AgregarFotoMascota(int id, FotoForCreationDto fotoMascota)
+        public async Task<bool> AddFotoMascota(int id, FotoForCreationDto fotoMascota)
         {
             var mascotaRepo = await _unitOfWork.MascotaRepository.GetById(id);
             mascotaRepo.Fotos = new List<Foto>();
@@ -97,27 +103,27 @@ namespace webapi.business.Services.Imp
             return await _unitOfWork.SaveAll();
         }
 
-        public async Task<bool> EliminarFoto(int id, int idfoto)
+        public async Task<bool> DeleteFotoMascota(int id, int idfoto)
         {
             var foto = await _unitOfWork.FotoRepository.GetById(idfoto);
 
-            if (foto == null)
-                return false;
-            if (foto.IsPrincipal)
-                return false;
+            if (foto == null) return false;
 
-            if (foto.IdPublico != null)
-            {
-                var eliminar = new DeletionParams(foto.IdPublico);
-                var x = _cloudinary.Destroy(eliminar);
+            if (VerifyFotoIsPrincipal(foto)) {
+                if (foto.IdPublico != null)
+                {
+                    var eliminar = new DeletionParams(foto.IdPublico);
+                    var x = _cloudinary.Destroy(eliminar);
 
-                if (x.Result.Equals("ok"))
-                    _unitOfWork.FotoRepository.Delete(foto);
+                    if (x.Result.Equals("ok"))
+                        _unitOfWork.FotoRepository.Delete(foto);
+                }
+                else
+                    return false;
+
+                return await _unitOfWork.SaveAll();
             }
-            else
-                return false;
-
-            return await _unitOfWork.SaveAll();
+            return false;
         }
         public async Task<bool> AgregarFotoReporte(int id, IFormFile archivo)
         {

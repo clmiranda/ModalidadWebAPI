@@ -14,10 +14,11 @@ namespace webapi.data.Repositories.Imp
         private IRepository<Denuncia> _denunciaRepository;
         private IRepository<Mascota> _mascotaRepository;
         private IRepository<Foto> _fotoRepository;
-        private IRepository<ContratoAdopcion> _contratoAdopcionRepository;
+        private IRepository<SolicitudAdopcion> _solicitudAdopcionRepository;
         private IRepository<Seguimiento> _seguimientoRepository;
         private IRepository<ReporteSeguimiento> _reporteSeguimientoRepository;
-        private IRepository<ContratoRechazo> _contratoRechazoRepository;
+        private IRepository<AdopcionRechazada> _adopcionRechazadaRepository;
+        private IRepository<AdopcionCancelada> _adopcionCanceladaRepository;
         private IRepository<ReporteTratamiento> _reporteTratamientoRepository;
         private IRolUserRepository _rolUserRepository;
         public UnitOfWork(BDSpatContext databaseContext,
@@ -45,9 +46,9 @@ namespace webapi.data.Repositories.Imp
         {
             get { return _fotoRepository ??= new Repository<Foto>(_databaseContext); }
         }
-        public IRepository<ContratoAdopcion> ContratoAdopcionRepository
+        public IRepository<SolicitudAdopcion> SolicitudAdopcionRepository
         {
-            get { return _contratoAdopcionRepository ??= new Repository<ContratoAdopcion>(_databaseContext); }
+            get { return _solicitudAdopcionRepository ??= new Repository<SolicitudAdopcion>(_databaseContext); }
         }
         public IRepository<Seguimiento> SeguimientoRepository
         {
@@ -58,9 +59,13 @@ namespace webapi.data.Repositories.Imp
             get { return _reporteSeguimientoRepository ??= new Repository<ReporteSeguimiento>(_databaseContext); }
         }
 
-        public IRepository<ContratoRechazo> ContratoRechazoRepository
+        public IRepository<AdopcionRechazada> AdopcionRechazadaRepository
         {
-            get { return _contratoRechazoRepository ??= new Repository<ContratoRechazo>(_databaseContext); }
+            get { return _adopcionRechazadaRepository ??= new Repository<AdopcionRechazada>(_databaseContext); }
+        }
+        public IRepository<AdopcionCancelada> AdopcionCanceladaRepository
+        {
+            get { return _adopcionCanceladaRepository ??= new Repository<AdopcionCancelada>(_databaseContext); }
         }
 
         public IRolUserRepository RolUserRepository

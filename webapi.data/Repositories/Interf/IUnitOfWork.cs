@@ -10,10 +10,11 @@ namespace webapi.data.Repositories.Interf
         IRepository<Mascota> MascotaRepository { get; }
         IRepository<Foto> FotoRepository { get; }
         IRepository<ReporteTratamiento> ReporteTratamientoRepository { get; }
-        IRepository<ContratoAdopcion> ContratoAdopcionRepository { get; }
+        IRepository<SolicitudAdopcion> SolicitudAdopcionRepository { get; }
         IRepository<Seguimiento> SeguimientoRepository { get; }
         IRepository<ReporteSeguimiento> ReporteSeguimientoRepository { get; }
-        IRepository<ContratoRechazo> ContratoRechazoRepository { get; }
+        IRepository<AdopcionRechazada> AdopcionRechazadaRepository { get; }
+        IRepository<AdopcionCancelada> AdopcionCanceladaRepository { get; }
         IRolUserRepository RolUserRepository { get; }
         Task<bool> SaveAll();
         void Rollback();

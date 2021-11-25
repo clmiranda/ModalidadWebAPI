@@ -9,6 +9,6 @@ namespace webapi.business.Dtos.Mascotas
         public string Nombre { get; set; }
         public string Estado { get; set; }
         public virtual FotoForReturnDto Foto { get; set; }
-        public virtual ContratoAdopcionReturnDto ContratoAdopcion { get; set; }
+        public virtual SolicitudAdopcionReturnDto SolicitudAdopcion { get; set; }
     }
 }

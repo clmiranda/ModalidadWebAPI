@@ -1,14 +1,15 @@
 ﻿using System;
 
-namespace webapi.core.Models
+namespace webapi.business.Dtos.Adopciones
 {
-    public partial class ContratoAdopcion : BaseEntity
+    public class SolicitudAdopcionForCreate
     {
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public string Ci { get; set; }
         public string Domicilio { get; set; }
         public string NumeroCelular { get; set; }
+
         public string Respuesta1 { get; set; }
         public string Respuesta2 { get; set; }
         public string Respuesta3 { get; set; }
@@ -16,13 +17,17 @@ namespace webapi.core.Models
         public string Respuesta5 { get; set; }
         public string Respuesta6 { get; set; }
         public string Respuesta7 { get; set; }
+        public DateTime FechaSolicitudAdopcion { get; }
+        public DateTime FechaAdopcion { get; }
         public DateTime FechaCreacion { get; set; }
-        public DateTime FechaSolicitudAdopcion { get; set; }
-        public DateTime FechaAdopcion { get; set; }
-        public string Estado { get; set; }
-        public virtual Mascota Mascota { get; set; }
-        public int? MascotaId { get; set; }
-        public virtual Seguimiento Seguimiento { get; set; }
-        public virtual ContratoRechazo ContratoRechazo { get; set; }
+        public string Estado { get; }
+        public int MascotaId { get; set; }
+        public SolicitudAdopcionForCreate()
+        {
+            FechaSolicitudAdopcion = DateTime.Now;
+            FechaAdopcion = DateTime.Now;
+            FechaCreacion = DateTime.Now;
+            Estado = "Pendiente";
+        }
     }
 }

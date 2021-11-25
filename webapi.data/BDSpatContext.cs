@@ -19,8 +19,9 @@ namespace webapi.data
             : base(options)
         {
         }
-        public virtual DbSet<ContratoAdopcion> ContratoAdopcion { get; set; }
-        public virtual DbSet<ContratoRechazo> ContratoRechazo { get; set; }
+        public virtual DbSet<SolicitudAdopcion> SolicitudAdopcion { get; set; }
+        public virtual DbSet<AdopcionRechazada> AdopcionRechazada { get; set; }
+        public virtual DbSet<AdopcionCancelada> AdopcionCancelada { get; set; }
         public virtual DbSet<Mascota> Mascota { get; set; }
         public virtual DbSet<ReporteSeguimiento> ReporteSeguimiento { get; set; }
         public virtual DbSet<ReporteTratamiento> ReporteTratamiento { get; set; }

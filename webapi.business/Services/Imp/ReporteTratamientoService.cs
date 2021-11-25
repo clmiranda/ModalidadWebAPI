@@ -16,7 +16,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<Mascota> GetAll(int id) {
+        public async Task<Mascota> GetAllReporteTratamiento(int id) {
             var mascota = await _unitOfWork.MascotaRepository.GetById(id);
             return mascota;
         }

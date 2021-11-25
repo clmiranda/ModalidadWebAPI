@@ -21,10 +21,10 @@ namespace spatwebapi.Controllers
             _reporteTratamientoService = reporteTratamientoService;
             _mapper = mapper;
         }
-        [HttpGet("GetAll/{id}")]
-        public async Task<ActionResult> GetAll(int id)
+        [HttpGet("GetAllReporteTratamiento/{id}")]
+        public async Task<ActionResult> GetAllReporteTratamiento(int id)
         {
-            var mascota = await _reporteTratamientoService.GetAll(id);
+            var mascota = await _reporteTratamientoService.GetAllReporteTratamiento(id);
             var mapped = _mapper.Map<MascotaForReturn>(mascota);
             return Ok(mapped);
         }

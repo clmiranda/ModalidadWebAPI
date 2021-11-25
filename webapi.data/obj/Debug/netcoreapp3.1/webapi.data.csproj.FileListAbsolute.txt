@@ -6,6 +6,7 @@ C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Debug\netcoreapp3.1\web
 C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Debug\netcoreapp3.1\webapi.core.dll
 C:\Users\Usuario\source\repos\spatwebapi\webapi.data\bin\Debug\netcoreapp3.1\webapi.core.pdb
 C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\webapi.data.csproj.AssemblyReference.cache
+C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\webapi.data.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\webapi.data.AssemblyInfoInputs.cache
 C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\webapi.data.AssemblyInfo.cs
 C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\webapi.data.csproj.CoreCompileInputs.cache
@@ -13,4 +14,3 @@ C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\web
 C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\webapi.data.dll
 C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\webapi.data.pdb
 C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\webapi.data.genruntimeconfig.cache
-C:\Users\Usuario\source\repos\spatwebapi\webapi.data\obj\Debug\netcoreapp3.1\webapi.data.GeneratedMSBuildEditorConfig.editorconfig

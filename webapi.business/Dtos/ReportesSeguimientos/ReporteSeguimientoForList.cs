@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using webapi.business.Dtos.Fotos;
 
 namespace webapi.business.Dtos.ReportesSeguimientos
