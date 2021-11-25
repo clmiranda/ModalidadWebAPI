@@ -1,6 +1,6 @@
 ﻿namespace webapi.business.Pagination
 {
-    public class ContratoAdopcionParametros
+    public class AdopcionParametros
     {
         private const int MaxPageSize = 50;
         public int PageNumber { get; set; } = 1;

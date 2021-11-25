@@ -24,6 +24,6 @@ namespace webapi.business.Dtos.Mascotas
         public virtual DenunciaForDetailedDto Denuncia { get; set; }
         public int DenunciaId { get; set; }
         public virtual ICollection<FotoForReturnDto> Fotos { get; set; }
-        public virtual ContratoAdopcionReturnDto ContratoAdopcion { get; set; }
+        public virtual SolicitudAdopcionReturnDto SolicitudAdopcion { get; set; }
     }
 }

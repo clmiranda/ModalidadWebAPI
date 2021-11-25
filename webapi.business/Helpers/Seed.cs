@@ -34,7 +34,7 @@ namespace webapi.business.Helpers
                     userManager.AddToRoleAsync(admin, "SuperAdministrador").Wait();
                     userManager.AddToRoleAsync(admin, "Administrador").Wait();
                     userManager.AddToRoleAsync(admin, "Voluntario").Wait();
-                    userManager.AddToRoleAsync(admin, "Moderador").Wait();
+                    //userManager.AddToRoleAsync(admin, "Moderador").Wait();
                 }
             }
         }

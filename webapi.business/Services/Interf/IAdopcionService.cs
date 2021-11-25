@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using webapi.business.Dtos.Adopciones;
+using webapi.business.Dtos.SolicitudAdopcionCancelada;
+using webapi.business.Dtos.SolicitudAdopcionRechazada;
+using webapi.business.Pagination;
+using webapi.core.Models;
+
+namespace webapi.business.Services.Interf
+{
+    public interface IAdopcionService
+    {
+        Task<IEnumerable<SolicitudAdopcion>> GetAll();
+        Task<IEnumerable<AdopcionRechazada>> GetAllSolicitudesAdopcionRechazadas();
+        Task<IEnumerable<AdopcionCancelada>> GetAllSolicitudesAdopcionCanceladas();
+        Task<PaginationList<SolicitudAdopcion>> GetAllAdopciones(AdopcionParametros parametros);
+        Task<SolicitudAdopcion> GetById(int id);
+        Task<SolicitudAdopcion> CreateSolicitudAdopcion(SolicitudAdopcionForCreate solicitudAdopcionDto);
+        Task<bool> UpdateFecha(FechaSolicitudAdopcionForUpdateDto fechaSolicitudAdopcionDto);
+        Task<bool> CreateSolicitudAdopcionRechazada(SolicitudAdopcionRechazadaForCreateDto solicitudAdopcionRechazadaDto);
+        Task<bool> CreateSolicitudAdopcionCancelada(SolicitudAdopcionCanceladaForCreateDto solicitudAdopcionCanceladaDto);
+        Task<bool> AprobarSolicitudAdopcion(int id, int mascotaId);
+        Task<bool> RechazarSolicitudAdopcion(int id, int mascotaId);
+        Task<bool> CancelarAdopcion(int id, int mascotaId);
+        IQueryable<SolicitudAdopcion> FindByCondition(Expression<Func<SolicitudAdopcion, bool>> expression);
+    }
+}

@@ -93,6 +93,12 @@
     <Compile Remove="Migrations\20210921235852_Changes_ReporteSeguimiento.Designer.cs" />
     <Compile Remove="Migrations\20210924203101_Change_ReporteSeguimiento.cs" />
     <Compile Remove="Migrations\20210924203101_Change_ReporteSeguimiento.Designer.cs" />
+    <Compile Remove="Migrations\20210924203402_Change_ReporteSeguimiento.cs" />
+    <Compile Remove="Migrations\20210924203402_Change_ReporteSeguimiento.Designer.cs" />
+    <Compile Remove="Migrations\20211122033335_Update_tables_adopcion.cs" />
+    <Compile Remove="Migrations\20211122033335_Update_tables_adopcion.Designer.cs" />
+    <Compile Remove="Migrations\20211122040049_Updated_tables_adopcion.cs" />
+    <Compile Remove="Migrations\20211122040049_Updated_tables_adopcion.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,10 +1,10 @@
 ﻿using System;
-using webapi.business.Dtos.ContratoRechazo;
+using webapi.business.Dtos.SolicitudAdopcionRechazada;
 using webapi.business.Dtos.Mascotas;
 
 namespace webapi.business.Dtos.Adopciones
 {
-    public class ContratoAdopcionForDetailDto
+    public class SolicitudAdopcionForDetailDto
     {
         public int Id { get; set; }
         public string Nombres { get; set; }
@@ -22,6 +22,6 @@ namespace webapi.business.Dtos.Adopciones
         public string Estado { get; set; }
         public DateTime FechaSolicitudAdopcion { get; set; }
         public MascotaForReturn Mascota { get; set; }
-        public ContratoRechazoForReturnDto ContratoRechazo { get; set; }
+        public SolicitudAdopcionRechazadaForReturnDto AdopcionRechazada { get; set; }
     }
 }

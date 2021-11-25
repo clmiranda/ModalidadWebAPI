@@ -30,7 +30,7 @@ namespace spatwebapi.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login(UserForLoginDto userforLogin)
         {
-            var user = await _userService.Login(userforLogin);
+            var user = await _userService.FindUser(userforLogin);
             if (user == null)
                 return Unauthorized(new { mensaje = "Error, debe confirmar su email o asegurarse de que los datos ingresados sean los correctos." });
             var token = await _userService.GenerateJwtToken(user, _config.GetSection("AppSettings:Token").Value);

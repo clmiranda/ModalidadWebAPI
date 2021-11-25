@@ -26,14 +26,14 @@ namespace spatwebapi.Controllers
         //[HttpGet("{id}", Name = "GetFoto")]
         //public async Task<IActionResult> GetFoto(int id)
         //{
-        //    var fotoRepository = await _fotoService.GetFoto(id);
+        //    var fotoRepository = atsewait _fotoService.GetFoto(id);
         //    var foto = _mapper.Map<FotoForReturnDto>(fotoRepository);
         //    return Ok(foto);
         //}
-        [HttpPost("Mascota/{mascotaId}/AgregarFotoMascota")]
-        public async Task<IActionResult> AgregarFotoMascota(int mascotaId, [FromForm] FotoForCreationDto dtoFoto)
+        [HttpPost("Mascota/{mascotaId}/AddFotoMascota")]
+        public async Task<IActionResult> AddFotoMascota(int mascotaId, [FromForm] FotoForCreationDto dtoFoto)
         {
-            var resultado = await _fotoService.AgregarFotoMascota(mascotaId, dtoFoto);
+            var resultado = await _fotoService.AddFotoMascota(mascotaId, dtoFoto);
             if (!resultado)
                 return BadRequest("No se pudo agregar la foto.");
             return Json("");
@@ -49,10 +49,10 @@ namespace spatwebapi.Controllers
             }
             return BadRequest(new { mensaje = "Conflicto al asignar la foto principal." });
         }
-        [HttpDelete("Mascota/{mascotaId}/EliminarFotoMascota/{idfoto}")]
-        public async Task<IActionResult> EliminarFotoMascota(int mascotaId, int idfoto)
+        [HttpDelete("Mascota/{mascotaId}/DeleteFotoMascota/{idfoto}")]
+        public async Task<IActionResult> DeleteFotoMascota(int mascotaId, int idfoto)
         {
-            if (await _fotoService.EliminarFoto(mascotaId, idfoto)) {
+            if (await _fotoService.DeleteFotoMascota(mascotaId, idfoto)) {
                 var mascota = await _mascotaService.GetMascotaById(mascotaId);
                 var mapped = _mapper.Map<MascotaForReturn>(mascota);
                 return Ok(mapped);

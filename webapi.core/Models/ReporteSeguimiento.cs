@@ -6,7 +6,6 @@ namespace webapi.core.Models
     public partial class ReporteSeguimiento : BaseEntity
     {
         public string Observaciones { get; set; }
-        //public string EstadoHogarMascota { get; set; }
         public DateTime Fecha { get; set; }
         public DateTime FechaCreacion { get; set; }
         public string Estado { get; set; }

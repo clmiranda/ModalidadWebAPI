@@ -10,8 +10,8 @@ using webapi.data;
 namespace webapi.data.Migrations
 {
     [DbContext(typeof(BDSpatContext))]
-    [Migration("20210924203402_Change_ReporteSeguimiento")]
-    partial class Change_ReporteSeguimiento
+    [Migration("20211122040610_Updated_tables_adopcion")]
+    partial class Updated_tables_adopcion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,95 +107,52 @@ namespace webapi.data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("webapi.core.Models.ContratoAdopcion", b =>
+            modelBuilder.Entity("webapi.core.Models.AdopcionCancelada", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Apellidos")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ci")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Domicilio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Estado")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaAdopcion")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaSolicitudAdopcion")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Razon")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MascotaId")
+                    b.Property<int>("SolicitudAdopcionId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Nombres")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NumeroCelular")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Respuesta1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Respuesta2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Respuesta3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Respuesta4")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Respuesta5")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Respuesta6")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Respuesta7")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MascotaId")
-                        .IsUnique()
-                        .HasFilter("[MascotaId] IS NOT NULL");
-
-                    b.ToTable("ContratoAdopcion");
-                });
-
-            modelBuilder.Entity("webapi.core.Models.ContratoRechazo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ContratoAdopcionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RazonRechazo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContratoAdopcionId")
+                    b.HasIndex("SolicitudAdopcionId")
                         .IsUnique();
 
-                    b.ToTable("ContratoRechazo");
+                    b.ToTable("AdopcionCancelada");
+                });
+
+            modelBuilder.Entity("webapi.core.Models.AdopcionRechazada", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Razon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SolicitudAdopcionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SolicitudAdopcionId")
+                        .IsUnique();
+
+                    b.ToTable("AdopcionRechazada");
                 });
 
             modelBuilder.Entity("webapi.core.Models.Denuncia", b =>
@@ -395,29 +352,96 @@ namespace webapi.data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ContratoAdopcionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Estado")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaConclusion")
+                    b.Property<DateTime>("FechaFin")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FechaInicio")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("SolicitudAdopcionId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContratoAdopcionId")
+                    b.HasIndex("SolicitudAdopcionId")
                         .IsUnique();
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Seguimiento");
+                });
+
+            modelBuilder.Entity("webapi.core.Models.SolicitudAdopcion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Apellidos")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ci")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Domicilio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaAdopcion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaSolicitudAdopcion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MascotaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombres")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeroCelular")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Respuesta1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Respuesta2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Respuesta3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Respuesta4")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Respuesta5")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Respuesta6")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Respuesta7")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MascotaId")
+                        .IsUnique()
+                        .HasFilter("[MascotaId] IS NOT NULL");
+
+                    b.ToTable("SolicitudAdopcion");
                 });
 
             modelBuilder.Entity("webapi.core.Models.User", b =>
@@ -567,18 +591,20 @@ namespace webapi.data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("webapi.core.Models.ContratoAdopcion", b =>
+            modelBuilder.Entity("webapi.core.Models.AdopcionCancelada", b =>
                 {
-                    b.HasOne("webapi.core.Models.Mascota", "Mascota")
-                        .WithOne("ContratoAdopcion")
-                        .HasForeignKey("webapi.core.Models.ContratoAdopcion", "MascotaId");
+                    b.HasOne("webapi.core.Models.SolicitudAdopcion", "SolicitudAdopcion")
+                        .WithOne("AdopcionCancelada")
+                        .HasForeignKey("webapi.core.Models.AdopcionCancelada", "SolicitudAdopcionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("webapi.core.Models.ContratoRechazo", b =>
+            modelBuilder.Entity("webapi.core.Models.AdopcionRechazada", b =>
                 {
-                    b.HasOne("webapi.core.Models.ContratoAdopcion", "ContratoAdopcion")
+                    b.HasOne("webapi.core.Models.SolicitudAdopcion", "SolicitudAdopcion")
                         .WithOne("ContratoRechazo")
-                        .HasForeignKey("webapi.core.Models.ContratoRechazo", "ContratoAdopcionId")
+                        .HasForeignKey("webapi.core.Models.AdopcionRechazada", "SolicitudAdopcionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -621,15 +647,22 @@ namespace webapi.data.Migrations
 
             modelBuilder.Entity("webapi.core.Models.Seguimiento", b =>
                 {
-                    b.HasOne("webapi.core.Models.ContratoAdopcion", "ContratoAdopcion")
+                    b.HasOne("webapi.core.Models.SolicitudAdopcion", "SolicitudAdopcion")
                         .WithOne("Seguimiento")
-                        .HasForeignKey("webapi.core.Models.Seguimiento", "ContratoAdopcionId")
+                        .HasForeignKey("webapi.core.Models.Seguimiento", "SolicitudAdopcionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("webapi.core.Models.User", "User")
                         .WithMany("Seguimientos")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("webapi.core.Models.SolicitudAdopcion", b =>
+                {
+                    b.HasOne("webapi.core.Models.Mascota", "Mascota")
+                        .WithOne("SolicitudAdopcion")
+                        .HasForeignKey("webapi.core.Models.SolicitudAdopcion", "MascotaId");
                 });
 
             modelBuilder.Entity("webapi.core.Models.UserRole", b =>

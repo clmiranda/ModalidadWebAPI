@@ -23,20 +23,20 @@ namespace webapi.business.Services.Imp
         {
             if (string.IsNullOrEmpty(filtro) || !listaFiltro.Contains(filtro))
                 return null;
-            var datos = new List<ContratoAdopcion>();
+            var datos = new List<SolicitudAdopcion>();
             switch (filtro)
             {
                 case "3 meses":
-                    datos = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= DateTime.Today.AddMonths(-3) && x.FechaSolicitudAdopcion.Date <= DateTime.Now.Date).ToListAsync();
+                    datos = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= DateTime.Today.AddMonths(-3) && x.FechaSolicitudAdopcion.Date <= DateTime.Now.Date).ToListAsync();
                     break;
                 case "6 meses":
-                    datos = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= DateTime.Today.AddMonths(-6) && x.FechaSolicitudAdopcion.Date <= DateTime.Now.Date).ToListAsync();
+                    datos = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= DateTime.Today.AddMonths(-6) && x.FechaSolicitudAdopcion.Date <= DateTime.Now.Date).ToListAsync();
                     break;
                 case "9 meses":
-                    datos = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= DateTime.Today.AddMonths(-9) && x.FechaSolicitudAdopcion.Date <= DateTime.Now.Date).ToListAsync();
+                    datos = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= DateTime.Today.AddMonths(-9) && x.FechaSolicitudAdopcion.Date <= DateTime.Now.Date).ToListAsync();
                     break;
                 case "12 meses":
-                    datos = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= DateTime.Today.AddMonths(-12) && x.FechaSolicitudAdopcion.Date <= DateTime.Now.Date).ToListAsync();
+                    datos = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= DateTime.Today.AddMonths(-12) && x.FechaSolicitudAdopcion.Date <= DateTime.Now.Date).ToListAsync();
                     break;
             }
             var lista = datos.OrderBy(x => x.FechaSolicitudAdopcion.Date)
@@ -113,11 +113,11 @@ namespace webapi.business.Services.Imp
             {
                 ContadorMascotasRegistradas = await _unitOfWork.MascotaRepository.GetAll().CountAsync(),
 
-                ContadorAdopcionesAprobadas = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.Estado.Equals("Aprobado")).CountAsync(),
+                ContadorAdopcionesAprobadas = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.Estado.Equals("Aprobado")).CountAsync(),
 
-                ContadorAdopcionesRechazadas = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.Estado.Equals("Rechazado")).CountAsync(),
+                ContadorAdopcionesRechazadas = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.Estado.Equals("Rechazado")).CountAsync(),
 
-                ContadorAdopcionesCanceladas = await _unitOfWork.ContratoAdopcionRepository.FindByCondition(x => x.Estado.Equals("Cancelado")).CountAsync(),
+                ContadorAdopcionesCanceladas = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.Estado.Equals("Cancelado")).CountAsync(),
 
                 ContadorSeguimientosActuales = await _unitOfWork.SeguimientoRepository.GetAll().CountAsync(),
 

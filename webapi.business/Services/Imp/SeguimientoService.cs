@@ -42,13 +42,13 @@ namespace webapi.business.Services.Imp
         {
             return await _unitOfWork.SeguimientoRepository.GetById(id);
         }
-        public void CreateSeguimiento(int idContrato)
+        public void CreateSeguimiento(int idAdopcion)
         {
             Seguimiento seguimiento = new Seguimiento
             {
-                ContratoAdopcionId = idContrato,
+                SolicitudAdopcionId = idAdopcion,
                 FechaInicio = DateTime.Now,
-                FechaConclusion = DateTime.Now,
+                FechaFin = DateTime.Now,
                 Estado = "Activo"
             };
             _unitOfWork.SeguimientoRepository.Insert(seguimiento);
@@ -60,7 +60,7 @@ namespace webapi.business.Services.Imp
         public async Task<Seguimiento> UpdateFecha(FechaReporteDto dto) {
             var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(dto.Id);
             seguimiento.FechaInicio = Convert.ToDateTime(dto.RangoFechas[0]);
-            seguimiento.FechaConclusion = Convert.ToDateTime(dto.RangoFechas[1]);
+            seguimiento.FechaFin = Convert.ToDateTime(dto.RangoFechas[1]);
             _unitOfWork.SeguimientoRepository.Update(seguimiento);
             if (await _unitOfWork.SaveAll())
                 return seguimiento;
@@ -75,7 +75,7 @@ namespace webapi.business.Services.Imp
             var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
             var user = await _unitOfWork.UserRepository.GetById(idUser);
             seguimiento.UserId = idUser;
-            seguimiento.Estado = "Pendiente";
+            seguimiento.Estado = "Asignado";
             _unitOfWork.SeguimientoRepository.Update(seguimiento);
             user.Seguimientos.Add(seguimiento);
             return await _unitOfWork.SaveAll();

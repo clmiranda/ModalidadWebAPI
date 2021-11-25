@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 using webapi.business.Dtos.Adopciones;
-using webapi.business.Dtos.ContratoRechazo;
+using webapi.business.Dtos.SolicitudAdopcionRechazada;
 using webapi.business.Dtos.Denuncias;
 using webapi.business.Dtos.Fotos;
 using webapi.business.Dtos.Mascotas;
@@ -40,26 +40,26 @@ namespace webapi.business.Helpers
                 {
                     options.MapFrom(s => s.Fotos.FirstOrDefault(x => x.IsPrincipal == true));
                 });
-            CreateMap<ContratoAdopcionReturnDto, ContratoAdopcion>();
-            CreateMap<ContratoAdopcion, ContratoAdopcionReturnDto>();
-            CreateMap<ContratoAdopcionForCreate, ContratoAdopcion>();
-            CreateMap<FechaContratoForUpdateDto, ContratoAdopcion>();
+            CreateMap<SolicitudAdopcionReturnDto, SolicitudAdopcion>();
+            CreateMap<SolicitudAdopcion, SolicitudAdopcionReturnDto>();
+            CreateMap<SolicitudAdopcionForCreate, SolicitudAdopcion>();
+            CreateMap<FechaSolicitudAdopcionForUpdateDto, SolicitudAdopcion>();
             CreateMap<Seguimiento, SeguimientoForReturnDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForList>();
-            CreateMap<ContratoAdopcion, ContratoAdopcionForList>()
+            CreateMap<SolicitudAdopcion, SolicitudAdopcionForList>()
                 .ForMember(d => d.RazonAdopcion, options =>
                 {
                     options.MapFrom(s => s.Respuesta1);
                 });
-            CreateMap<ContratoAdopcion, ContratoAdopcionForDetailDto>();
+            CreateMap<SolicitudAdopcion, SolicitudAdopcionForDetailDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
             CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
 
             CreateMap<ReporteTratamiento, ReporteTratamientoForReturnDto>();
             CreateMap<ReporteTratamientoForCreateDto, ReporteTratamiento>();
             CreateMap<ReporteTratamientoForUpdateDto, ReporteTratamiento>();
-            CreateMap<ContratoRechazo, ContratoRechazoForReturnDto>();
-            CreateMap<ContratoRechazoForCreateDto, ContratoRechazo>();
+            CreateMap<AdopcionRechazada, SolicitudAdopcionRechazadaForReturnDto>();
+            CreateMap<SolicitudAdopcionRechazadaForCreateDto, AdopcionRechazada>();
             CreateMap<User, UserRolesForReturn>()
                 .ForMember(dest => dest.Edad, opt =>
                 {
@@ -75,7 +75,7 @@ namespace webapi.business.Helpers
     {
         opt.MapFrom(src => src.RangoFechas[0] == "null" ? (DateTime?)null : Convert.ToDateTime(src.RangoFechas[0]));
     })
-    .ForMember(dest => dest.FechaConclusion, opt =>
+    .ForMember(dest => dest.FechaFin, opt =>
     {
         opt.MapFrom(src => src.RangoFechas[1] == "null" ? (DateTime?)null : Convert.ToDateTime(src.RangoFechas[1]));
     });

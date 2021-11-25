@@ -54,7 +54,7 @@ namespace webapi.business.Services.Imp
         public async Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporteDto)
         {
             var reporte = await _unitOfWork.SeguimientoRepository.GetById(reporteDto.SeguimientoId);
-            if (reporte.FechaInicio.Date <= reporteDto.Fecha.Date && reporte.FechaConclusion.Date >= reporteDto.Fecha.Date)
+            if (reporte.FechaInicio.Date <= reporteDto.Fecha.Date && reporte.FechaFin.Date >= reporteDto.Fecha.Date)
             {
                 if (reporte.ReporteSeguimientos.Any(x => x.Fecha.Date.ToShortDateString() == reporteDto.Fecha.Date.ToShortDateString()))
                     return 2;

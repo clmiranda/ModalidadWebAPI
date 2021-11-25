@@ -10,10 +10,10 @@ namespace webapi.business.Dtos.Seguimientos
     {
         public int Id { get; set; }
         public DateTime FechaInicio { get; set; }
-        public DateTime FechaConclusion { get; set; }
+        public DateTime FechaFin { get; set; }
         public string Estado { get; set; }
-        public virtual ContratoAdopcionForList ContratoAdopcion { get; set; }
-        public int ContratoAdopcionId { get; set; }
+        public virtual SolicitudAdopcionForList SolicitudAdopcion { get; set; }
+        public int SolicitudAdopcionId { get; set; }
         public virtual UserForDetailedDto User { get; set; }
         public int UserId { get; set; }
         public virtual List<ReporteSeguimientoForList> ReporteSeguimientos { get; set; }
