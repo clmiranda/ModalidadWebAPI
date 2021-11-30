@@ -8,6 +8,6 @@ namespace webapi.business.Services.Interf
 {
     public interface IRolUserService
     {
-        Task<IEnumerable<string>> PutRolesUser(int id, string[] rolesUserDto);
+        Task<IEnumerable<string>> AsignarRoles(int id, string[] rolesUser);
     }
 }

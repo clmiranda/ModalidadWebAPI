@@ -13,13 +13,13 @@ namespace webapi.business.Services.Imp
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<IEnumerable<string>> PutRolesUser(int id, string[] rolesUserDto)
+        public async Task<IEnumerable<string>> AsignarRoles(int id, string[] rolesUser)
         {
             var user = await _unitOfWork.UserRepository.FindById(id.ToString());
 
             var userRoles = await _unitOfWork.RolUserRepository.GetRolesUser(user);
 
-            var selectedRoles = rolesUserDto;
+            var selectedRoles = rolesUser;
 
             selectedRoles = selectedRoles ?? new string[] { };
 

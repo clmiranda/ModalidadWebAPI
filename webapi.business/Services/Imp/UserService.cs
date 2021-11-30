@@ -25,7 +25,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task<IEnumerable<User>> GetAllUsers()
         {
             var users = await _unitOfWork.UserRepository.GetAll().ToListAsync();
             return users;
@@ -42,7 +42,7 @@ namespace webapi.business.Services.Imp
                 return user;
             return null;
         }
-        public async Task<object> GenerateJwtToken(User user, string security)
+        public async Task<object> GenerateJwtToken(User user, string parametroSecurity)
         {
             var claims = new List<Claim> {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -52,7 +52,7 @@ namespace webapi.business.Services.Imp
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(security));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(parametroSecurity));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -65,10 +65,10 @@ namespace webapi.business.Services.Imp
             var appUser = _mapper.Map<UserRolesForReturn>(user);
             return new { user = appUser, token = tokenHandler.WriteToken(token) };
         }
-        public async Task<IdentityResult> PostUsuario(UserForRegisterDto userforRegisterDto)
+        public async Task<IdentityResult> CreateUser(UserForRegisterDto userforRegisterDto)
         {
             var userToCreate = _mapper.Map<User>(userforRegisterDto);
-            var resultado = await _unitOfWork.UserRepository.PostUsuario(userToCreate, userforRegisterDto.Password);
+            var resultado = await _unitOfWork.UserRepository.CreateUser(userToCreate, userforRegisterDto.Password);
             return resultado;
         }
         public async Task<User> GetUsuario(int id)
@@ -100,10 +100,10 @@ namespace webapi.business.Services.Imp
             var resultado = await _unitOfWork.UserRepository.UpdateUsuario(usuario);
             return resultado;
         }
-        public async Task<IdentityResult> DeleteUsuario(int id)
+        public async Task<IdentityResult> DeleteUser(int id)
         {
             var usuario = await _unitOfWork.UserRepository.GetById(id);
-            var resultado = await _unitOfWork.UserRepository.DeleteUsuario(usuario);
+            var resultado = await _unitOfWork.UserRepository.DeleteUser(usuario);
             return resultado;
         }
         public async Task<IdentityResult> ConfirmEmail(string userId, string token)

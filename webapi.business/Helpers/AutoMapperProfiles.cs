@@ -70,7 +70,7 @@ namespace webapi.business.Helpers
                     opt.MapFrom(d => d.UserRoles.Select((role) => new
                     { name = role.Role.Name }).Select(x => x.name));
                 });
-            CreateMap<FechaReporteDto, Seguimiento>()
+            CreateMap<RangoFechaSeguimientoDto, Seguimiento>()
     .ForMember(dest => dest.FechaInicio, opt =>
     {
         opt.MapFrom(src => src.RangoFechas[0] == "null" ? (DateTime?)null : Convert.ToDateTime(src.RangoFechas[0]));

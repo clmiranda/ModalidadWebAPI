@@ -31,7 +31,7 @@ namespace webapi.data.Repositories.Imp
         {
             return await _userManager.ConfirmEmailAsync(u, token);
         }
-        public async Task<IdentityResult> PostUsuario(User u, string password)
+        public async Task<IdentityResult> CreateUser(User u, string password)
         {
             return await _userManager.CreateAsync(u, password);
         }
@@ -87,7 +87,7 @@ namespace webapi.data.Repositories.Imp
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<IdentityResult> DeleteUsuario(User u)
+        public async Task<IdentityResult> DeleteUser(User u)
         {
             return await _userManager.DeleteAsync(u);
         }

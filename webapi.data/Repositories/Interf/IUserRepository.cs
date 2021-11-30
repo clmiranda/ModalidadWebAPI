@@ -11,10 +11,10 @@ namespace webapi.data.Repositories.Interf
     public interface IUserRepository
     {
         IQueryable<User> FindByCondition(Expression<Func<User, bool>> expression);
-        Task<IdentityResult> PostUsuario(User u, string password);
+        Task<IdentityResult> CreateUser(User u, string password);
         Task<IdentityResult> UpdateUsuario(User u);
         Task<IdentityResult> UpdateEmail(User u, string newEmail, string token);
-        Task<IdentityResult> DeleteUsuario(User u);
+        Task<IdentityResult> DeleteUser(User u);
         Task<string> GenerateEmailToken(User u);
         Task<string> GeneratePasswordResetToken(User usuario);
         Task<string> GenerateEmailChangeToken(User usuario, string newEmail);

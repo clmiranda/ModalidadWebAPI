@@ -57,7 +57,8 @@ namespace webapi.business.Services.Imp
             var lista = _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario"))).ToList();
             return lista;
         }
-        public async Task<Seguimiento> UpdateFecha(FechaReporteDto dto) {
+        /*
+        public async Task<Seguimiento> UpdateFecha(RangoFechaSeguimientoDto dto) {
             var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(dto.Id);
             seguimiento.FechaInicio = Convert.ToDateTime(dto.RangoFechas[0]);
             seguimiento.FechaFin = Convert.ToDateTime(dto.RangoFechas[1]);
@@ -66,6 +67,7 @@ namespace webapi.business.Services.Imp
                 return seguimiento;
             return null;
         }
+        */
         public async Task<bool> DeleteSeguimiento(Seguimiento seguimiento)
         {
             _unitOfWork.SeguimientoRepository.Delete(seguimiento);

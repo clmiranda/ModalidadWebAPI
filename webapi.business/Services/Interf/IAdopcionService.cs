@@ -22,7 +22,7 @@ namespace webapi.business.Services.Interf
         Task<bool> UpdateFecha(FechaSolicitudAdopcionForUpdateDto fechaSolicitudAdopcionDto);
         Task<bool> CreateSolicitudAdopcionRechazada(SolicitudAdopcionRechazadaForCreateDto solicitudAdopcionRechazadaDto);
         Task<bool> CreateSolicitudAdopcionCancelada(SolicitudAdopcionCanceladaForCreateDto solicitudAdopcionCanceladaDto);
-        Task<bool> AprobarSolicitudAdopcion(int id, int mascotaId);
+        Task<bool> AprobarSolicitudAdopcion(int id);
         Task<bool> RechazarSolicitudAdopcion(int id, int mascotaId);
         Task<bool> CancelarAdopcion(int id, int mascotaId);
         IQueryable<SolicitudAdopcion> FindByCondition(Expression<Func<SolicitudAdopcion, bool>> expression);
