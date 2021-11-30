@@ -125,7 +125,7 @@ namespace spatwebapi.Controllers
             var modelo = await _adopcionService.GetById(id);
             if (modelo!=null)
             {
-                if (await _adopcionService.AprobarSolicitudAdopcion(id, modelo.Mascota.Id)) {
+                if (await _adopcionService.AprobarSolicitudAdopcion(id)) {
                     var solicitudAdopcion = _mapper.Map<SolicitudAdopcionReturnDto>(modelo);
                         return Ok(solicitudAdopcion);
                 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Dtos.ReportesSeguimientos;
+using webapi.business.Dtos.Seguimientos;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
 using webapi.data.Repositories.Interf;
@@ -65,6 +66,16 @@ namespace webapi.business.Services.Imp
             }
             return 3;
         }
+        public async Task<Seguimiento> UpdateRangoFechasSeguimiento(RangoFechaSeguimientoDto rangoFechaSeguimiento)
+        {
+            var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(rangoFechaSeguimiento.Id);
+            seguimiento.FechaInicio = Convert.ToDateTime(rangoFechaSeguimiento.RangoFechas[0]);
+            seguimiento.FechaFin = Convert.ToDateTime(rangoFechaSeguimiento.RangoFechas[1]);
+            _unitOfWork.SeguimientoRepository.Update(seguimiento);
+            if (await _unitOfWork.SaveAll())
+                return seguimiento;
+            return null;
+        }
         public async Task<bool> SendReporte(ReporteSeguimientoForUpdate reporteDto)
         {
             var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporteDto.Id);
@@ -72,7 +83,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork.ReporteSeguimientoRepository.Update(resul);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> UpdateFecha(ReporteSeguimientoForUpdateAdmin reporteDto)
+        public async Task<bool> UpdateFechaReporte(ReporteSeguimientoForUpdateAdmin reporteDto)
         {
             var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporteDto.Id);
             reporte.Fecha = reporteDto.Fecha.Date;

@@ -9,8 +9,8 @@ namespace webapi.business.Services.Interf
     public interface IUserService
     {
         Task<User> FindUser(UserForLoginDto userForLoginDto);
-        Task<object> GenerateJwtToken(User user, string security);
-        Task<IdentityResult> PostUsuario(UserForRegisterDto userforRegisterDto);
+        Task<object> GenerateJwtToken(User user, string parametroSecurity);
+        Task<IdentityResult> CreateUser(UserForRegisterDto userforRegisterDto);
         Task<IdentityResult> UpdateUsuario(UserUpdateDto userForUpdateDto);
         Task<IdentityResult> UpdateEmail(UpdateEmailDto userForUpdateDto);
         Task<UserTokenToReturnDto> GetEmailToken(string email);
@@ -20,7 +20,7 @@ namespace webapi.business.Services.Interf
         Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto resetPasswordDto);
         Task<User> GetUsuario(int id);
         Task<IdentityResult> CambiarEstado(int id);
-        Task<IdentityResult> DeleteUsuario(int id);
-        Task<IEnumerable<User>> GetAll();
+        Task<IdentityResult> DeleteUser(int id);
+        Task<IEnumerable<User>> GetAllUsers();
     }
 }

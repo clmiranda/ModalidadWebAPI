@@ -20,13 +20,15 @@ namespace spatwebapi.Controllers
         private readonly IUserService _userService;
         private readonly IRolUserService _roleUserService;
         private readonly HttpContext _httpContext;
+        private readonly IEmailService _emailService;
         public UserController(IUserService userService, IMapper mapper,
-           IRolUserService roleUserService, IHttpContextAccessor httpContextAccessor)
+           IRolUserService roleUserService, IHttpContextAccessor httpContextAccessor, IEmailService emailService)
         {
             _userService = userService;
             _mapper = mapper;
             _roleUserService = roleUserService;
             _httpContext = httpContextAccessor.HttpContext;
+            _emailService = emailService;
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpGet("GetUser/{id}")]
@@ -38,6 +40,24 @@ namespace spatwebapi.Controllers
             var userToReturn = _mapper.Map<UserForDetailedDto>(user);
             return Ok(userToReturn);
         }
+        [Authorize(Roles = "SuperAdministrador")]
+        [HttpPost("CreateUser")]
+        public async Task<IActionResult> CreateUser([FromBody] UserForRegisterDto userforRegisterDto)
+        {
+            var result = await _userService.CreateUser(userforRegisterDto);
+            if (result.Succeeded)
+            {
+                var userToCreate = await _userService.GetEmailToken(userforRegisterDto.Email);
+                var confirmationLink = Url.Action("ConfirmEmail", "Auth",
+                    new { userId = userToCreate.Id, token = userToCreate.Token }, Request.Scheme);
+
+                await _emailService.SendEmailAsync(userforRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href=" + confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
+                return Ok();
+            }
+            else
+                return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
+        }
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("UpdateUser")]
         public async Task<ActionResult> UpdateUser(UserUpdateDto userDto)
         {
@@ -52,6 +72,7 @@ namespace spatwebapi.Controllers
             }
             return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
         }
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("UpdateEmail")]
         public async Task<ActionResult> UpdateEmail(UpdateEmailDto updateEmailDto)
         {
@@ -75,21 +96,24 @@ namespace spatwebapi.Controllers
                     return Ok();
                 return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
         }
-        [HttpGet("GetUsers")]
-        public async Task<IActionResult> GetUsers()
+        [Authorize(Roles = "SuperAdministrador")]
+        [HttpGet("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers()
         {
-            var listaUsers = await _userService.GetAll();
+            var listaUsers = await _userService.GetAllUsers();
             var mapped = _mapper.Map<IEnumerable<UserRolesForReturn>>(listaUsers);
             return Ok(mapped);
         }
-        [HttpPost("PutRolesUser/{id}")]
-        public async Task<IActionResult> PutRolesUser(int id,  string[] RolesUsuario)
+        [Authorize(Roles = "SuperAdministrador")]
+        [HttpPost("AsignarRoles/{id}")]
+        public async Task<IActionResult> AsignarRoles(int id,  string[] rolesUser)
         {
-            var userRoles = await _roleUserService.PutRolesUser(id, RolesUsuario);
+            var userRoles = await _roleUserService.AsignarRoles(id, rolesUser);
             if (userRoles == null)
                 return BadRequest(new { mensaje = "Error al editar Roles." });
             return Ok(userRoles);
         }
+        [Authorize(Roles = "SuperAdministrador")]
         [HttpPut("CambiarEstado/{id}")]
         public async Task<IActionResult> CambiarEstado(int id)
         {
@@ -101,13 +125,14 @@ namespace spatwebapi.Controllers
                 return Ok(resultado);
             return BadRequest(new { mensaje = "Error al modificar estado." });
         }
-        [HttpDelete("EliminarUsuario/{id}")]
-        public async Task<IActionResult> EliminarUsuario(int id)
+        [Authorize(Roles = "SuperAdministrador")]
+        [HttpDelete("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
         {
             var usuario = await _userService.GetUsuario(id);
             if (usuario == null)
                 return BadRequest(new { mensaje = "El usuario no existe." });
-            var resultado = await _userService.DeleteUsuario(id);
+            var resultado = await _userService.DeleteUser(id);
             if (resultado.Succeeded)
                 return Ok(resultado);
             return BadRequest(new { mensaje = "Error al eliminar." });

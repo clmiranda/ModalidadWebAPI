@@ -36,23 +36,6 @@ namespace spatwebapi.Controllers
             var token = await _userService.GenerateJwtToken(user, _config.GetSection("AppSettings:Token").Value);
             return Ok(token);
         }
-        [Authorize(Roles = "SuperAdministrador, Administrador")]
-        [HttpPost("PostUsuario")]
-        public async Task<IActionResult> PostUsuario([FromBody] UserForRegisterDto userforRegisterDto)
-        {
-            var result = await _userService.PostUsuario(userforRegisterDto);
-            if (result.Succeeded)
-            {
-                var userToCreate = await _userService.GetEmailToken(userforRegisterDto.Email);
-                var confirmationLink = Url.Action("ConfirmEmail", "Auth",
-                    new { userId = userToCreate.Id, token = userToCreate.Token }, Request.Scheme);
-
-                await _emailService.SendEmailAsync(userforRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href=" + confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
-                return Ok();
-            }
-            else
-                return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
-        }
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {

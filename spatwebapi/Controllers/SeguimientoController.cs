@@ -72,6 +72,7 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
             return Ok(mapped);
         }
+        /*
         [HttpPut("UpdateFecha")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> UpdateFecha([FromBody] FechaReporteDto dto)
@@ -90,6 +91,7 @@ namespace spatwebapi.Controllers
             }
             return BadRequest(new { mensaje = "No existe el Seguimiento." });
         }
+        */
         [HttpPut("{id}/AsignarSeguimiento/{idUser}")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<IActionResult> AsignarSeguimiento(int id, int idUser)

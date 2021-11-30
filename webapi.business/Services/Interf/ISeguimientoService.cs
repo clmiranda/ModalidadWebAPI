@@ -11,7 +11,6 @@ namespace webapi.business.Services.Interf
         IEnumerable<Seguimiento> GetAll();
         Task<PaginationList<Seguimiento>> GetAllSeguimiento(SeguimientoParametros parametros);
         IEnumerable<User> GetAllVoluntarios();
-        Task<Seguimiento> UpdateFecha(FechaReporteDto dto);
         Task<Seguimiento> GetById(int id);
         void CreateSeguimiento(int idAdopcion);
         Task<bool> DeleteSeguimiento(Seguimiento seguimiento);

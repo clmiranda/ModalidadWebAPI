@@ -90,7 +90,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork.AdopcionRechazadaRepository.Insert(c);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> AprobarSolicitudAdopcion(int id, int mascotaId) {
+        public async Task<bool> AprobarSolicitudAdopcion(int id) {
             var solicitudAdopcion = await _unitOfWork.SolicitudAdopcionRepository.GetById(id);
             solicitudAdopcion.Estado = "Aprobado";
             solicitudAdopcion.Mascota.Estado = "Adoptada";
