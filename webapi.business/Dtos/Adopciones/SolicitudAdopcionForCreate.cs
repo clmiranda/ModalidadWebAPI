@@ -4,11 +4,11 @@ namespace webapi.business.Dtos.Adopciones
 {
     public class SolicitudAdopcionForCreate
     {
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
-        public string Ci { get; set; }
+        public string NombreCompleto { get; set; }
+        //public string Apellidos { get; set; }
+        //public string Ci { get; set; }
         public string Domicilio { get; set; }
-        public string NumeroCelular { get; set; }
+        public string Telefono { get; set; }
 
         public string Respuesta1 { get; set; }
         public string Respuesta2 { get; set; }

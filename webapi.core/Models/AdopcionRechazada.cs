@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace webapi.core.Models
 {
     public class AdopcionRechazada : BaseEntity
     {
+        [Required]
+        [MaxLength(300)]
         public string Razon { get; set; }
         public DateTime FechaCreacion { get; set; }
         public virtual SolicitudAdopcion SolicitudAdopcion { get; set; }

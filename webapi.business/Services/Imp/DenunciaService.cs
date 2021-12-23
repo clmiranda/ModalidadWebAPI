@@ -41,7 +41,6 @@ namespace webapi.business.Services.Imp
         }
         public async Task<Denuncia> CreateDenuncia(Denuncia denuncia)
         {
-            denuncia.Estado = "Activo";
             _unitOfWork.DenunciaRepository.Insert(denuncia);
             if (await _unitOfWork.SaveAll())
                 return denuncia;

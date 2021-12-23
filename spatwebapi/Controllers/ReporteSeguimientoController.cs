@@ -42,18 +42,18 @@ namespace spatwebapi.Controllers
             var seguimiento = await _seguimientoService.GetById(idSeguimiento);
             if (seguimiento == null) return NotFound(null);
 
-            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderBy(x => x.Estado).ToList();
+            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
             var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
             return Ok(mapped);
         }
         [HttpPut("UpdateRangoFechasSeguimiento")]
-        public async Task<IActionResult> UpdateRangoFechasSeguimiento([FromBody] RangoFechaSeguimientoDto rangoFechaSeguimiento) {
-            var seguimiento = await _seguimientoService.GetById(rangoFechaSeguimiento.Id);
+        public async Task<IActionResult> UpdateRangoFechasSeguimiento([FromBody] RangoFechaSeguimientoDto rangoFechaSeguimientoDto) {
+            var seguimiento = await _seguimientoService.GetById(rangoFechaSeguimientoDto.Id);
             if (seguimiento != null) {
-                var resultado = await _reporteSeguimientoService.UpdateRangoFechasSeguimiento(rangoFechaSeguimiento);
+                var resultado = await _reporteSeguimientoService.UpdateRangoFechasSeguimiento(rangoFechaSeguimientoDto);
                 if (resultado != null) {
                     var mapped = _mapper.Map<SeguimientoForReturnDto>(resultado);
-                    mapped.ReporteSeguimientos = mapped.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderByDescending(x => x.Id).ToList();
+                    mapped.ReporteSeguimientos = mapped.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderByDescending(x => x.Id).ToList();
                     return Ok(mapped);
                 }
                 return BadRequest(new { mensaje = "Problemas al actualizar los datos." });
@@ -83,7 +83,7 @@ namespace spatwebapi.Controllers
             if (await _reporteSeguimientoService.CreateReporteSeguimiento(id))
             {
                 var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(id);
-                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderBy(x => x.Estado).ToList();
+                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
                 var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                 return Ok(mapped);
             }
@@ -91,22 +91,22 @@ namespace spatwebapi.Controllers
         }
         [HttpPut("SendReporte")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public async Task<IActionResult> SendReporte([FromForm] ReporteSeguimientoForUpdate reporteDto, IFormFile Foto)
+        public async Task<IActionResult> SendReporte([FromForm] ReporteSeguimientoForUpdate reporteSeguimientoDto, IFormFile Foto)
         {
-            var reporte = await _reporteSeguimientoService.GetByIdNotracking(reporteDto.Id);
+            var reporte = await _reporteSeguimientoService.GetByIdNotracking(reporteSeguimientoDto.Id);
             if (reporte == null)
                 return NotFound(new { mensaje = "Reporte no encontrado, Id incorrecto." });
             if (reporte.Estado.Equals("Enviado"))
                 return BadRequest(new { mensaje = "El reporte ya fue enviado anteriormente." });
 
-            var resultadoMascota = await _reporteSeguimientoService.SendReporte(reporteDto);
+            var resultadoMascota = await _reporteSeguimientoService.SendReporte(reporteSeguimientoDto);
             if (resultadoMascota)
             {
-                var resultadoFoto = await _fotoService.AgregarFotoReporte(reporteDto.Id, Foto);
+                var resultadoFoto = await _fotoService.AgregarFotoReporte(reporteSeguimientoDto.Id, Foto);
                 if (resultadoFoto)
                 {
-                    var seguimiento = await _seguimientoService.GetById(reporteDto.SeguimientoId);
-                    seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha.Date.Equals(DateTime.Now.Date)).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
+                    var seguimiento = await _seguimientoService.GetById(reporteSeguimientoDto.SeguimientoId);
+                    seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte.Date.Equals(DateTime.Now.Date)).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
                     var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                     return Ok(mapped);
                 }
@@ -114,19 +114,19 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "Hubo problemas al generar el Reporte." });
         }
         [HttpPut("UpdateFechaReporte")]
-        public async Task<IActionResult> UpdateFechaReporte(ReporteSeguimientoForUpdateAdmin reporteDto)
+        public async Task<IActionResult> UpdateFechaReporte(ReporteSeguimientoForUpdateAdmin reporteSeguimientoDto)
         {
-            var reporte = await _reporteSeguimientoService.GetById(reporteDto.Id);
+            var reporte = await _reporteSeguimientoService.GetById(reporteSeguimientoDto.Id);
             if (reporte.Estado.Equals("Enviado"))
                 return BadRequest(new { mensaje = "El Reporte ya fue enviado." });
-            var verificar = await _reporteSeguimientoService.VerifyDate(reporteDto);
+            var verificar = await _reporteSeguimientoService.VerifyDate(reporteSeguimientoDto);
             if (verificar == 1)
             {
-                var resultado = await _reporteSeguimientoService.UpdateFechaReporte(reporteDto);
+                var resultado = await _reporteSeguimientoService.UpdateFechaReporte(reporteSeguimientoDto);
                 if (resultado)
                 {
                     var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(reporte.SeguimientoId);
-                    seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderBy(x => x.Estado).ToList();
+                    seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
                     var mappeado = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                     return Ok(mappeado);
                 }
@@ -145,7 +145,7 @@ namespace spatwebapi.Controllers
             if (await _reporteSeguimientoService.DeleteReporte(idReporte))
             {
                 var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(idSeguimiento);
-                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderBy(x => x.Estado).ToList();
+                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
                 var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                 return Ok(mapped);
             }

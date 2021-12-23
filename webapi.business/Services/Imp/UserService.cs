@@ -20,10 +20,12 @@ namespace webapi.business.Services.Imp
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+        private IPersonaService _personaService;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IPersonaService personaService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _personaService = personaService;
         }
         public async Task<IEnumerable<User>> GetAllUsers()
         {
@@ -32,14 +34,20 @@ namespace webapi.business.Services.Imp
         }
         public async Task<User> FindUser(UserForLoginDto userForLoginDto)
         {
-            var user = await _unitOfWork.UserRepository.FindByName(userForLoginDto.Username);
-            if (user == null)
+            var resul = await _unitOfWork.UserRepository.FindByName(userForLoginDto.Username);
+            if (resul == null)
+            {
+                resul = await _unitOfWork.UserRepository.FindByEmail(userForLoginDto.Username);
+                if (resul == null)
+                    return null;
+            }
+            if (resul == null)
                 return null;
-            if (!await _unitOfWork.UserRepository.IsEmailConfirmed(user))
+            if (!await _unitOfWork.UserRepository.IsEmailConfirmed(resul))
                 return null;
-            var result = await _unitOfWork.UserRepository.CheckPassword(user, userForLoginDto.Password, false);
-            if (result.Succeeded)
-                return user;
+            var checkPassword = await _unitOfWork.UserRepository.CheckPassword(resul, userForLoginDto.Password, false);
+            if (checkPassword.Succeeded)
+                return resul;
             return null;
         }
         public async Task<object> GenerateJwtToken(User user, string parametroSecurity)
@@ -67,8 +75,11 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IdentityResult> CreateUser(UserForRegisterDto userforRegisterDto)
         {
-            var userToCreate = _mapper.Map<User>(userforRegisterDto);
-            var resultado = await _unitOfWork.UserRepository.CreateUser(userToCreate, userforRegisterDto.Password);
+            //var persona = await _personaService.CreatePersona(userforRegisterDto.Persona);
+            var mapped = _mapper.Map<User>(userforRegisterDto);
+            //mapped.Persona = persona;
+            //mapped.PersonaId = persona.Id;
+            var resultado = await _unitOfWork.UserRepository.CreateUser(mapped, userforRegisterDto.Password);
             return resultado;
         }
         public async Task<User> GetUsuario(int id)
@@ -78,8 +89,11 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IdentityResult> UpdateUsuario(UserUpdateDto userForUpdateDto)
         {
+            //var persona = await _personaService.UpdatePersona(userForUpdateDto.Persona);
             var user = await _unitOfWork.UserRepository.GetById(userForUpdateDto.Id);
             var mapped = _mapper.Map(userForUpdateDto, user);
+            //mapped.Persona = persona;
+            //mapped.PersonaId = persona.Id;
             var resultado = await _unitOfWork.UserRepository.UpdateUsuario(mapped);
             return resultado;
         }

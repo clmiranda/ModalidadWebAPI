@@ -76,9 +76,9 @@ namespace spatwebapi.Controllers
         }
 
         [HttpPost("CreateMascota")]
-        public async Task<IActionResult> CreateMascota([FromBody] MascotaForCreateDto dto)
+        public async Task<IActionResult> CreateMascota([FromBody] MascotaForCreateDto mascotaDto)
         {
-            var mascota = await _mascotaService.CreateMascota(dto);
+            var mascota = await _mascotaService.CreateMascota(mascotaDto);
             if (mascota.Equals(null))
                 return BadRequest(new { mensaje = "Hubo problemas al crear la Mascota." });
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
@@ -86,9 +86,9 @@ namespace spatwebapi.Controllers
         }
 
         [HttpPut("UpdateMascota")]
-        public async Task<ActionResult> UpdateMascota([FromBody] MascotaForUpdateDto dto)
+        public async Task<ActionResult> UpdateMascota([FromBody] MascotaForUpdateDto mascotaDto)
         {
-            var mascota = await _mascotaService.UpdateMascota(dto);
+            var mascota = await _mascotaService.UpdateMascota(mascotaDto);
             if (mascota.Equals(null))
                 return BadRequest(new { mensaje = "Hubo problemas al actualizar los datos." });
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);

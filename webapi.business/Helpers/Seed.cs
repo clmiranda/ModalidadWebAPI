@@ -25,10 +25,10 @@ namespace webapi.business.Helpers
                     roleManager.CreateAsync(item).Wait();
                 }
 
-                var user = SetAdminUser();
-                var result = userManager.CreateAsync(user, "admin").Result;
+                var user = SetUser();
+                var userCreate = userManager.CreateAsync(user, "Admin123").Result;
 
-                if (result.Succeeded)
+                if (userCreate.Succeeded)
                 {
                     var admin = userManager.FindByNameAsync("Admin").Result;
                     userManager.AddToRoleAsync(admin, "SuperAdministrador").Wait();
@@ -38,19 +38,27 @@ namespace webapi.business.Helpers
                 }
             }
         }
-        private static User SetAdminUser()
+        private static User SetUser()
         {
-            var u = new User
-            {
+            var persona = new Persona {
                 Nombres = "Admin",
                 Apellidos = "Admin",
+                Genero = "Masculino",
+                Domicilio = "Barrio Senac",
+                FechaNacimiento = new DateTime(1992, 9, 24),
+                Telefono = "76980199"
+            };
+            var user = new User
+            {
+                Persona = persona,
+                //PersonaId = persona.Id,
                 Estado = "Activo",
                 UserName = "admin",
                 Email = "miranda76575@gmail.com",
                 EmailConfirmed = true,
                 FechaCreacion = DateTime.Now
             };
-            return u;
+            return user;
         }
     }
 }

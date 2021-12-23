@@ -8,7 +8,7 @@ namespace webapi.business.Dtos.ReportesSeguimientos
         public int Id { get; set; }
         public string Observaciones { get; set; }
         public string Estado { get; set; }
-        public DateTime Fecha { get; set; }
+        public DateTime FechaReporte { get; set; }
         public int SeguimientoId { get; set; }
         public virtual FotoForReturnDto Foto { get; set; }
     }

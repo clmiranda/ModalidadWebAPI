@@ -1,4 +1,5 @@
 ﻿using System;
+using webapi.business.Dtos.Persona;
 
 namespace webapi.business.Dtos.Usuario
 {
@@ -6,11 +7,12 @@ namespace webapi.business.Dtos.Usuario
     {
         public int Id { get; set; }
         public string UserName { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
-        public string Domicilio { get; set; }
-        public string NumeroCelular { get; set; }
-        public DateTime FechaNacimiento { get; set; }
-        public string Sexo { get; set; }
+        //public string Nombres { get; set; }
+        //public string Apellidos { get; set; }
+        //public string Domicilio { get; set; }
+        //public string NumeroCelular { get; set; }
+        //public DateTime FechaNacimiento { get; set; }
+        //public string Sexo { get; set; }
+        public virtual PersonaForCreateUpdateDto Persona { get; set; }
     }
 }

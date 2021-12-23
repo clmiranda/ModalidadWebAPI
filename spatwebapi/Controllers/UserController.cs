@@ -42,16 +42,16 @@ namespace spatwebapi.Controllers
         }
         [Authorize(Roles = "SuperAdministrador")]
         [HttpPost("CreateUser")]
-        public async Task<IActionResult> CreateUser([FromBody] UserForRegisterDto userforRegisterDto)
+        public async Task<IActionResult> CreateUser([FromBody] UserForRegisterDto userForRegisterDto)
         {
-            var result = await _userService.CreateUser(userforRegisterDto);
+            var result = await _userService.CreateUser(userForRegisterDto);
             if (result.Succeeded)
             {
-                var userToCreate = await _userService.GetEmailToken(userforRegisterDto.Email);
+                var userToCreate = await _userService.GetEmailToken(userForRegisterDto.Email);
                 var confirmationLink = Url.Action("ConfirmEmail", "Auth",
-                    new { userId = userToCreate.Id, token = userToCreate.Token }, Request.Scheme);
+                    new { idUser = userToCreate.Id, token = userToCreate.Token }, Request.Scheme);
 
-                await _emailService.SendEmailAsync(userforRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href=" + confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
+                await _emailService.SendEmailAsync(userForRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href=" + confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
                 return Ok();
             }
             else
@@ -90,8 +90,8 @@ namespace spatwebapi.Controllers
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("ResetPassword/{id}")]
-        public async Task<ActionResult> ResetPassword(int id, UpdateUserPassword dto) {
-                var resul = await _userService.ResetPassword(id, dto.Password);
+        public async Task<ActionResult> ResetPassword(int id, UpdateUserPassword updateUserdto) {
+                var resul = await _userService.ResetPassword(id, updateUserdto.Password);
                 if (resul.Succeeded)
                     return Ok();
                 return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });

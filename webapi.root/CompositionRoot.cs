@@ -29,8 +29,8 @@ namespace webapi.root
             services.AddDbContext<BDSpatContext>(x =>
             {
                 x.UseLazyLoadingProxies();
-                x.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            });
+                x.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+        });
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
@@ -54,6 +54,8 @@ namespace webapi.root
 
             services.AddScoped<IReporteTratamientoService, ReporteTratamientoService>();
 
+            services.AddScoped<IPersonaService, PersonaService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.Configure<SmtpSettings>(configuration.GetSection("SmtpSettings"));
             services.AddSingleton<IEmailService, EmailService>();
@@ -76,7 +78,7 @@ namespace webapi.root
                 opt.User.RequireUniqueEmail = true;
             }).AddDefaultTokenProviders().AddErrorDescriber<CustomIdentityErrorDescriber>();
             services.Configure<DataProtectionTokenProviderOptions>(options =>
-            options.TokenLifespan = TimeSpan.FromHours(3));
+            options.TokenLifespan = TimeSpan.FromHours(1));
 
             builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
             builder.AddEntityFrameworkStores<BDSpatContext>();

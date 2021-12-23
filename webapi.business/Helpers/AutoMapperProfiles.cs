@@ -11,6 +11,7 @@ using webapi.business.Dtos.ReporteTratamientos;
 using webapi.business.Dtos.Seguimientos;
 using webapi.business.Dtos.Usuario;
 using webapi.core.Models;
+using webapi.business.Dtos.Persona;
 
 namespace webapi.business.Helpers
 {
@@ -22,7 +23,8 @@ namespace webapi.business.Helpers
             CreateMap<Foto, FotoForReturnDto>();
             CreateMap<UserForRegisterDto, User>();
             CreateMap<User, UserTokenToReturnDto>();
-            CreateMap<User, UserForDetailedDto>()
+            CreateMap<User, UserForDetailedDto>();
+            CreateMap<Persona, PersonaForReturnDto>()
                 .ForMember(d => d.Edad, options =>
               {
                   options.MapFrom(s => s.FechaNacimiento.CalculoEdad());
@@ -55,16 +57,18 @@ namespace webapi.business.Helpers
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
             CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
 
+            CreateMap<PersonaForCreateUpdateDto, Persona>();
+
             CreateMap<ReporteTratamiento, ReporteTratamientoForReturnDto>();
             CreateMap<ReporteTratamientoForCreateDto, ReporteTratamiento>();
             CreateMap<ReporteTratamientoForUpdateDto, ReporteTratamiento>();
             CreateMap<AdopcionRechazada, SolicitudAdopcionRechazadaForReturnDto>();
             CreateMap<SolicitudAdopcionRechazadaForCreateDto, AdopcionRechazada>();
             CreateMap<User, UserRolesForReturn>()
-                .ForMember(dest => dest.Edad, opt =>
-                {
-                    opt.MapFrom(d => d.FechaNacimiento.CalculoEdad());
-                })
+                //.ForMember(dest => dest.Edad, opt =>
+                //{
+                //    opt.MapFrom(d => d.FechaNacimiento.CalculoEdad());
+                //})
                 .ForMember(dest => dest.Roles, opt =>
                 {
                     opt.MapFrom(d => d.UserRoles.Select((role) => new

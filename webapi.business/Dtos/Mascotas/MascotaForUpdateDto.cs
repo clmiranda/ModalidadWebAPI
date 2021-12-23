@@ -8,7 +8,7 @@
         public string Especie { get; set; }
         public string Caracteristicas { get; set; }
         public string RasgosParticulares { get; set; }
-        public string Tamaño { get; set; }
+        public string Tamano { get; set; }
         public bool? Esterilizado { get; set; }
         public string Edad { get; set; }
         public int? DenunciaId { get; set; }

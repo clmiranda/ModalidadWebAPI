@@ -57,7 +57,7 @@ namespace spatwebapi.Controllers
             var seguimiento = await _seguimientoService.GetById(id);
             if (seguimiento == null)
                 return NotFound(null);
-            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderBy(x => x.Estado).ToList();
+            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
             var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
             return Ok(mapped);
         }
@@ -68,7 +68,7 @@ namespace spatwebapi.Controllers
             var seguimiento = await _seguimientoService.GetById(id);
             if (seguimiento == null)
                 return NotFound(null);
-            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.Fecha.Date.Equals(DateTime.Now.Date)).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
+            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte.Date.Equals(DateTime.Now.Date)).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
             var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
             return Ok(mapped);
         }

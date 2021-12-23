@@ -37,7 +37,7 @@ namespace webapi.business.Services.Imp
         }
         public IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id)
         {
-            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id && x.Estado.Equals("Asignado")).ToList().OrderBy(y => y.Fecha.Date));
+            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id && x.Estado.Equals("Asignado")).ToList().OrderBy(y => y.FechaReporte.Date));
             return lista;
         }
         public async Task<bool> CreateReporteSeguimiento(int id)
@@ -46,7 +46,7 @@ namespace webapi.business.Services.Imp
             {
                 SeguimientoId = id,
                 Estado = "Activo",
-                Fecha = DateTime.Now,
+                FechaReporte = DateTime.Now,
                 FechaCreacion = DateTime.Now
             };
             _unitOfWork.ReporteSeguimientoRepository.Insert(reporte);
@@ -55,11 +55,11 @@ namespace webapi.business.Services.Imp
         public async Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporteDto)
         {
             var reporte = await _unitOfWork.SeguimientoRepository.GetById(reporteDto.SeguimientoId);
-            if (reporte.FechaInicio.Date <= reporteDto.Fecha.Date && reporte.FechaFin.Date >= reporteDto.Fecha.Date)
+            if (reporte.FechaInicio.Date <= reporteDto.FechaReporte.Date && reporte.FechaFin.Date >= reporteDto.FechaReporte.Date)
             {
-                if (reporte.ReporteSeguimientos.Any(x => x.Fecha.Date.ToShortDateString() == reporteDto.Fecha.Date.ToShortDateString()))
+                if (reporte.ReporteSeguimientos.Any(x => x.FechaReporte.Date.ToShortDateString() == reporteDto.FechaReporte.Date.ToShortDateString()))
                     return 2;
-                if (reporteDto.Fecha.Date < DateTime.Now.Date)
+                if (reporteDto.FechaReporte.Date < DateTime.Now.Date)
                     return 4;
                 else
                     return 1;
@@ -86,7 +86,7 @@ namespace webapi.business.Services.Imp
         public async Task<bool> UpdateFechaReporte(ReporteSeguimientoForUpdateAdmin reporteDto)
         {
             var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporteDto.Id);
-            reporte.Fecha = reporteDto.Fecha.Date;
+            reporte.FechaReporte = reporteDto.FechaReporte.Date;
             reporte.Estado = reporteDto.Estado;
             _unitOfWork.ReporteSeguimientoRepository.Update(reporte);
             return await _unitOfWork.SaveAll();

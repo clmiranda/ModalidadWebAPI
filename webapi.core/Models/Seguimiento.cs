@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace webapi.core.Models
 {
@@ -7,6 +8,8 @@ namespace webapi.core.Models
     {
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
+        [Required]
+        [MaxLength(20)]
         public string Estado { get; set; }
         public virtual User User { get; set; }
         public int? UserId { get; set; }
