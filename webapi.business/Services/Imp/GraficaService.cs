@@ -85,21 +85,21 @@ namespace webapi.business.Services.Imp
             switch (filtro)
             {
                 case "3 meses":
-                    datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Fecha.Date >= DateTime.Today.AddMonths(-3) && x.Fecha.Date <= DateTime.Now.Date).ToListAsync();
+                    datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.FechaReporte.Date >= DateTime.Today.AddMonths(-3) && x.FechaReporte.Date <= DateTime.Now.Date).ToListAsync();
                     break;
                 case "6 meses":
-                    datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Fecha.Date >= DateTime.Today.AddMonths(-6) && x.Fecha.Date <= DateTime.Now.Date).ToListAsync();
+                    datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.FechaReporte.Date >= DateTime.Today.AddMonths(-6) && x.FechaReporte.Date <= DateTime.Now.Date).ToListAsync();
                     break;
                 case "9 meses":
-                    datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Fecha.Date >= DateTime.Today.AddMonths(-9) && x.Fecha.Date <= DateTime.Now.Date).ToListAsync();
+                    datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.FechaReporte.Date >= DateTime.Today.AddMonths(-9) && x.FechaReporte.Date <= DateTime.Now.Date).ToListAsync();
                     break;
                 case "12 meses":
-                    datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Fecha.Date >= DateTime.Today.AddMonths(-12) && x.Fecha.Date <= DateTime.Now.Date).ToListAsync();
+                    datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.FechaReporte.Date >= DateTime.Today.AddMonths(-12) && x.FechaReporte.Date <= DateTime.Now.Date).ToListAsync();
                     break;
             }
             var lista = datos.Where(x => x.Estado.Equals("Enviado"))
-                .OrderBy(x => x.Fecha.Date)
-                .GroupBy(x => x.Fecha.Date.ToString("MMMM yyyy"))
+                .OrderBy(x => x.FechaReporte.Date)
+                .GroupBy(x => x.FechaReporte.Date.ToString("MMMM yyyy"))
                 .Select(x => new DataGraficaDto()
                 {
                     Nombre = x.Key,
@@ -123,7 +123,7 @@ namespace webapi.business.Services.Imp
 
                 ContadorVoluntariosRegistrados = await _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario"))).CountAsync(),
 
-                ContadorReportesSemana = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Estado.Equals("Enviado") && x.Fecha.Date >= DateTime.Today.AddDays(-(int)DayOfWeek.Monday) && x.Fecha.Date <= DateTime.Today.AddDays((int)DayOfWeek.Sunday)).CountAsync(),
+                ContadorReportesSemana = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Estado.Equals("Enviado") && x.FechaReporte.Date >= DateTime.Today.AddDays(-(int)DayOfWeek.Monday) && x.FechaReporte.Date <= DateTime.Today.AddDays((int)DayOfWeek.Sunday)).CountAsync(),
 
                 ContadorDenunciasRegistradas = await _unitOfWork.DenunciaRepository.GetAll().CountAsync()
             };

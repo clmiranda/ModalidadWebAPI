@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace webapi.core.Models
 {
     public partial class ReporteSeguimiento : BaseEntity
     {
+        [Required]
+        [MaxLength(300)]
         public string Observaciones { get; set; }
-        public DateTime Fecha { get; set; }
+        public DateTime FechaReporte { get; set; }
         public DateTime FechaCreacion { get; set; }
+        [Required]
+        [MaxLength(20)]
         public string Estado { get; set; }
         public virtual Seguimiento Seguimiento { get; set; }
         public int SeguimientoId { get; set; }

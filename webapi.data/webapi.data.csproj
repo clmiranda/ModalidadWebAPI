@@ -9,110 +9,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200509165219_Initial.cs" />
-    <Compile Remove="Migrations\20200509165219_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200511191309_Second.cs" />
-    <Compile Remove="Migrations\20200511191309_Second.Designer.cs" />
-    <Compile Remove="Migrations\20200511192615_Second.cs" />
-    <Compile Remove="Migrations\20200511192615_Second.Designer.cs" />
-    <Compile Remove="Migrations\20200511195843_Second.cs" />
-    <Compile Remove="Migrations\20200511195843_Second.Designer.cs" />
-    <Compile Remove="Migrations\20200511200256_Initial.cs" />
-    <Compile Remove="Migrations\20200511200256_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200513164632_Second.cs" />
-    <Compile Remove="Migrations\20200513164632_Second.Designer.cs" />
-    <Compile Remove="Migrations\20200513174155_Third.cs" />
-    <Compile Remove="Migrations\20200513174155_Third.Designer.cs" />
-    <Compile Remove="Migrations\20200526194428_fourth.cs" />
-    <Compile Remove="Migrations\20200526194428_fourth.Designer.cs" />
-    <Compile Remove="Migrations\20200526195733_Fifth.cs" />
-    <Compile Remove="Migrations\20200526195733_Fifth.Designer.cs" />
-    <Compile Remove="Migrations\20200526200334_Fourth.cs" />
-    <Compile Remove="Migrations\20200526200334_Fourth.Designer.cs" />
-    <Compile Remove="Migrations\20200526200845_Fourth.cs" />
-    <Compile Remove="Migrations\20200526200845_Fourth.Designer.cs" />
-    <Compile Remove="Migrations\20200528203737_Fifth.cs" />
-    <Compile Remove="Migrations\20200528203737_Fifth.Designer.cs" />
-    <Compile Remove="Migrations\20200530150050_Sixth.cs" />
-    <Compile Remove="Migrations\20200530150050_Sixth.Designer.cs" />
-    <Compile Remove="Migrations\20200530151354_Sixth.cs" />
-    <Compile Remove="Migrations\20200530151354_Sixth.Designer.cs" />
-    <Compile Remove="Migrations\20200611220613_Seventh.cs" />
-    <Compile Remove="Migrations\20200611220613_Seventh.Designer.cs" />
-    <Compile Remove="Migrations\20200625214203_eighth.cs" />
-    <Compile Remove="Migrations\20200625214203_eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200625214251_Eighth.cs" />
-    <Compile Remove="Migrations\20200625214251_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200630005236_Eighth.cs" />
-    <Compile Remove="Migrations\20200630005236_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200703203546_Eighth.cs" />
-    <Compile Remove="Migrations\20200703203546_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200708212832_Eighth.cs" />
-    <Compile Remove="Migrations\20200708212832_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200708213445_Eighth.cs" />
-    <Compile Remove="Migrations\20200708213445_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200708214250_Eighth.cs" />
-    <Compile Remove="Migrations\20200708214250_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200721203107_Eighth.cs" />
-    <Compile Remove="Migrations\20200721203107_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200721203737_Eighth.cs" />
-    <Compile Remove="Migrations\20200721203737_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200721223844_Eighth.cs" />
-    <Compile Remove="Migrations\20200721223844_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200809193413_Eighth.cs" />
-    <Compile Remove="Migrations\20200809193413_Eighth.Designer.cs" />
-    <Compile Remove="Migrations\20200817214239_Ninth.cs" />
-    <Compile Remove="Migrations\20200817214239_Ninth.Designer.cs" />
-    <Compile Remove="Migrations\20200828202525_Tenth.cs" />
-    <Compile Remove="Migrations\20200828202525_Tenth.Designer.cs" />
-    <Compile Remove="Migrations\20200929002516_Tenth.cs" />
-    <Compile Remove="Migrations\20200929002516_Tenth.Designer.cs" />
-    <Compile Remove="Migrations\20200929161252_Tenth.cs" />
-    <Compile Remove="Migrations\20200929161252_Tenth.Designer.cs" />
-    <Compile Remove="Migrations\20201030221538_Third.cs" />
-    <Compile Remove="Migrations\20201030221538_Third.Designer.cs" />
-    <Compile Remove="Migrations\20201030223448_Third.cs" />
-    <Compile Remove="Migrations\20201030223448_Third.Designer.cs" />
-    <Compile Remove="Migrations\20201121220742_UserChangesColumns.cs" />
-    <Compile Remove="Migrations\20201121220742_UserChangesColumns.Designer.cs" />
-    <Compile Remove="Migrations\20210308225523_ChangesSeguimiento.cs" />
-    <Compile Remove="Migrations\20210308225523_ChangesSeguimiento.Designer.cs" />
-    <Compile Remove="Migrations\20210312020646_ChangesSeguimiento_Reportes.cs" />
-    <Compile Remove="Migrations\20210312020646_ChangesSeguimiento_Reportes.Designer.cs" />
-    <Compile Remove="Migrations\20210313011928_ChangesSeguimiento_Reportes.cs" />
-    <Compile Remove="Migrations\20210313011928_ChangesSeguimiento_Reportes.Designer.cs" />
-    <Compile Remove="Migrations\20210317005356_ChangesSeguimiento_Reportes.cs" />
-    <Compile Remove="Migrations\20210317005356_ChangesSeguimiento_Reportes.Designer.cs" />
-    <Compile Remove="Migrations\20210408233547_ChangeSeguimiento_Reportes_Adopciones.cs" />
-    <Compile Remove="Migrations\20210408233547_ChangeSeguimiento_Reportes_Adopciones.Designer.cs" />
-    <Compile Remove="Migrations\20210415004116_ChangeSeguimiento_Reportes_Adopciones.cs" />
-    <Compile Remove="Migrations\20210415004116_ChangeSeguimiento_Reportes_Adopciones.Designer.cs" />
-    <Compile Remove="Migrations\20210422012748_ChangeSeguimiento_Reportes_Adopciones.cs" />
-    <Compile Remove="Migrations\20210422012748_ChangeSeguimiento_Reportes_Adopciones.Designer.cs" />
-    <Compile Remove="Migrations\20210921235852_Changes_ReporteSeguimiento.cs" />
-    <Compile Remove="Migrations\20210921235852_Changes_ReporteSeguimiento.Designer.cs" />
-    <Compile Remove="Migrations\20210924203101_Change_ReporteSeguimiento.cs" />
-    <Compile Remove="Migrations\20210924203101_Change_ReporteSeguimiento.Designer.cs" />
-    <Compile Remove="Migrations\20210924203402_Change_ReporteSeguimiento.cs" />
-    <Compile Remove="Migrations\20210924203402_Change_ReporteSeguimiento.Designer.cs" />
-    <Compile Remove="Migrations\20211122033335_Update_tables_adopcion.cs" />
-    <Compile Remove="Migrations\20211122033335_Update_tables_adopcion.Designer.cs" />
-    <Compile Remove="Migrations\20211122040049_Updated_tables_adopcion.cs" />
-    <Compile Remove="Migrations\20211122040049_Updated_tables_adopcion.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

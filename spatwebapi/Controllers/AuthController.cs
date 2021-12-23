@@ -28,18 +28,18 @@ namespace spatwebapi.Controllers
             _userManager = userManager;
         }
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(UserForLoginDto userforLogin)
+        public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var user = await _userService.FindUser(userforLogin);
+            var user = await _userService.FindUser(userForLoginDto);
             if (user == null)
                 return Unauthorized(new { mensaje = "Error, debe confirmar su email o asegurarse de que los datos ingresados sean los correctos." });
             var token = await _userService.GenerateJwtToken(user, _config.GetSection("AppSettings:Token").Value);
             return Ok(token);
         }
         [HttpGet("ConfirmEmail")]
-        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        public async Task<IActionResult> ConfirmEmail(string idUser, string token)
         {
-            var result = await _userService.ConfirmEmail(userId, token);
+            var result = await _userService.ConfirmEmail(idUser, token);
             if (result == null)
                 return BadRequest("Ha ocurrido un error, Id o Token inválido.");
 
@@ -71,12 +71,12 @@ namespace spatwebapi.Controllers
             return Redirect("https://localhost:44363/Cuenta/ResetPassword?email=" + email + "&token=" + token);
         }
         [HttpPost("ResetPasswordExterno")]
-        public async Task<IActionResult> ResetPasswordExterno(ResetPasswordDto resetDto)
+        public async Task<IActionResult> ResetPasswordExterno(ResetPasswordDto resetPasswordDto)
         {
-            var user = await _userManager.FindByEmailAsync(resetDto.Email);
+            var user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
             if (user == null)
                 return NotFound(new { mensaje = "El email no se encuentra registrado." });
-            var result = await _userService.ResetPasswordExterno(resetDto);
+            var result = await _userService.ResetPasswordExterno(resetPasswordDto);
             if (result.Succeeded)
                 return Ok();
             else return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });

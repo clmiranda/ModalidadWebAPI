@@ -146,7 +146,7 @@ namespace webapi.business.Services.Imp
             foto.Url = resultUpload.SecureUrl.ToString();
             foto.IdPublico = resultUpload.PublicId;
             foto.ReporteSeguimientoId = id;
-            foto.FechaAgregado = DateTime.Now;
+            foto.FechaCreacion = DateTime.Now;
             foto.IsPrincipal = true;
 
             reporteRepo.Foto = new Foto();

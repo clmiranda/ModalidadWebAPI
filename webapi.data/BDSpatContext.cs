@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using webapi.core.Models;
 
 namespace webapi.data
@@ -28,15 +25,16 @@ namespace webapi.data
         public virtual DbSet<Seguimiento> Seguimiento { get; set; }
         public virtual DbSet<Denuncia> Denuncia { get; set; }
         public virtual DbSet<Foto> Foto { get; set; }
+        public virtual DbSet<Persona> Persona { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-O7T5KFV\\SQLEXPRESS;Initial Catalog=DatabaseSpat;Integrated Security=True");
-            }
-        }
+//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//                optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=DatabaseSpat;Username=postgres;Password=dV91ut3F");
+//            }
+//        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -62,6 +60,28 @@ namespace webapi.data
                 entity.HasIndex(e => e.UserName).IsUnique();
                 entity.Property(e => e.Estado).HasMaxLength(50);
             });
+
+            modelBuilder.Entity<Persona>()
+                        .HasKey(x => x.Id);
+
+            modelBuilder.Entity<User>()
+                        .HasOne(x => x.Persona)
+                        .WithOne(x => x.User)
+                        .HasForeignKey<Persona>(x => x.Id);
+
+
+            modelBuilder.Ignore<IdentityUserToken<string>>();
+            modelBuilder.Ignore<IdentityUserLogin<string>>();
+            modelBuilder.Ignore<IdentityUserClaim<string>>();
+            modelBuilder.Ignore<IdentityRoleClaim<string>>();
+
+            modelBuilder.Entity<User>()
+                .Ignore(x => x.AccessFailedCount)
+                .Ignore(x => x.LockoutEnabled)
+                .Ignore(x => x.TwoFactorEnabled)
+                .Ignore(x => x.LockoutEnd)
+                .Ignore(x => x.PhoneNumberConfirmed)
+                .Ignore(x => x.PhoneNumber);
             OnModelCreatingPartial(modelBuilder);
         }
 

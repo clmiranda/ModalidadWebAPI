@@ -15,6 +15,7 @@ namespace webapi.data.Repositories.Interf
         IRepository<ReporteSeguimiento> ReporteSeguimientoRepository { get; }
         IRepository<AdopcionRechazada> AdopcionRechazadaRepository { get; }
         IRepository<AdopcionCancelada> AdopcionCanceladaRepository { get; }
+        IRepository<Persona> PersonaRepository { get; }
         IRolUserRepository RolUserRepository { get; }
         Task<bool> SaveAll();
         void Rollback();

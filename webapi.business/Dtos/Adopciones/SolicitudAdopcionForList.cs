@@ -7,11 +7,11 @@ namespace webapi.business.Dtos.Adopciones
     public class SolicitudAdopcionForList
     {
         public int Id { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
-        public string Ci { get; set; }
+        public string NombreCompleto { get; set; }
+        //public string Apellidos { get; set; }
+        //public string Ci { get; set; }
         public string Domicilio { get; set; }
-        public string NumeroCelular { get; set; }
+        public string Telefono { get; set; }
         public string RazonAdopcion { get; set; }
         public DateTime FechaSolicitudAdopcion { get; set; }
         public DateTime FechaAdopcion { get; set; }

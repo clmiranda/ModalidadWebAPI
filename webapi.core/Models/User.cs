@@ -1,21 +1,25 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace webapi.core.Models
 {
     public partial class User: IdentityUser<int>
     {
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
-        public string Domicilio { get; set; }
-        public string NumeroCelular { get; set; }
-        public DateTime FechaNacimiento { get; set; }
+        //public string Nombres { get; set; }
+        //public string Apellidos { get; set; }
+        //public string Domicilio { get; set; }
+        //public string NumeroCelular { get; set; }
+        //public DateTime FechaNacimiento { get; set; }
         public DateTime FechaCreacion { get; set; }
+        [Required]
+        [MaxLength(20)]
         public string Estado { get; set; }
-        public string Sexo { get; set; }
+        //public string Sexo { get; set; }
         public virtual ICollection<Seguimiento> Seguimientos { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual Persona Persona { get; set; }
+        //public virtual int PersonaId { get; set; }
     }
 }

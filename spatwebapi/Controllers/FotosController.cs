@@ -30,30 +30,30 @@ namespace spatwebapi.Controllers
         //    var foto = _mapper.Map<FotoForReturnDto>(fotoRepository);
         //    return Ok(foto);
         //}
-        [HttpPost("Mascota/{mascotaId}/AddFotoMascota")]
-        public async Task<IActionResult> AddFotoMascota(int mascotaId, [FromForm] FotoForCreationDto dtoFoto)
+        [HttpPost("Mascota/{idMascota}/AddFotoMascota")]
+        public async Task<IActionResult> AddFotoMascota(int idMascota, [FromForm] FotoForCreationDto fotoDto)
         {
-            var resultado = await _fotoService.AddFotoMascota(mascotaId, dtoFoto);
+            var resultado = await _fotoService.AddFotoMascota(idMascota, fotoDto);
             if (!resultado)
                 return BadRequest("No se pudo agregar la foto.");
             return Json("");
         }
-        [HttpPost("Mascota/{id}/SetFotoPrincipalMascota/{idfoto}")]
-        public async Task<IActionResult> SetFotoPrincipalMascota(int id, int idfoto)
+        [HttpPost("Mascota/{idMascota}/SetFotoPrincipalMascota/{idFoto}")]
+        public async Task<IActionResult> SetFotoPrincipalMascota(int idMascota, int idFoto)
         {
-            if (await _fotoService.SetFotoPrincipalMascota(id, idfoto))
+            if (await _fotoService.SetFotoPrincipalMascota(idMascota, idFoto))
             {
-                var modelo = await _fotoService.GetMascota(id);
+                var modelo = await _fotoService.GetMascota(idMascota);
                 var mascota = _mapper.Map<MascotaForReturn>(modelo);
                 return Ok(mascota);
             }
             return BadRequest(new { mensaje = "Conflicto al asignar la foto principal." });
         }
-        [HttpDelete("Mascota/{mascotaId}/DeleteFotoMascota/{idfoto}")]
-        public async Task<IActionResult> DeleteFotoMascota(int mascotaId, int idfoto)
+        [HttpDelete("Mascota/{idMascota}/DeleteFotoMascota/{idFoto}")]
+        public async Task<IActionResult> DeleteFotoMascota(int idMascota, int idFoto)
         {
-            if (await _fotoService.DeleteFotoMascota(mascotaId, idfoto)) {
-                var mascota = await _mascotaService.GetMascotaById(mascotaId);
+            if (await _fotoService.DeleteFotoMascota(idMascota, idFoto)) {
+                var mascota = await _mascotaService.GetMascotaById(idMascota);
                 var mapped = _mapper.Map<MascotaForReturn>(mascota);
                 return Ok(mapped);
             }

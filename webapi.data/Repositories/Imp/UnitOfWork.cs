@@ -20,6 +20,7 @@ namespace webapi.data.Repositories.Imp
         private IRepository<AdopcionRechazada> _adopcionRechazadaRepository;
         private IRepository<AdopcionCancelada> _adopcionCanceladaRepository;
         private IRepository<ReporteTratamiento> _reporteTratamientoRepository;
+        private IRepository<Persona> _personaRepository;
         private IRolUserRepository _rolUserRepository;
         public UnitOfWork(BDSpatContext databaseContext,
             SignInManager<User> signInManager, UserManager<User> userManager)
@@ -76,6 +77,10 @@ namespace webapi.data.Repositories.Imp
         public IRepository<ReporteTratamiento> ReporteTratamientoRepository
         {
             get { return _reporteTratamientoRepository ??= new Repository<ReporteTratamiento>(_databaseContext); }
+        }
+        public IRepository<Persona> PersonaRepository
+        {
+            get { return _personaRepository ??= new Repository<Persona>(_databaseContext); }
         }
 
         public async Task<bool> SaveAll()
