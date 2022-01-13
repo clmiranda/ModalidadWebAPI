@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Dtos.ReporteTratamientos;
 using webapi.business.Services.Interf;
@@ -25,6 +26,10 @@ namespace webapi.business.Services.Imp
             var reporteTratamiento = await _unitOfWork.ReporteTratamientoRepository.GetById(id);
             return reporteTratamiento;
         }
+        public async Task<ReporteTratamiento> GetById(int id)
+        {
+            return await _unitOfWork.ReporteTratamientoRepository.GetById(id);
+        }
         public async Task<bool> CreateReporteTratamiento(ReporteTratamientoForCreateDto reporteTratamientoDto)
         {
             var reporteTratamiento = _mapper.Map<ReporteTratamiento>(reporteTratamientoDto);
@@ -42,6 +47,18 @@ namespace webapi.business.Services.Imp
         {
             _unitOfWork.ReporteTratamientoRepository.Delete(reporteTratamiento);
             return await _unitOfWork.SaveAll();
+        }
+        public async Task<bool> UpdateFecha(FechaReporteTratamientoForUpdateDto fechaReporteTratamientoDto)
+        {
+            var reporteTratamiento = await _unitOfWork.ReporteTratamientoRepository.GetById(fechaReporteTratamientoDto.Id);
+            var mapped = _mapper.Map(fechaReporteTratamientoDto, reporteTratamiento);
+            _unitOfWork.ReporteTratamientoRepository.Update(mapped);
+            return await _unitOfWork.SaveAll();
+        }
+        public bool VerifyDateIsRepeated(Mascota mascota, FechaReporteTratamientoForUpdateDto fechaReporteTratamientoDto) {
+            if (mascota.ReporteTratamientos.Any(x => x.FechaCreacion.Date.ToShortDateString() == fechaReporteTratamientoDto.FechaCreacion.Date.ToShortDateString()))
+                return false;
+            return true;
         }
     }
 }

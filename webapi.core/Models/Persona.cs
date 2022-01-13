@@ -21,6 +21,7 @@ namespace webapi.core.Models
         [Required]
         [MaxLength(20)]
         public string Genero { get; set; }
+        [Required]
         public virtual User User { get; set; }
     }
 }

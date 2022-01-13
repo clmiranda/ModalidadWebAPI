@@ -25,6 +25,7 @@ namespace webapi.business.Services.Interf
         Task<bool> AprobarSolicitudAdopcion(int id);
         Task<bool> RechazarSolicitudAdopcion(int id, int mascotaId);
         Task<bool> CancelarAdopcion(int id, int mascotaId);
+        Task<bool> DeleteAllSolicitudAdopcion(int mascotaId);
         IQueryable<SolicitudAdopcion> FindByCondition(Expression<Func<SolicitudAdopcion, bool>> expression);
     }
 }

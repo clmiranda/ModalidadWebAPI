@@ -12,6 +12,7 @@ using webapi.business.Dtos.Seguimientos;
 using webapi.business.Dtos.Usuario;
 using webapi.core.Models;
 using webapi.business.Dtos.Persona;
+using webapi.business.Dtos.SolicitudAdopcionCancelada;
 
 namespace webapi.business.Helpers
 {
@@ -63,7 +64,10 @@ namespace webapi.business.Helpers
             CreateMap<ReporteTratamientoForCreateDto, ReporteTratamiento>();
             CreateMap<ReporteTratamientoForUpdateDto, ReporteTratamiento>();
             CreateMap<AdopcionRechazada, SolicitudAdopcionRechazadaForReturnDto>();
+            CreateMap<AdopcionCancelada, SolicitudAdopcionCanceladaForReturnDto>();
             CreateMap<SolicitudAdopcionRechazadaForCreateDto, AdopcionRechazada>();
+            CreateMap<SolicitudAdopcionCanceladaForCreateDto, AdopcionCancelada>();
+            CreateMap<FechaReporteTratamientoForUpdateDto, ReporteTratamiento>();
             CreateMap<User, UserRolesForReturn>()
                 //.ForMember(dest => dest.Edad, opt =>
                 //{

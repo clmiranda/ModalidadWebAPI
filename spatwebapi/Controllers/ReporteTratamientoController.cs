@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Mascotas;
 using webapi.business.Dtos.ReporteTratamientos;
@@ -25,6 +26,7 @@ namespace spatwebapi.Controllers
         public async Task<ActionResult> GetAllReporteTratamiento(int id)
         {
             var mascota = await _reporteTratamientoService.GetAllReporteTratamiento(id);
+            mascota.ReporteTratamientos = mascota.ReporteTratamientos.OrderBy(x => x.FechaCreacion).ToList();
             var mapped = _mapper.Map<MascotaForReturn>(mascota);
             return Ok(mapped);
         }
@@ -37,7 +39,7 @@ namespace spatwebapi.Controllers
             return Ok(mapped);
         }
         [HttpPost("CreateReporteTratamiento")]
-        public async Task<IActionResult> CreateReporteTratamiento([FromBody]ReporteTratamientoForCreateDto reporteTratamientoDto)
+        public async Task<IActionResult> CreateReporteTratamiento([FromBody] ReporteTratamientoForCreateDto reporteTratamientoDto)
         {
             var resultado = await _reporteTratamientoService.CreateReporteTratamiento(reporteTratamientoDto);
             if (resultado)
@@ -61,6 +63,25 @@ namespace spatwebapi.Controllers
                 return Ok();
             else
                 return BadRequest(new { mensaje = "Problemas al eliminar el registro." });
+        }
+        [HttpPut("UpdateFecha")]
+        public async Task<IActionResult> UpdateFecha([FromForm] FechaReporteTratamientoForUpdateDto fechaReporteTratamientoDto)
+        {
+            var reporteTratamiento = await _reporteTratamientoService.GetById(fechaReporteTratamientoDto.Id);
+            if (reporteTratamiento != null)
+            {
+                if (_reporteTratamientoService.VerifyDateIsRepeated(reporteTratamiento.Mascota, fechaReporteTratamientoDto))
+                {
+                    if (await _reporteTratamientoService.UpdateFecha(fechaReporteTratamientoDto))
+                    {
+                        var mascota = _mapper.Map<MascotaForReturn>(reporteTratamiento.Mascota);
+                        return Ok(mascota);
+                    }
+                    return BadRequest(new { mensaje = "Ha ocurrido un error actualizando los datos." });
+                }
+                return BadRequest(new { mensaje = "No se puede asignar una fecha que ya fue asignada a otro registro" });
+            }
+            return BadRequest(new { mensaje = "No se pudo encontrar el reporte de tratamiento." });
         }
     }
 }

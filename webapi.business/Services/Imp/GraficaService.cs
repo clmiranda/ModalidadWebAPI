@@ -138,8 +138,8 @@ namespace webapi.business.Services.Imp
                      Cantidad = x.Count()
                  }).ToList();
 
-            var listaSeguimientos = await _unitOfWork.SeguimientoRepository.GetAll().ToListAsync();
-            dataForDashboardDto.DataGraficaSeguimiento = listaSeguimientos
+            var listaSolicitudesAdopcion = await _unitOfWork.SolicitudAdopcionRepository.GetAll().ToListAsync();
+            dataForDashboardDto.DataGraficaSolicitudAdopcion = listaSolicitudesAdopcion
                  .OrderBy(x => x.Estado)
                  .GroupBy(x => x.Estado)
                  .Select(x => new DataGraficaDto()

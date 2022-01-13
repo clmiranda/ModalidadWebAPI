@@ -2,10 +2,14 @@
 
 namespace webapi.data.Migrations
 {
-    public partial class MaxLength_columns_added : Migration
+    public partial class parameters_required_added : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Mascota_Denuncia_DenunciaId",
+                table: "Mascota");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Telefono",
                 table: "SolicitudAdopcion",
@@ -139,7 +143,7 @@ namespace webapi.data.Migrations
                 table: "ReporteSeguimiento",
                 type: "character varying(300)",
                 maxLength: 300,
-                nullable: false,
+                nullable: true,
                 oldClrType: typeof(string),
                 oldType: "text");
 
@@ -275,6 +279,16 @@ namespace webapi.data.Migrations
                 oldType: "text",
                 oldNullable: true);
 
+            migrationBuilder.AlterColumn<int>(
+                name: "DenunciaId",
+                table: "Mascota",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "integer",
+                oldNullable: true);
+
             migrationBuilder.AlterColumn<string>(
                 name: "Caracteristicas",
                 table: "Mascota",
@@ -338,10 +352,22 @@ namespace webapi.data.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Mascota_Denuncia_DenunciaId",
+                table: "Mascota",
+                column: "DenunciaId",
+                principalTable: "Denuncia",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Mascota_Denuncia_DenunciaId",
+                table: "Mascota");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Telefono",
                 table: "SolicitudAdopcion",
@@ -473,9 +499,11 @@ namespace webapi.data.Migrations
                 table: "ReporteSeguimiento",
                 type: "text",
                 nullable: false,
+                defaultValue: "",
                 oldClrType: typeof(string),
                 oldType: "character varying(300)",
-                oldMaxLength: 300);
+                oldMaxLength: 300,
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "Estado",
@@ -607,6 +635,14 @@ namespace webapi.data.Migrations
                 oldMaxLength: 50,
                 oldNullable: true);
 
+            migrationBuilder.AlterColumn<int>(
+                name: "DenunciaId",
+                table: "Mascota",
+                type: "integer",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "integer");
+
             migrationBuilder.AlterColumn<string>(
                 name: "Caracteristicas",
                 table: "Mascota",
@@ -670,6 +706,14 @@ namespace webapi.data.Migrations
                 oldClrType: typeof(string),
                 oldType: "character varying(300)",
                 oldMaxLength: 300);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Mascota_Denuncia_DenunciaId",
+                table: "Mascota",
+                column: "DenunciaId",
+                principalTable: "Denuncia",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
     }
 }

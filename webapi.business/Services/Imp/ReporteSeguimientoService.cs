@@ -15,10 +15,13 @@ namespace webapi.business.Services.Imp
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public ReporteSeguimientoService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IFotoService _fotoService;
+        public ReporteSeguimientoService(IUnitOfWork unitOfWork, IMapper mapper,
+            IFotoService fotoService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _fotoService = fotoService;
         }
         public async Task<ReporteSeguimiento> GetById(int id)
         {
@@ -94,8 +97,16 @@ namespace webapi.business.Services.Imp
         public async Task<bool> DeleteReporte(int id)
         {
             var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
-            _unitOfWork.ReporteSeguimientoRepository.Delete(reporte);
-            return await _unitOfWork.SaveAll();
+            if (reporte != null)
+            {
+                _unitOfWork.ReporteSeguimientoRepository.Delete(reporte);
+
+                if (await _fotoService.DeleteFotoReporteSeguimiento(reporte.Foto.Id))
+                    return await _unitOfWork.SaveAll();
+
+                return false;
+            }
+            return false;
         }
         public async Task<ReporteSeguimiento> GetByIdNotracking(int id)
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -71,6 +72,15 @@ namespace webapi.business.Services.Imp
         public async Task<bool> DeleteSeguimiento(Seguimiento seguimiento)
         {
             _unitOfWork.SeguimientoRepository.Delete(seguimiento);
+            return await _unitOfWork.SaveAll();
+        }
+        public async Task<bool> DeleteAllSeguimiento(int idUser)
+        {
+            var seguimiento = await _unitOfWork.SeguimientoRepository.FindByCondition(x => x.UserId == idUser).ToListAsync();
+            foreach (var item in seguimiento)
+            {
+                _unitOfWork.SeguimientoRepository.Delete(item);
+            }
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> AsignarSeguimiento(int id, int idUser) {

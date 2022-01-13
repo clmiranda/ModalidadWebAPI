@@ -6,6 +6,11 @@ namespace webapi.core.Models
 {
     public partial class Mascota : BaseEntity
     {
+        public Mascota()
+        {
+            Fotos = new List<Foto>();
+            ReporteTratamientos = new List<ReporteTratamiento>();
+        }
         [Required]
         [MaxLength(20)]
         public string Nombre { get; set; }
@@ -26,6 +31,7 @@ namespace webapi.core.Models
         public DateTime FechaCreacion { get; set; }
         [MaxLength(20)]
         public string Estado { get; set; }
+        [Required]
         public virtual Denuncia Denuncia { get; set; }
         public int? DenunciaId { get; set; }
         public virtual List<Foto> Fotos { get; set; }

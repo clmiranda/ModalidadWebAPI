@@ -125,6 +125,22 @@ namespace webapi.business.Services.Imp
             }
             return false;
         }
+        public async Task<bool> DeleteAllFotoMascota(Mascota mascota) {
+            foreach (var foto in mascota.Fotos)
+            {
+                if (foto.IdPublico != null)
+                {
+                    var eliminar = new DeletionParams(foto.IdPublico);
+                    var x = _cloudinary.Destroy(eliminar);
+
+                    if (x.Result.Equals("ok"))
+                        _unitOfWork.FotoRepository.Delete(foto);
+                }
+                else
+                    return false;
+            }
+            return true;
+        }
         public async Task<bool> AgregarFotoReporte(int id, IFormFile archivo)
         {
             var reporteRepo = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
@@ -151,6 +167,21 @@ namespace webapi.business.Services.Imp
 
             reporteRepo.Foto = new Foto();
             reporteRepo.Foto = foto;
+            return await _unitOfWork.SaveAll();
+        }
+        public async Task<bool> DeleteFotoReporteSeguimiento(int idFoto)
+        {
+            var foto = await _unitOfWork.FotoRepository.GetById(idFoto);
+            if (foto.IdPublico != null)
+                {
+                    var eliminar = new DeletionParams(foto.IdPublico);
+                    var x = _cloudinary.Destroy(eliminar);
+
+                    if (x.Result.Equals("ok"))
+                        _unitOfWork.FotoRepository.Delete(foto);
+                }
+                else
+                    return false;
             return await _unitOfWork.SaveAll();
         }
     }

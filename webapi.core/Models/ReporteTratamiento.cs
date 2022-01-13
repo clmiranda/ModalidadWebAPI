@@ -12,6 +12,7 @@ namespace webapi.core.Models
         [MaxLength(300)]
         public string Descripcion { get; set; }
         public DateTime FechaCreacion { get; set; }
+        [Required]
         public virtual Mascota Mascota { get; set; }
         public int MascotaId { get; set; }
     }
