@@ -74,20 +74,20 @@ namespace webapi.business.Services.Imp
             return null;
         }
         public async Task<bool> UpdateFecha(FechaSolicitudAdopcionForUpdateDto fechaSolicitudAdopcionDto) {
-            var modelo = await _unitOfWork.SolicitudAdopcionRepository.GetById(fechaSolicitudAdopcionDto.Id);
-            var mapped = _mapper.Map(fechaSolicitudAdopcionDto, modelo);
+            var solicitudAdopcion = await _unitOfWork.SolicitudAdopcionRepository.GetById(fechaSolicitudAdopcionDto.Id);
+            var mapped = _mapper.Map(fechaSolicitudAdopcionDto, solicitudAdopcion);
             _unitOfWork.SolicitudAdopcionRepository.Update(mapped);
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> CreateSolicitudAdopcionRechazada(SolicitudAdopcionRechazadaForCreateDto solicitudAdopcionRechazadaDto) {
-            var c = _mapper.Map<AdopcionRechazada>(solicitudAdopcionRechazadaDto);
-            _unitOfWork.AdopcionRechazadaRepository.Insert(c);
+            var adopcionRechazada = _mapper.Map<AdopcionRechazada>(solicitudAdopcionRechazadaDto);
+            _unitOfWork.AdopcionRechazadaRepository.Insert(adopcionRechazada);
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> CreateSolicitudAdopcionCancelada(SolicitudAdopcionCanceladaForCreateDto solicitudAdopcionCanceladaDto)
         {
-            var c = _mapper.Map<AdopcionRechazada>(solicitudAdopcionCanceladaDto);
-            _unitOfWork.AdopcionRechazadaRepository.Insert(c);
+            var adopcionCancelada = _mapper.Map<AdopcionCancelada>(solicitudAdopcionCanceladaDto);
+            _unitOfWork.AdopcionCanceladaRepository.Insert(adopcionCancelada);
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> AprobarSolicitudAdopcion(int id) {
@@ -108,7 +108,7 @@ namespace webapi.business.Services.Imp
             _unitOfWork.SolicitudAdopcionRepository.Update(solicitudAdopcion);
 
             var mascota = await _unitOfWork.MascotaRepository.GetById(mascotaId);
-            mascota.Estado = "Inactivo";
+            mascota.Estado = "Activo";
             _unitOfWork.MascotaRepository.Update(mascota);
             return await _unitOfWork.SaveAll();
         }
@@ -121,9 +121,18 @@ namespace webapi.business.Services.Imp
             _unitOfWork.SolicitudAdopcionRepository.Update(solicitudAdopcion);
 
             var mascota = await _unitOfWork.MascotaRepository.GetById(mascotaId);
-            mascota.Estado = "Inactivo";
+            mascota.Estado = "Activo";
             _unitOfWork.MascotaRepository.Update(mascota);
             return await _unitOfWork.SaveAll();
+        }
+        public async Task<bool> DeleteAllSolicitudAdopcion(int mascotaId)
+        {
+            var listaSolicitudAdopcion = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.MascotaId == mascotaId).ToListAsync();
+            foreach (var solicitudAdopcion in listaSolicitudAdopcion)
+            {
+                _unitOfWork.SolicitudAdopcionRepository.Delete(solicitudAdopcion);
+            }
+            return true;
         }
         public IQueryable<SolicitudAdopcion> FindByCondition(Expression<Func<SolicitudAdopcion, bool>> expression)
         {

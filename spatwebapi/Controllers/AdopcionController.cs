@@ -81,21 +81,21 @@ namespace spatwebapi.Controllers
         {
             var mascota = await _mascotaService.GetMascotaById(id);
             if (mascota==null)
-                return NotFound(null);
+                return Ok(null);
             if (!mascota.Estado.Equals("Activo"))
-                return BadRequest(null);
-            var resul = await _adopcionService.FindByCondition(x => x.Mascota.Id == id).FirstOrDefaultAsync();
+                return Ok(null);
+            //var resul = await _adopcionService.FindByCondition(x => x.Mascota.Id == id).FirstOrDefaultAsync();
             //var modelo = _mapper.Map<SolicitudAdopcionReturnDto>(resul);
-            if (resul != null) return Ok(new SolicitudAdopcionReturnDto());
-            return Ok(resul);
+            //if (resul != null) return Ok(new SolicitudAdopcionReturnDto());
+            return Ok(new SolicitudAdopcionReturnDto());
         }
         [AllowAnonymous]
         [HttpPost("CreateSolicitudAdopcion")]
         public async Task<IActionResult> CreateSolicitudAdopcion([FromBody] SolicitudAdopcionForCreate solicitudAdopcionDto) {
             var resul = await _adopcionService.CreateSolicitudAdopcion(solicitudAdopcionDto);
             if (resul != null) {
-                var mapeado = _mapper.Map<SolicitudAdopcionReturnDto>(resul);
-                return Ok(mapeado);
+                //var mapeado = _mapper.Map<SolicitudAdopcionReturnDto>(resul);
+                return Ok(null);
             }
             return BadRequest(new { mensaje = "Ha ocurrido un error guardando los datos." });
         }
@@ -154,14 +154,14 @@ namespace spatwebapi.Controllers
         }
         [HttpPut("CancelarAdopcion")]
         public async Task<IActionResult> CancelarAdopcion(SolicitudAdopcionCanceladaForCreateDto solicitudAdopcionCanceladaDto) {
-            var modelo = await _adopcionService.GetById(solicitudAdopcionCanceladaDto.SolicitudAdopcionId);
-            if (modelo!=null)
+            var solicitudAdopcion = await _adopcionService.GetById(solicitudAdopcionCanceladaDto.SolicitudAdopcionId);
+            if (solicitudAdopcion!=null)
             {
-                if (await _adopcionService.CancelarAdopcion(solicitudAdopcionCanceladaDto.SolicitudAdopcionId, modelo.Mascota.Id))
+                if (await _adopcionService.CancelarAdopcion(solicitudAdopcionCanceladaDto.SolicitudAdopcionId, solicitudAdopcion.Mascota.Id))
                 {
                     if (await _adopcionService.CreateSolicitudAdopcionCancelada(solicitudAdopcionCanceladaDto)) {
-                        var solicitudAdopcion = _mapper.Map<SolicitudAdopcionReturnDto>(modelo);
-                        return Ok(solicitudAdopcion);
+                        var mapped = _mapper.Map<SolicitudAdopcionReturnDto>(solicitudAdopcion);
+                        return Ok(mapped);
                     }
                     return BadRequest(new { mensaje = "Ha ocurrido un error al cancelar la solicitud de adopción." });
                 }

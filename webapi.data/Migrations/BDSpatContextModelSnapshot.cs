@@ -230,6 +230,7 @@ namespace webapi.data.Migrations
                         .HasColumnType("character varying(300)");
 
                     b.Property<int?>("DenunciaId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("Edad")
@@ -333,7 +334,6 @@ namespace webapi.data.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Observaciones")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
 
@@ -672,7 +672,9 @@ namespace webapi.data.Migrations
                 {
                     b.HasOne("webapi.core.Models.Denuncia", "Denuncia")
                         .WithOne("Mascota")
-                        .HasForeignKey("webapi.core.Models.Mascota", "DenunciaId");
+                        .HasForeignKey("webapi.core.Models.Mascota", "DenunciaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Denuncia");
                 });

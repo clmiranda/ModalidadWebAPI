@@ -16,10 +16,15 @@ namespace webapi.business.Services.Imp
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public DenunciaService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IFotoService _fotoService;
+        private readonly IAdopcionService _adopcionService;
+        public DenunciaService(IUnitOfWork unitOfWork, IMapper mapper,
+            IFotoService fotoService, IAdopcionService adopcionService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _fotoService = fotoService;
+            _adopcionService = adopcionService;
         }
         public async Task<IEnumerable<DenunciaForListDto>> GetAll() {
             var lista = await _unitOfWork.DenunciaRepository.GetAll().ToListAsync();
@@ -56,7 +61,16 @@ namespace webapi.business.Services.Imp
         public async Task<bool> DeleteDenuncia(Denuncia denuncia)
         {
             _unitOfWork.DenunciaRepository.Delete(denuncia);
-            return await _unitOfWork.SaveAll();
+
+            var mascota = await _unitOfWork.MascotaRepository.FindByCondition(x => x.DenunciaId == denuncia.Id).FirstOrDefaultAsync();
+            if (mascota != null)
+            {
+                if (await _fotoService.DeleteAllFotoMascota(mascota) && await _adopcionService.DeleteAllSolicitudAdopcion(mascota.Id))
+                    return await _unitOfWork.SaveAll();
+
+                return false;
+            }
+            return false;
         }
     }
 }

@@ -20,12 +20,13 @@ namespace webapi.business.Services.Imp
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private IPersonaService _personaService;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IPersonaService personaService)
+        private readonly ISeguimientoService _seguimientoService;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper,
+            ISeguimientoService seguimientoService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _personaService = personaService;
+            _seguimientoService = seguimientoService;
         }
         public async Task<IEnumerable<User>> GetAllUsers()
         {
@@ -118,6 +119,7 @@ namespace webapi.business.Services.Imp
         {
             var usuario = await _unitOfWork.UserRepository.GetById(id);
             var resultado = await _unitOfWork.UserRepository.DeleteUser(usuario);
+            await _seguimientoService.DeleteAllSeguimiento(usuario.Id);
             return resultado;
         }
         public async Task<IdentityResult> ConfirmEmail(string userId, string token)
