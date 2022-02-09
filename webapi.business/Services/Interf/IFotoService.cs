@@ -7,13 +7,12 @@ namespace webapi.business.Services.Interf
 {
     public interface IFotoService
     {
-        Task<Foto> GetFoto(int id);
         Task<Mascota> GetMascota(int id);
         Task<bool> SetFotoPrincipalMascota(int id, int idfoto);
         Task<bool> AddFotoMascota(int id, FotoForCreationDto fotoMascota);
         Task<bool> DeleteFotoMascota(int id, int idfoto);
         Task<bool> AgregarFotoReporte(int id, IFormFile fotoReporte);
-        Task<bool> DeleteAllFotoMascota(Mascota mascota);
+        bool DeleteAllFotoMascota(Mascota mascota);
         Task<bool> DeleteFotoReporteSeguimiento(int idFoto);
     }
 }

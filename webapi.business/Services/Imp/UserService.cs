@@ -35,10 +35,10 @@ namespace webapi.business.Services.Imp
         }
         public async Task<User> FindUser(UserForLoginDto userForLoginDto)
         {
-            var resul = await _unitOfWork.UserRepository.FindByName(userForLoginDto.Username);
+            var resul = await _unitOfWork.UserRepository.FindByName(userForLoginDto.UsernameEmail);
             if (resul == null)
             {
-                resul = await _unitOfWork.UserRepository.FindByEmail(userForLoginDto.Username);
+                resul = await _unitOfWork.UserRepository.FindByEmail(userForLoginDto.UsernameEmail);
                 if (resul == null)
                     return null;
             }
@@ -76,10 +76,7 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IdentityResult> CreateUser(UserForRegisterDto userforRegisterDto)
         {
-            //var persona = await _personaService.CreatePersona(userforRegisterDto.Persona);
             var mapped = _mapper.Map<User>(userforRegisterDto);
-            //mapped.Persona = persona;
-            //mapped.PersonaId = persona.Id;
             var resultado = await _unitOfWork.UserRepository.CreateUser(mapped, userforRegisterDto.Password);
             return resultado;
         }
@@ -90,11 +87,8 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IdentityResult> UpdateUsuario(UserUpdateDto userForUpdateDto)
         {
-            //var persona = await _personaService.UpdatePersona(userForUpdateDto.Persona);
             var user = await _unitOfWork.UserRepository.GetById(userForUpdateDto.Id);
             var mapped = _mapper.Map(userForUpdateDto, user);
-            //mapped.Persona = persona;
-            //mapped.PersonaId = persona.Id;
             var resultado = await _unitOfWork.UserRepository.UpdateUsuario(mapped);
             return resultado;
         }

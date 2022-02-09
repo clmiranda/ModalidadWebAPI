@@ -99,7 +99,6 @@ namespace webapi.business.Services.Imp
             _seguimientoService.CreateSeguimiento(solicitudAdopcion.Id);
             return await _unitOfWork.SaveAll();
         }
-
         public async Task<bool> RechazarSolicitudAdopcion(int id, int mascotaId)
         {
             var solicitudAdopcion = await _unitOfWork.SolicitudAdopcionRepository.GetById(id);
@@ -112,11 +111,14 @@ namespace webapi.business.Services.Imp
             _unitOfWork.MascotaRepository.Update(mascota);
             return await _unitOfWork.SaveAll();
         }
-
         public async Task<bool> CancelarAdopcion(int id, int mascotaId)
         {
             var solicitudAdopcion = await _unitOfWork.SolicitudAdopcionRepository.GetById(id);
+
+            _unitOfWork.SeguimientoRepository.Delete(solicitudAdopcion.Seguimiento);
+
             solicitudAdopcion.Mascota = null;
+            solicitudAdopcion.Seguimiento = null;
             solicitudAdopcion.Estado = "Cancelado";
             _unitOfWork.SolicitudAdopcionRepository.Update(solicitudAdopcion);
 
@@ -133,10 +135,6 @@ namespace webapi.business.Services.Imp
                 _unitOfWork.SolicitudAdopcionRepository.Delete(solicitudAdopcion);
             }
             return true;
-        }
-        public IQueryable<SolicitudAdopcion> FindByCondition(Expression<Func<SolicitudAdopcion, bool>> expression)
-        {
-            return _unitOfWork.SolicitudAdopcionRepository.FindByCondition(expression).AsQueryable();
         }
     }
 }

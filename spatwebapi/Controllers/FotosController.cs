@@ -22,14 +22,6 @@ namespace spatwebapi.Controllers
             _fotoService = fotoService;
             _mascotaService = mascotaService;
         }
-        //[AllowAnonymous]
-        //[HttpGet("{id}", Name = "GetFoto")]
-        //public async Task<IActionResult> GetFoto(int id)
-        //{
-        //    var fotoRepository = atsewait _fotoService.GetFoto(id);
-        //    var foto = _mapper.Map<FotoForReturnDto>(fotoRepository);
-        //    return Ok(foto);
-        //}
         [HttpPost("Mascota/{idMascota}/AddFotoMascota")]
         public async Task<IActionResult> AddFotoMascota(int idMascota, [FromForm] FotoForCreationDto fotoDto)
         {

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.SolicitudAdopcionCancelada;
 using webapi.business.Dtos.SolicitudAdopcionRechazada;
@@ -15,7 +14,6 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "SuperAdministrador, Administrador")]
     public class AdopcionController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -29,6 +27,7 @@ namespace spatwebapi.Controllers
             _mascotaService = mascotaService;
         }
         [HttpGet("GetAllAdopciones")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<ActionResult> GetAllAdopciones([FromQuery] AdopcionParametros parametros)
         {
             var resul = await _adopcionService.GetAllAdopciones(parametros);
@@ -38,6 +37,7 @@ namespace spatwebapi.Controllers
             return Ok(lista);
         }
         [HttpGet("GetById/{id}")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<ActionResult> GetById(int id) {
             var resul = await _adopcionService.GetById(id);
             if (resul == null)
@@ -45,16 +45,8 @@ namespace spatwebapi.Controllers
             var modelo = _mapper.Map<SolicitudAdopcionForDetailDto>(resul);
             return Ok(modelo);
         }
-        //[HttpGet("GetInformeContrato/{id}")]
-        //public async Task<ActionResult> GetInformeContrato(int id)
-        //{
-        //    var resul = await _adopcionService.GetById(id);
-        //    if (resul==null)
-        //        return NotFound("Id de contrato no existe.");
-        //    var modelo = _mapper.Map<SolicitudAdopcionForDetailDto>(resul);
-        //    return Ok(modelo);
-        //}
         [HttpGet("GetAll")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<ActionResult> GetAll()
         {
             var lista = await _adopcionService.GetAll();
@@ -62,6 +54,7 @@ namespace spatwebapi.Controllers
             return Ok(mapped);
         }
         [HttpGet("GetAllSolicitudesAdopcionRechazadas")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<ActionResult> GetAllSolicitudesAdopcionRechazadas()
         {
             var lista = await _adopcionService.GetAllSolicitudesAdopcionRechazadas();
@@ -69,6 +62,7 @@ namespace spatwebapi.Controllers
             return Ok(mapped);
         }
         [HttpGet("GetAllSolicitudesAdopcionCanceladas")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<ActionResult> GetAllSolicitudesAdopcionCanceladas()
         {
             var lista = await _adopcionService.GetAllSolicitudesAdopcionCanceladas();
@@ -84,9 +78,6 @@ namespace spatwebapi.Controllers
                 return Ok(null);
             if (!mascota.Estado.Equals("Activo"))
                 return Ok(null);
-            //var resul = await _adopcionService.FindByCondition(x => x.Mascota.Id == id).FirstOrDefaultAsync();
-            //var modelo = _mapper.Map<SolicitudAdopcionReturnDto>(resul);
-            //if (resul != null) return Ok(new SolicitudAdopcionReturnDto());
             return Ok(new SolicitudAdopcionReturnDto());
         }
         [AllowAnonymous]
@@ -94,12 +85,12 @@ namespace spatwebapi.Controllers
         public async Task<IActionResult> CreateSolicitudAdopcion([FromBody] SolicitudAdopcionForCreate solicitudAdopcionDto) {
             var resul = await _adopcionService.CreateSolicitudAdopcion(solicitudAdopcionDto);
             if (resul != null) {
-                //var mapeado = _mapper.Map<SolicitudAdopcionReturnDto>(resul);
                 return Ok(null);
             }
             return BadRequest(new { mensaje = "Ha ocurrido un error guardando los datos." });
         }
         [HttpPut("UpdateFecha")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> UpdateFecha([FromForm] FechaSolicitudAdopcionForUpdateDto fechaSolicitudDto) {
             var modelo = await _adopcionService.GetById(fechaSolicitudDto.Id);
             if (modelo != null) {
@@ -112,15 +103,8 @@ namespace spatwebapi.Controllers
             }
             return BadRequest(new { mensaje = "No se pudo encontrar la solicitud de adopción." });
         }
-        //[HttpGet("DetailAdopcion/{id}")]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> DetailAdopcion(int id) {
-        //    var resul = _mapper.Map<SolicitudAdopcionReturnDto>(await _adopcionService.GetById(id));
-        //    if (resul==null)
-        //        return BadRequest(null);
-        //    return Ok(resul);
-        //}
         [HttpPut("{id}/AprobarSolicitudAdopcion")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> AprobarSolicitudAdopcion(int id) {
             var modelo = await _adopcionService.GetById(id);
             if (modelo!=null)
@@ -135,6 +119,7 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "No se pudo encontrar la solicitud de adopción." });
         }
         [HttpPut("RechazarSolicitudAdopcion")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> RechazarSolicitudAdopcion(SolicitudAdopcionRechazadaForCreateDto solicitudAdopcionRechazadaDto) {
             var modelo = await _adopcionService.GetById(solicitudAdopcionRechazadaDto.SolicitudAdopcionId);
             if (modelo!=null)
@@ -153,6 +138,7 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "No se pudo encontrar la solicitud de adopción." });
         }
         [HttpPut("CancelarAdopcion")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> CancelarAdopcion(SolicitudAdopcionCanceladaForCreateDto solicitudAdopcionCanceladaDto) {
             var solicitudAdopcion = await _adopcionService.GetById(solicitudAdopcionCanceladaDto.SolicitudAdopcionId);
             if (solicitudAdopcion!=null)

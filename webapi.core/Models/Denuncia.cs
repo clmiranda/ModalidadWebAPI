@@ -10,7 +10,6 @@ namespace webapi.core.Models
         [Required]
         [MaxLength(300)]
         public string Descripcion { get; set; }
-        //public string Estado { get; set; }
         public virtual Mascota Mascota { get; set; }
     }
 }

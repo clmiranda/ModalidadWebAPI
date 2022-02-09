@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace webapi.core.Models
+﻿namespace webapi.core.Models
 {
     public interface IEntity
     {

@@ -8,8 +8,6 @@ namespace webapi.core.Models
         [Required]
         [MaxLength(300)]
         public string NombreCompleto { get; set; }
-        //public string Apellidos { get; set; }
-        //public string Ci { get; set; }
         [Required]
         [MaxLength(200)]
         public string Domicilio { get; set; }

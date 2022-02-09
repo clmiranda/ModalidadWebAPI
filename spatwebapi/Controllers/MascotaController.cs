@@ -52,7 +52,6 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
             return Ok(mapped);
         }
-
         [HttpGet("GetAllMascotaAdopcion")]
         [AllowAnonymous]
         public async Task<ActionResult> GetAllMascotaAdopcion([FromQuery] MascotaParametros parametros)
@@ -63,18 +62,16 @@ namespace spatwebapi.Controllers
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);
         }
-
         [HttpGet("GetAllMascotaAdmin")]
         public async Task<ActionResult> GetAllMascotaAdmin([FromQuery] MascotaParametros parametros)
         {
             var resul = await _mascotaService.GetAllMascotas(parametros);
             var lista = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(resul);
-            lista = lista.OrderByDescending(x => x.Estado.Equals("Inactivo")).ToList();
+            lista = lista.OrderByDescending(x => x.Estado.Equals("Activo") || x.Estado.Equals("Inactivo")).ToList();
             Response.AddPagination(resul.CurrentPage, resul.PageSize,
                  resul.TotalCount, resul.TotalPages);
             return Ok(lista);
         }
-
         [HttpPost("CreateMascota")]
         public async Task<IActionResult> CreateMascota([FromBody] MascotaForCreateDto mascotaDto)
         {
@@ -84,7 +81,6 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
             return Ok(mapped);
         }
-
         [HttpPut("UpdateMascota")]
         public async Task<ActionResult> UpdateMascota([FromBody] MascotaForUpdateDto mascotaDto)
         {
@@ -94,7 +90,6 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
             return Ok(mapped);
         }
-
         [HttpPut("ChangeStateSituacion/{id}")]
         public async Task<IActionResult> ChangeStateSituacion([FromBody] string estado, int id)
         {

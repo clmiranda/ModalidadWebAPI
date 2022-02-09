@@ -35,17 +35,6 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(lista);
             return Ok(mapped);
         }
-        //revisar GetSeguimiento para ver si ya no se usa ese metodo
-        [HttpGet("GetSeguimientoForReportes/{idSeguimiento}")]
-        public async Task<ActionResult> GetSeguimientoForReportes(int idSeguimiento)
-        {
-            var seguimiento = await _seguimientoService.GetById(idSeguimiento);
-            if (seguimiento == null) return NotFound(null);
-
-            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
-            var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
-            return Ok(mapped);
-        }
         [HttpPut("UpdateRangoFechasSeguimiento")]
         public async Task<IActionResult> UpdateRangoFechasSeguimiento([FromBody] RangoFechaSeguimientoDto rangoFechaSeguimientoDto) {
             var seguimiento = await _seguimientoService.GetById(rangoFechaSeguimientoDto.Id);
