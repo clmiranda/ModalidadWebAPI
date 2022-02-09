@@ -54,8 +54,6 @@ namespace webapi.root
 
             services.AddScoped<IReporteTratamientoService, ReporteTratamientoService>();
 
-            services.AddScoped<IPersonaService, PersonaService>();
-
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.Configure<SmtpSettings>(configuration.GetSection("SmtpSettings"));
             services.AddSingleton<IEmailService, EmailService>();

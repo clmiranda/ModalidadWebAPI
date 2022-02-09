@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using webapi.business.Dtos.Seguimientos;
 using webapi.business.Pagination;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
@@ -32,11 +31,16 @@ namespace webapi.business.Services.Imp
             var resul = _unitOfWork.SeguimientoRepository.GetAll();
             if (parametros.Filter == "Activo")
                 resul = resul.Where(x => x.Estado.Equals("Activo"));
-            //else if (parametros.Filter == "Pendiente")
-            //    resul = resul.Where(x => x.Estado.Equals("Pendiente"));
             else if (parametros.Filter == "Asignado")
                 resul = resul.Where(x => x.Estado.Equals("Asignado"));
             var pagination = await PaginationList<Seguimiento>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
+            return pagination;
+        }
+        public async Task<PaginationList<Seguimiento>> GetAllSeguimientoVoluntario(int idUser, SeguimientoParametros parametros)
+        {
+            var lista = _unitOfWork.SeguimientoRepository.GetAll();
+            lista = lista.Where(x => x.UserId == idUser);
+            var pagination = await PaginationList<Seguimiento>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);
             return pagination;
         }
         public async Task<Seguimiento> GetById(int id)
@@ -55,24 +59,8 @@ namespace webapi.business.Services.Imp
             _unitOfWork.SeguimientoRepository.Insert(seguimiento);
         }
         public IEnumerable<User> GetAllVoluntarios() {
-            var lista = _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario"))).ToList();
+            var lista = _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario")) && x.Estado.Equals("Activo")).ToList();
             return lista;
-        }
-        /*
-        public async Task<Seguimiento> UpdateFecha(RangoFechaSeguimientoDto dto) {
-            var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(dto.Id);
-            seguimiento.FechaInicio = Convert.ToDateTime(dto.RangoFechas[0]);
-            seguimiento.FechaFin = Convert.ToDateTime(dto.RangoFechas[1]);
-            _unitOfWork.SeguimientoRepository.Update(seguimiento);
-            if (await _unitOfWork.SaveAll())
-                return seguimiento;
-            return null;
-        }
-        */
-        public async Task<bool> DeleteSeguimiento(Seguimiento seguimiento)
-        {
-            _unitOfWork.SeguimientoRepository.Delete(seguimiento);
-            return await _unitOfWork.SaveAll();
         }
         public async Task<bool> DeleteAllSeguimiento(int idUser)
         {
@@ -102,20 +90,5 @@ namespace webapi.business.Services.Imp
             user.Seguimientos.Remove(seguimiento);
             return await _unitOfWork.SaveAll();
         }
-        //public async Task<bool> AceptarSeguimientoVoluntario(int id)
-        //{
-        //    var resul = await _unitOfWork.SeguimientoRepository.GetById(id);
-        //    resul.Estado = "Asignado";
-        //    _unitOfWork.SeguimientoRepository.Update(resul);
-        //    return await _unitOfWork.SaveAll();
-        //}
-        //public async Task<bool> RechazarSeguimientoVoluntario(int id)
-        //{
-        //    var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
-        //    seguimiento.User = null;
-        //    seguimiento.Estado = "Activo";
-        //    _unitOfWork.SeguimientoRepository.Update(seguimiento);
-        //    return await _unitOfWork.SaveAll();
-        //}
     }
 }

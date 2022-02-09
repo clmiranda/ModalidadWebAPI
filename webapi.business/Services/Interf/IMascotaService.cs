@@ -17,7 +17,6 @@ namespace webapi.business.Services.Interf
         Task<Mascota> GetMascotaById(int id);
         Task<Mascota> CreateMascota(MascotaForCreateDto mascota);
         Task<Mascota> UpdateMascota(MascotaForUpdateDto mascota);
-        Task<bool> DeleteMascota(Mascota mascota);
         Task<bool> ChangeEstado(string estado, int id);
     }
 }

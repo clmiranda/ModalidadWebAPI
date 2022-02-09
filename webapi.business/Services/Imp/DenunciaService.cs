@@ -33,7 +33,8 @@ namespace webapi.business.Services.Imp
         }
         public async  Task<PaginationList<Denuncia>> GetAllDenuncias(DenunciaParametros parametros)
         {
-            var resul= _unitOfWork.DenunciaRepository.GetAll();
+            var resul = _unitOfWork.DenunciaRepository.GetAll();
+            resul = resul.OrderBy(x => x.Id);
             if (!String.IsNullOrEmpty(parametros.Busqueda))
                 resul = resul.Where(x => x.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Descripcion.ToLower().Contains(parametros.Busqueda.ToLower()));
             var pagination= await PaginationList<Denuncia>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
@@ -65,7 +66,7 @@ namespace webapi.business.Services.Imp
             var mascota = await _unitOfWork.MascotaRepository.FindByCondition(x => x.DenunciaId == denuncia.Id).FirstOrDefaultAsync();
             if (mascota != null)
             {
-                if (await _fotoService.DeleteAllFotoMascota(mascota) && await _adopcionService.DeleteAllSolicitudAdopcion(mascota.Id))
+                if ( _fotoService.DeleteAllFotoMascota(mascota) && await _adopcionService.DeleteAllSolicitudAdopcion(mascota.Id))
                     return await _unitOfWork.SaveAll();
 
                 return false;

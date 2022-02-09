@@ -1,5 +1,4 @@
-﻿using System;
-using webapi.core.Models;
+﻿using webapi.core.Models;
 
 namespace webapi.business.Dtos.ReportesSeguimientos
 {

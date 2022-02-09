@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +26,7 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAll")]
-        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public IActionResult GetAll()
         {
             var lista = _seguimientoService.GetAll();
@@ -42,8 +43,19 @@ namespace spatwebapi.Controllers
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);
         }
-        [HttpGet("GetAllVoluntarios")]
+        [HttpGet("GetAllSeguimientoVoluntario")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
+        public async Task<ActionResult> GetAllSeguimientoVoluntario([FromQuery] SeguimientoParametros parametros)
+        {
+            var idUser = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
+            var listaSeguimiento = await _seguimientoService.GetAllSeguimientoVoluntario(idUser, parametros);
+            var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(listaSeguimiento);
+            Response.AddPagination(listaSeguimiento.CurrentPage, listaSeguimiento.PageSize,
+                 listaSeguimiento.TotalCount, listaSeguimiento.TotalPages);
+            return Ok(mapped);
+        }
+        [HttpGet("GetAllVoluntarios")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public IEnumerable<UserForDetailedDto> GetAllVoluntarios()
         {
             var lista = _seguimientoService.GetAllVoluntarios();
@@ -62,7 +74,7 @@ namespace spatwebapi.Controllers
             return Ok(mapped);
         }
         [HttpGet("GetSeguimientoVoluntario/{id}")]
-        [Authorize(Roles = "SuperAdministrador, Voluntario")]
+        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<ActionResult> GetSeguimientoVoluntario(int id)
         {
             var seguimiento = await _seguimientoService.GetById(id);
@@ -72,28 +84,8 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
             return Ok(mapped);
         }
-        /*
-        [HttpPut("UpdateFecha")]
-        [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<IActionResult> UpdateFecha([FromBody] FechaReporteDto dto)
-        {
-            var seguimiento = await _seguimientoService.GetById(dto.Id);
-            if (seguimiento != null)
-            {
-                var resultado = await _seguimientoService.UpdateFecha(dto);
-                if (resultado != null)
-                {
-                    var mapped = _mapper.Map<SeguimientoForReturnDto>(resultado);
-                    mapped.ReporteSeguimientos = mapped.ReporteSeguimientos.OrderByDescending(x => x.Fecha).ToList().OrderByDescending(x => x.Id).ToList();
-                    return Ok(mapped);
-                }
-                return BadRequest(new { mensaje = "Problemas al actualizar los datos." });
-            }
-            return BadRequest(new { mensaje = "No existe el Seguimiento." });
-        }
-        */
         [HttpPut("{id}/AsignarSeguimiento/{idUser}")]
-        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> AsignarSeguimiento(int id, int idUser)
         {
             var resultado = await _seguimientoService.AsignarSeguimiento(id, idUser);
@@ -102,7 +94,7 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "Problemas al guardar los datos." });
         }
         [HttpPut("{id}/QuitarAsignacion/{idUser}")]
-        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> QuitarAsignacion(int id, int idUser)
         {
             var resultado = await _seguimientoService.QuitarAsignacion(id, idUser);
@@ -114,24 +106,5 @@ namespace spatwebapi.Controllers
             }
             return BadRequest(new { mensaje = "Problemas al guardar los datos." });
         }
-
-        //[Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        //[HttpPost("{id}/AceptarSeguimientoVoluntario")]
-        //public async Task<IActionResult> AceptarSeguimientoVoluntario(int id)
-        //{
-        //    var resultado = await _seguimientoService.AceptarSeguimientoVoluntario(id);
-        //    if (resultado)
-        //        return Ok();
-        //    return BadRequest(new { mensaje = "Problemas al asignar el seguimiento." });
-        //}
-        //[Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        //[HttpPost("{id}/RechazarSeguimientoVoluntario")]
-        //public async Task<IActionResult> RechazarSeguimientoVoluntario(int id)
-        //{
-        //    var resultado = await _seguimientoService.RechazarSeguimientoVoluntario(id);
-        //    if (resultado)
-        //        return Ok();
-        //    return BadRequest(new { mensaje = "Problemas al rechazar el seguimiento." });
-        //}
     }
 }

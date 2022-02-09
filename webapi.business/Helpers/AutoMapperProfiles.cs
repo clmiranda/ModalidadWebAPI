@@ -69,10 +69,6 @@ namespace webapi.business.Helpers
             CreateMap<SolicitudAdopcionCanceladaForCreateDto, AdopcionCancelada>();
             CreateMap<FechaReporteTratamientoForUpdateDto, ReporteTratamiento>();
             CreateMap<User, UserRolesForReturn>()
-                //.ForMember(dest => dest.Edad, opt =>
-                //{
-                //    opt.MapFrom(d => d.FechaNacimiento.CalculoEdad());
-                //})
                 .ForMember(dest => dest.Roles, opt =>
                 {
                     opt.MapFrom(d => d.UserRoles.Select((role) => new

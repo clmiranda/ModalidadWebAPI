@@ -13,7 +13,6 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "SuperAdministrador")]
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -44,18 +43,20 @@ namespace spatwebapi.Controllers
         [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser([FromBody] UserForRegisterDto userForRegisterDto)
         {
-            var result = await _userService.CreateUser(userForRegisterDto);
-            if (result.Succeeded)
+            var resultado = await _userService.CreateUser(userForRegisterDto);
+            if (resultado.Succeeded)
             {
                 var userToCreate = await _userService.GetEmailToken(userForRegisterDto.Email);
                 var confirmationLink = Url.Action("ConfirmEmail", "Auth",
                     new { idUser = userToCreate.Id, token = userToCreate.Token }, Request.Scheme);
 
                 await _emailService.SendEmailAsync(userForRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href=" + confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
-                return Ok();
+                var listaUsers = await _userService.GetAllUsers();
+                var mapped = _mapper.Map<IEnumerable<UserRolesForReturn>>(listaUsers);
+                return Ok(mapped);
             }
             else
-                return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
+                return BadRequest(new { mensaje = resultado.Errors.FirstOrDefault().Description });
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("UpdateUser")]
@@ -91,10 +92,10 @@ namespace spatwebapi.Controllers
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("ResetPassword/{id}")]
         public async Task<ActionResult> ResetPassword(int id, UpdateUserPassword updateUserdto) {
-                var resul = await _userService.ResetPassword(id, updateUserdto.Password);
-                if (resul.Succeeded)
+                var resultado = await _userService.ResetPassword(id, updateUserdto.Password);
+                if (resultado.Succeeded)
                     return Ok();
-                return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
+                return BadRequest(new { mensaje = resultado.Errors.FirstOrDefault().Description });
         }
         [Authorize(Roles = "SuperAdministrador")]
         [HttpGet("GetAllUsers")]
@@ -106,9 +107,9 @@ namespace spatwebapi.Controllers
         }
         [Authorize(Roles = "SuperAdministrador")]
         [HttpPost("AsignarRoles/{id}")]
-        public async Task<IActionResult> AsignarRoles(int id,  string[] rolesUser)
+        public async Task<IActionResult> AsignarRoles(int id,  string[] RolesUser)
         {
-            var userRoles = await _roleUserService.AsignarRoles(id, rolesUser);
+            var userRoles = await _roleUserService.AsignarRoles(id, RolesUser);
             if (userRoles == null)
                 return BadRequest(new { mensaje = "Error al editar Roles." });
             return Ok(userRoles);
@@ -123,7 +124,7 @@ namespace spatwebapi.Controllers
             var resultado = await _userService.CambiarEstado(id);
             if (resultado.Succeeded)
                 return Ok(resultado);
-            return BadRequest(new { mensaje = "Error al modificar estado." });
+            return BadRequest(new { mensaje = resultado.Errors.FirstOrDefault().Description });
         }
         [Authorize(Roles = "SuperAdministrador")]
         [HttpDelete("DeleteUser/{id}")]
@@ -134,8 +135,8 @@ namespace spatwebapi.Controllers
                 return BadRequest(new { mensaje = "El usuario no existe." });
             var resultado = await _userService.DeleteUser(id);
             if (resultado.Succeeded)
-                return Ok(resultado);
-            return BadRequest(new { mensaje = "Error al eliminar." });
+                return Ok();
+            return BadRequest(new { mensaje = resultado.Errors.FirstOrDefault().Description });
         }
     }
 }

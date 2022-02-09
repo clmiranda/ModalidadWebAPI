@@ -50,14 +50,10 @@ namespace webapi.business.Services.Imp
                 return mapped;
             return null;
         }
-        public async Task<bool> DeleteMascota(Mascota mascota)
-        {
-            _unitOfWork.MascotaRepository.Delete(mascota);
-            return await _unitOfWork.SaveAll();
-        }
         public async Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros)
         {
             var resul = _unitOfWork.MascotaRepository.GetAll();
+            resul = resul.OrderByDescending(x => x.Id);
 
             if (!String.IsNullOrEmpty(parametros.Busqueda))
                 resul = resul.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Denuncia.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()));

@@ -37,16 +37,12 @@ namespace webapi.business.Services.Imp
             );
             _cloudinary = new Cloudinary(acc);
         }
-
-        public async Task<Foto> GetFoto(int id)
-        {
-            return await _unitOfWork.FotoRepository.GetById(id);
-        }
         public async Task<Mascota> GetMascota(int id)
         {
             return await _unitOfWork.MascotaRepository.GetById(id);
         }
-        public bool VerifyFotoIsPrincipal(Foto foto) {
+        public bool VerifyFotoIsPrincipal(Foto foto)
+        {
             if (foto.IsPrincipal)
                 return false;
             return true;
@@ -59,7 +55,8 @@ namespace webapi.business.Services.Imp
 
             var foto = await _unitOfWork.FotoRepository.GetById(idfoto);
 
-            if (VerifyFotoIsPrincipal(foto)) {
+            if (VerifyFotoIsPrincipal(foto))
+            {
                 var principal = await _unitOfWork.FotoRepository.FindByCondition(x => x.Mascota.Id == id && x.IsPrincipal).FirstOrDefaultAsync();
                 principal.IsPrincipal = false;
 
@@ -102,20 +99,20 @@ namespace webapi.business.Services.Imp
             }
             return await _unitOfWork.SaveAll();
         }
-
         public async Task<bool> DeleteFotoMascota(int id, int idfoto)
         {
             var foto = await _unitOfWork.FotoRepository.GetById(idfoto);
 
             if (foto == null) return false;
 
-            if (VerifyFotoIsPrincipal(foto)) {
+            if (VerifyFotoIsPrincipal(foto))
+            {
                 if (foto.IdPublico != null)
                 {
-                    var eliminar = new DeletionParams(foto.IdPublico);
-                    var x = _cloudinary.Destroy(eliminar);
+                    var parametros = new DeletionParams(foto.IdPublico);
+                    var resultado = _cloudinary.Destroy(parametros);
 
-                    if (x.Result.Equals("ok"))
+                    if (resultado.Result.Equals("ok"))
                         _unitOfWork.FotoRepository.Delete(foto);
                 }
                 else
@@ -125,15 +122,16 @@ namespace webapi.business.Services.Imp
             }
             return false;
         }
-        public async Task<bool> DeleteAllFotoMascota(Mascota mascota) {
+        public bool DeleteAllFotoMascota(Mascota mascota)
+        {
             foreach (var foto in mascota.Fotos)
             {
                 if (foto.IdPublico != null)
                 {
-                    var eliminar = new DeletionParams(foto.IdPublico);
-                    var x = _cloudinary.Destroy(eliminar);
+                    var parametros = new DeletionParams(foto.IdPublico);
+                    var resultado = _cloudinary.Destroy(parametros);
 
-                    if (x.Result.Equals("ok"))
+                    if (resultado.Result.Equals("ok"))
                         _unitOfWork.FotoRepository.Delete(foto);
                 }
                 else
@@ -173,15 +171,15 @@ namespace webapi.business.Services.Imp
         {
             var foto = await _unitOfWork.FotoRepository.GetById(idFoto);
             if (foto.IdPublico != null)
-                {
-                    var eliminar = new DeletionParams(foto.IdPublico);
-                    var x = _cloudinary.Destroy(eliminar);
+            {
+                var eliminar = new DeletionParams(foto.IdPublico);
+                var x = _cloudinary.Destroy(eliminar);
 
-                    if (x.Result.Equals("ok"))
-                        _unitOfWork.FotoRepository.Delete(foto);
-                }
-                else
-                    return false;
+                if (x.Result.Equals("ok"))
+                    _unitOfWork.FotoRepository.Delete(foto);
+            }
+            else
+                return false;
             return await _unitOfWork.SaveAll();
         }
     }

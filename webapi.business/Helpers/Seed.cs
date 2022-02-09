@@ -34,15 +34,14 @@ namespace webapi.business.Helpers
                     userManager.AddToRoleAsync(admin, "SuperAdministrador").Wait();
                     userManager.AddToRoleAsync(admin, "Administrador").Wait();
                     userManager.AddToRoleAsync(admin, "Voluntario").Wait();
-                    //userManager.AddToRoleAsync(admin, "Moderador").Wait();
                 }
             }
         }
         private static User SetUser()
         {
             var persona = new Persona {
-                Nombres = "Admin",
-                Apellidos = "Admin",
+                Nombres = "Carlos",
+                Apellidos = "Ramirez",
                 Genero = "Masculino",
                 Domicilio = "Barrio Senac",
                 FechaNacimiento = new DateTime(1992, 9, 24),
@@ -51,7 +50,6 @@ namespace webapi.business.Helpers
             var user = new User
             {
                 Persona = persona,
-                //PersonaId = persona.Id,
                 Estado = "Activo",
                 UserName = "admin",
                 Email = "miranda76575@gmail.com",
