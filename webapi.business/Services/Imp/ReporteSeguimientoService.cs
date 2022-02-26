@@ -58,12 +58,12 @@ namespace webapi.business.Services.Imp
         public async Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporteDto)
         {
             var reporte = await _unitOfWork.SeguimientoRepository.GetById(reporteDto.SeguimientoId);
-            if (reporte.FechaInicio.Date <= reporteDto.FechaReporte.Date && reporte.FechaFin.Date >= reporteDto.FechaReporte.Date)
+            if (reporteDto.FechaReporte.Date >= reporte.FechaInicio.Date && reporteDto.FechaReporte.Date <= reporte.FechaFin.Date)
             {
                 if (reporte.ReporteSeguimientos.Any(x => x.FechaReporte.Date.ToShortDateString() == reporteDto.FechaReporte.Date.ToShortDateString()))
                     return 2;
-                if (reporteDto.FechaReporte.Date < DateTime.Now.Date)
-                    return 4;
+                //if (reporteDto.FechaReporte.Date < DateTime.Now.Date)
+                //    return 4;
                 else
                     return 1;
             }
@@ -101,10 +101,13 @@ namespace webapi.business.Services.Imp
             {
                 _unitOfWork.ReporteSeguimientoRepository.Delete(reporte);
 
-                if (await _fotoService.DeleteFotoReporteSeguimiento(reporte.Foto.Id))
+                if (reporte.Foto != null)
+                    if (await _fotoService.DeleteFotoReporteSeguimiento(reporte.Foto.Id))
+                        return await _unitOfWork.SaveAll();
+                    else
+                        return false;
+                else
                     return await _unitOfWork.SaveAll();
-
-                return false;
             }
             return false;
         }

@@ -14,7 +14,6 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "SuperAdministrador, Administrador")]
     public class ReporteSeguimientoController : Controller
     {
         private readonly ISeguimientoService _seguimientoService;
@@ -29,6 +28,7 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAll")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public ActionResult GetAll()
         {
             var lista = _reporteSeguimientoService.GetAll();
@@ -36,6 +36,7 @@ namespace spatwebapi.Controllers
             return Ok(mapped);
         }
         [HttpPut("UpdateRangoFechasSeguimiento")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> UpdateRangoFechasSeguimiento([FromBody] RangoFechaSeguimientoDto rangoFechaSeguimientoDto) {
             var seguimiento = await _seguimientoService.GetById(rangoFechaSeguimientoDto.Id);
             if (seguimiento != null) {
@@ -67,6 +68,7 @@ namespace spatwebapi.Controllers
             return lista;
         }
         [HttpPost("CreateReporteSeguimiento/{id}")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> CreateReporteSeguimiento(int id)
         {
             if (await _reporteSeguimientoService.CreateReporteSeguimiento(id))
@@ -103,6 +105,7 @@ namespace spatwebapi.Controllers
             return BadRequest(new { mensaje = "Hubo problemas al generar el Reporte." });
         }
         [HttpPut("UpdateFechaReporte")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> UpdateFechaReporte(ReporteSeguimientoForUpdateAdmin reporteSeguimientoDto)
         {
             var reporte = await _reporteSeguimientoService.GetById(reporteSeguimientoDto.Id);
@@ -129,6 +132,7 @@ namespace spatwebapi.Controllers
                 return BadRequest(new { mensaje = "La fecha no puede ser menor a la fecha actual." });
         }
         [HttpDelete("{idSeguimiento}/DeleteReporte/{idReporte}")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> DeleteReporte(int idSeguimiento, int idReporte)
         {
             if (await _reporteSeguimientoService.DeleteReporte(idReporte))

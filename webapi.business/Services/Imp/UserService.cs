@@ -112,8 +112,9 @@ namespace webapi.business.Services.Imp
         public async Task<IdentityResult> DeleteUser(int id)
         {
             var usuario = await _unitOfWork.UserRepository.GetById(id);
+            await _seguimientoService.DeleteAllSeguimientoFromUser(usuario.Id);
+
             var resultado = await _unitOfWork.UserRepository.DeleteUser(usuario);
-            await _seguimientoService.DeleteAllSeguimiento(usuario.Id);
             return resultado;
         }
         public async Task<IdentityResult> ConfirmEmail(string userId, string token)

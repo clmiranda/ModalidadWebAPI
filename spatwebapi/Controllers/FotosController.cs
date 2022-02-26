@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +27,11 @@ namespace spatwebapi.Controllers
         public async Task<IActionResult> AddFotoMascota(int idMascota, [FromForm] FotoForCreationDto fotoDto)
         {
             var resultado = await _fotoService.AddFotoMascota(idMascota, fotoDto);
-            if (!resultado)
-                return BadRequest("No se pudo agregar la foto.");
-            return Json("");
+            if (resultado.Equals("ErrorCount"))
+                return BadRequest("No se pueden agregar más de 4 fotos.");
+            else if(resultado.Equals("ErrorSave"))
+                return BadRequest("No se pudo agregar la(s) foto(s).");
+            return Json("Foto(s) agregada(s).");
         }
         [HttpPost("Mascota/{idMascota}/SetFotoPrincipalMascota/{idFoto}")]
         public async Task<IActionResult> SetFotoPrincipalMascota(int idMascota, int idFoto)
@@ -36,8 +39,9 @@ namespace spatwebapi.Controllers
             if (await _fotoService.SetFotoPrincipalMascota(idMascota, idFoto))
             {
                 var modelo = await _fotoService.GetMascota(idMascota);
-                var mascota = _mapper.Map<MascotaForReturn>(modelo);
-                return Ok(mascota);
+                var mapped = _mapper.Map<MascotaForDetailedDto>(modelo);
+                mapped.Fotos = mapped.Fotos.OrderByDescending(x => x.IsPrincipal == true).ToList();
+                return Ok(mapped);
             }
             return BadRequest(new { mensaje = "Conflicto al asignar la foto principal." });
         }

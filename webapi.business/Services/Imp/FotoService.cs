@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Fotos;
@@ -66,38 +65,45 @@ namespace webapi.business.Services.Imp
             return false;
         }
 
-        public async Task<bool> AddFotoMascota(int id, FotoForCreationDto fotoMascota)
+        public async Task<string> AddFotoMascota(int idMascota, FotoForCreationDto fotoMascota)
         {
-            var mascotaRepo = await _unitOfWork.MascotaRepository.GetById(id);
-            mascotaRepo.Fotos = new List<Foto>();
-            Foto fotoMap = new Foto();
-            foreach (var item in fotoMascota.Archivo)
+            var mascotaRepo = await _unitOfWork.MascotaRepository.GetById(idMascota);
+            if (mascotaRepo.Fotos.Count() + fotoMascota.Archivo.Count() > 4)
+                return "ErrorCount";
+            else
             {
-                var imagen = item;
-                var resultUpload = new ImageUploadResult();
-
-                if (imagen.Length > 0)
+                //mascotaRepo.Fotos = new List<Foto>();
+                Foto fotoMap = new Foto();
+                foreach (var item in fotoMascota.Archivo)
                 {
-                    using (var stream = imagen.OpenReadStream())
-                    {
-                        var parametros = new ImageUploadParams()
-                        {
-                            File = new FileDescription(imagen.Name, stream),
-                            Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
-                        };
-                        resultUpload = _cloudinary.Upload(parametros);
-                    }
-                }
-                fotoMascota.Url = resultUpload.SecureUrl.ToString();
-                fotoMascota.IdPublico = resultUpload.PublicId;
-                fotoMascota.MascotaId = id;
+                    var imagen = item;
+                    var resultUpload = new ImageUploadResult();
 
-                fotoMap = _mapper.Map<Foto>(fotoMascota);
-                mascotaRepo.Fotos.Add(fotoMap);
-                if (!mascotaRepo.Fotos.Any(x => x.IsPrincipal))
-                    fotoMap.IsPrincipal = true;
+                    if (imagen.Length > 0)
+                    {
+                        using (var stream = imagen.OpenReadStream())
+                        {
+                            var parametros = new ImageUploadParams()
+                            {
+                                File = new FileDescription(imagen.Name, stream),
+                                Transformation = new Transformation().Width(600).Height(600).Crop("fill").Gravity("face")
+                            };
+                            resultUpload = _cloudinary.Upload(parametros);
+                        }
+                    }
+                    fotoMascota.Url = resultUpload.SecureUrl.ToString();
+                    fotoMascota.IdPublico = resultUpload.PublicId;
+                    fotoMascota.MascotaId = idMascota;
+
+                    fotoMap = _mapper.Map<Foto>(fotoMascota);
+                    mascotaRepo.Fotos.Add(fotoMap);
+                    if (!mascotaRepo.Fotos.Any(x => x.IsPrincipal))
+                        fotoMap.IsPrincipal = true;
+                }
+                if (await _unitOfWork.SaveAll())
+                    return "Ok";
+                return "ErrorSave";
             }
-            return await _unitOfWork.SaveAll();
         }
         public async Task<bool> DeleteFotoMascota(int id, int idfoto)
         {

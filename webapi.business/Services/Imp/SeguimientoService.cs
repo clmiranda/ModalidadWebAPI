@@ -59,15 +59,16 @@ namespace webapi.business.Services.Imp
             _unitOfWork.SeguimientoRepository.Insert(seguimiento);
         }
         public IEnumerable<User> GetAllVoluntarios() {
-            var lista = _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario")) && x.Estado.Equals("Activo")).ToList();
+            var lista = _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.All(y => !y.Role.Name.Equals("SuperAdministrador") && y.Role.Name.Equals("Voluntario"))).ToList();
             return lista;
         }
-        public async Task<bool> DeleteAllSeguimiento(int idUser)
+        public async Task<bool> DeleteAllSeguimientoFromUser(int idUser)
         {
             var seguimiento = await _unitOfWork.SeguimientoRepository.FindByCondition(x => x.UserId == idUser).ToListAsync();
             foreach (var item in seguimiento)
             {
-                _unitOfWork.SeguimientoRepository.Delete(item);
+                item.User = null;
+                item.Estado = "Activo";
             }
             return await _unitOfWork.SaveAll();
         }
