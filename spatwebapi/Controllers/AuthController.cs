@@ -44,7 +44,7 @@ namespace spatwebapi.Controllers
                 return BadRequest("Ha ocurrido un error, Id o Token inválido.");
 
             if (result.Succeeded)
-                return Redirect("https://localhost:44363/Cuenta/ConfirmEmail");
+                return Redirect("https://localhost:44363/LoginAccount/ConfirmEmail");
             else
                 return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
         }
@@ -68,7 +68,7 @@ namespace spatwebapi.Controllers
         [HttpGet("ValidateResetPassword")]
         public RedirectResult ValidateResetPassword(string email, string token)
         {
-            return Redirect("https://localhost:44363/Cuenta/ResetPassword?email=" + email + "&token=" + token);
+            return Redirect("https://localhost:44363/LoginAccount/ResetPassword?email=" + email + "&token=" + token);
         }
         [HttpPost("ResetPasswordExterno")]
         public async Task<IActionResult> ResetPasswordExterno(ResetPasswordDto resetPasswordDto)

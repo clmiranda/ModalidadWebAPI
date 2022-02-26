@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +33,7 @@ namespace spatwebapi.Controllers
         {
             var resul = await _adopcionService.GetAllAdopciones(parametros);
             var lista = _mapper.Map<IEnumerable<SolicitudAdopcionForList>>(resul);
+            lista = lista.OrderByDescending(x => x.FechaAdopcion).ToList().ToList();
             Response.AddPagination(resul.CurrentPage, resul.PageSize,
                  resul.TotalCount, resul.TotalPages);
             return Ok(lista);
@@ -96,8 +98,8 @@ namespace spatwebapi.Controllers
             if (modelo != null) {
                 if (await _adopcionService.UpdateFecha(fechaSolicitudDto))
                 {
-                    var res = _mapper.Map<SolicitudAdopcionReturnDto>(modelo);
-                    return Ok(res);
+                    //var res = _mapper.Map<SolicitudAdopcionReturnDto>(modelo);
+                    return Ok();
                 }
                 return BadRequest(new { mensaje = "Ha ocurrido un error actualizando los datos." });
             }

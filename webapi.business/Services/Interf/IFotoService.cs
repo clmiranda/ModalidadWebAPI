@@ -9,7 +9,7 @@ namespace webapi.business.Services.Interf
     {
         Task<Mascota> GetMascota(int id);
         Task<bool> SetFotoPrincipalMascota(int id, int idfoto);
-        Task<bool> AddFotoMascota(int id, FotoForCreationDto fotoMascota);
+        Task<string> AddFotoMascota(int idMascota, FotoForCreationDto fotoMascota);
         Task<bool> DeleteFotoMascota(int id, int idfoto);
         Task<bool> AgregarFotoReporte(int id, IFormFile fotoReporte);
         bool DeleteAllFotoMascota(Mascota mascota);

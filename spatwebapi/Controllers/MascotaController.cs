@@ -50,6 +50,7 @@ namespace spatwebapi.Controllers
             var mascota = _mascotaService.FindByCondition(x => x.DenunciaId == id).FirstOrDefault();
             if (mascota == null) return Ok(new MascotaForDetailedDto { DenunciaId = id });
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+            mapped.Fotos = mapped.Fotos.OrderByDescending(x => x.IsPrincipal == true).ToList();
             return Ok(mapped);
         }
         [HttpGet("GetAllMascotaAdopcion")]
