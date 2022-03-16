@@ -1,7 +1,6 @@
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\spatwebapi.exe
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\appsettings.json
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\spatwebapi.exe
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\spatwebapi.deps.json
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\spatwebapi.runtimeconfig.json
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\spatwebapi.runtimeconfig.dev.json
@@ -88,6 +87,7 @@ C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\ko\M
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\pl\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\pt-BR\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\ru\Microsoft.CodeAnalysis.resources.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\cs\Microsoft.CodeAnalysis.CSharp.resources.dll

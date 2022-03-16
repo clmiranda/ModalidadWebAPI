@@ -43,7 +43,7 @@ namespace spatwebapi.Controllers
                 var resultado = await _reporteSeguimientoService.UpdateRangoFechasSeguimiento(rangoFechaSeguimientoDto);
                 if (resultado != null) {
                     var mapped = _mapper.Map<SeguimientoForReturnDto>(resultado);
-                    mapped.ReporteSeguimientos = mapped.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderByDescending(x => x.Id).ToList();
+                    mapped.ReporteSeguimientos = mapped.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
                     return Ok(mapped);
                 }
                 return BadRequest(new { mensaje = "Problemas al actualizar los datos." });
@@ -97,7 +97,7 @@ namespace spatwebapi.Controllers
                 if (resultadoFoto)
                 {
                     var seguimiento = await _seguimientoService.GetById(reporteSeguimientoDto.SeguimientoId);
-                    seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte.Date.Equals(DateTime.Now.Date)).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
+                    seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte.Date).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
                     var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                     return Ok(mapped);
                 }
