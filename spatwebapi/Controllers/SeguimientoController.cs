@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -79,10 +78,15 @@ namespace spatwebapi.Controllers
         {
             var seguimiento = await _seguimientoService.GetById(id);
             if (seguimiento == null)
-                return NotFound(null);
-            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte.Date.Equals(DateTime.Now.Date)).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
-            var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
-            return Ok(mapped);
+                return Ok(null);
+            var idUser = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
+            if (seguimiento.UserId == idUser)
+            {
+                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte.Date).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
+                var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
+                return Ok(mapped);
+            }
+            return Unauthorized();
         }
         [HttpPut("{id}/AsignarSeguimiento/{idUser}")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]

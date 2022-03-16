@@ -86,7 +86,7 @@ namespace webapi.business.Services.Imp
                             var parametros = new ImageUploadParams()
                             {
                                 File = new FileDescription(imagen.Name, stream),
-                                Transformation = new Transformation().Width(600).Height(600).Crop("fill").Gravity("face")
+                                //Transformation = new Transformation().Width(1000).Height(1000).Crop("fill").Gravity("face")
                             };
                             resultUpload = _cloudinary.Upload(parametros);
                         }
@@ -158,7 +158,7 @@ namespace webapi.business.Services.Imp
                     var parametros = new ImageUploadParams()
                     {
                         File = new FileDescription(archivo.Name, stream),
-                        Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
+                        //Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
                     };
                     resultUpload = _cloudinary.Upload(parametros);
                 }
