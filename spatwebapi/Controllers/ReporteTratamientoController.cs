@@ -26,6 +26,9 @@ namespace spatwebapi.Controllers
         public async Task<ActionResult> GetAllReporteTratamiento(int id)
         {
             var mascota = await _reporteTratamientoService.GetAllReporteTratamiento(id);
+            if (mascota == null)
+                return Ok(null);
+
             mascota.ReporteTratamientos = mascota.ReporteTratamientos.OrderBy(x => x.FechaCreacion).ToList();
             var mapped = _mapper.Map<MascotaForReturn>(mascota);
             return Ok(mapped);
@@ -74,8 +77,8 @@ namespace spatwebapi.Controllers
                 {
                     if (await _reporteTratamientoService.UpdateFecha(fechaReporteTratamientoDto))
                     {
-                        var mascota = _mapper.Map<MascotaForReturn>(reporteTratamiento.Mascota);
-                        return Ok(mascota);
+                        var mapped = _mapper.Map<MascotaForReturn>(reporteTratamiento.Mascota);
+                        return Ok(mapped);
                     }
                     return BadRequest(new { mensaje = "Ha ocurrido un error actualizando los datos." });
                 }

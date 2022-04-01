@@ -31,21 +31,22 @@ namespace spatwebapi.Controllers
         [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<ActionResult> GetAllAdopciones([FromQuery] AdopcionParametros parametros)
         {
-            var resul = await _adopcionService.GetAllAdopciones(parametros);
-            var lista = _mapper.Map<IEnumerable<SolicitudAdopcionForList>>(resul);
-            lista = lista.OrderByDescending(x => x.FechaAdopcion).ToList().ToList();
-            Response.AddPagination(resul.CurrentPage, resul.PageSize,
-                 resul.TotalCount, resul.TotalPages);
-            return Ok(lista);
+            var lista = await _adopcionService.GetAllAdopciones(parametros);
+            var mapped = _mapper.Map<IEnumerable<SolicitudAdopcionForList>>(lista);
+            mapped = mapped.OrderByDescending(x => x.FechaAdopcion).ToList().ToList();
+            Response.AddPagination(lista.CurrentPage, lista.PageSize,
+                 lista.TotalCount, lista.TotalPages);
+            return Ok(mapped);
         }
         [HttpGet("GetById/{id}")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public async Task<ActionResult> GetById(int id) {
-            var resul = await _adopcionService.GetById(id);
-            if (resul == null)
-                return NotFound("Id de solicitud de adopción no existe.");
-            var modelo = _mapper.Map<SolicitudAdopcionForDetailDto>(resul);
-            return Ok(modelo);
+        public async Task<ActionResult> GetById(int id)
+        {
+            var solicitudAdopcion = await _adopcionService.GetById(id);
+            if (solicitudAdopcion == null)
+                return Ok(null);
+            var mapped = _mapper.Map<SolicitudAdopcionForDetailDto>(solicitudAdopcion);
+            return Ok(mapped);
         }
         [HttpGet("GetAll")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
@@ -76,7 +77,7 @@ namespace spatwebapi.Controllers
         public async Task<ActionResult<SolicitudAdopcionReturnDto>> GetSolicitudAdopcionByIdMascota(int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
-            if (mascota==null)
+            if (mascota == null)
                 return Ok(null);
             if (!mascota.Estado.Equals("Activo"))
                 return Ok(null);
@@ -84,36 +85,37 @@ namespace spatwebapi.Controllers
         }
         [AllowAnonymous]
         [HttpPost("CreateSolicitudAdopcion")]
-        public async Task<IActionResult> CreateSolicitudAdopcion([FromBody] SolicitudAdopcionForCreate solicitudAdopcionDto) {
-            var resul = await _adopcionService.CreateSolicitudAdopcion(solicitudAdopcionDto);
-            if (resul != null) {
+        public async Task<IActionResult> CreateSolicitudAdopcion([FromBody] SolicitudAdopcionForCreate solicitudAdopcionDto)
+        {
+            var resultado = await _adopcionService.CreateSolicitudAdopcion(solicitudAdopcionDto);
+            if (resultado != null)
                 return Ok(null);
-            }
             return BadRequest(new { mensaje = "Ha ocurrido un error guardando los datos." });
         }
         [HttpPut("UpdateFecha")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<IActionResult> UpdateFecha([FromForm] FechaSolicitudAdopcionForUpdateDto fechaSolicitudDto) {
-            var modelo = await _adopcionService.GetById(fechaSolicitudDto.Id);
-            if (modelo != null) {
+        public async Task<IActionResult> UpdateFecha([FromForm] FechaSolicitudAdopcionForUpdateDto fechaSolicitudDto)
+        {
+            var solicitudAdopcion = await _adopcionService.GetById(fechaSolicitudDto.Id);
+            if (solicitudAdopcion != null)
+            {
                 if (await _adopcionService.UpdateFecha(fechaSolicitudDto))
-                {
-                    //var res = _mapper.Map<SolicitudAdopcionReturnDto>(modelo);
                     return Ok();
-                }
                 return BadRequest(new { mensaje = "Ha ocurrido un error actualizando los datos." });
             }
             return BadRequest(new { mensaje = "No se pudo encontrar la solicitud de adopción." });
         }
         [HttpPut("{id}/AprobarSolicitudAdopcion")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<IActionResult> AprobarSolicitudAdopcion(int id) {
-            var modelo = await _adopcionService.GetById(id);
-            if (modelo!=null)
+        public async Task<IActionResult> AprobarSolicitudAdopcion(int id)
+        {
+            var solicitudAdopcion = await _adopcionService.GetById(id);
+            if (solicitudAdopcion != null)
             {
-                if (await _adopcionService.AprobarSolicitudAdopcion(id)) {
-                    var solicitudAdopcion = _mapper.Map<SolicitudAdopcionReturnDto>(modelo);
-                        return Ok(solicitudAdopcion);
+                if (await _adopcionService.AprobarSolicitudAdopcion(id))
+                {
+                    var mapped = _mapper.Map<SolicitudAdopcionReturnDto>(solicitudAdopcion);
+                    return Ok(mapped);
                 }
                 else
                     return BadRequest(new { mensaje = "Hubo problemas al guardar los datos." });
@@ -122,15 +124,17 @@ namespace spatwebapi.Controllers
         }
         [HttpPut("RechazarSolicitudAdopcion")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<IActionResult> RechazarSolicitudAdopcion(SolicitudAdopcionRechazadaForCreateDto solicitudAdopcionRechazadaDto) {
-            var modelo = await _adopcionService.GetById(solicitudAdopcionRechazadaDto.SolicitudAdopcionId);
-            if (modelo!=null)
+        public async Task<IActionResult> RechazarSolicitudAdopcion(SolicitudAdopcionRechazadaForCreateDto solicitudAdopcionRechazadaDto)
+        {
+            var solicitudAdopcion = await _adopcionService.GetById(solicitudAdopcionRechazadaDto.SolicitudAdopcionId);
+            if (solicitudAdopcion != null)
             {
-                if (await _adopcionService.RechazarSolicitudAdopcion(solicitudAdopcionRechazadaDto.SolicitudAdopcionId, modelo.Mascota.Id)) {
+                if (await _adopcionService.RechazarSolicitudAdopcion(solicitudAdopcionRechazadaDto.SolicitudAdopcionId, solicitudAdopcion.Mascota.Id))
+                {
                     if (await _adopcionService.CreateSolicitudAdopcionRechazada(solicitudAdopcionRechazadaDto))
                     {
-                        var solicitudAdopcion = _mapper.Map<SolicitudAdopcionReturnDto>(modelo);
-                        return Ok(solicitudAdopcion);
+                        var mapped = _mapper.Map<SolicitudAdopcionReturnDto>(solicitudAdopcion);
+                        return Ok(mapped);
                     }
                     return BadRequest(new { mensaje = "Ocurrio un problema al tratar de generar el informe." });
                 }
@@ -141,13 +145,15 @@ namespace spatwebapi.Controllers
         }
         [HttpPut("CancelarAdopcion")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<IActionResult> CancelarAdopcion(SolicitudAdopcionCanceladaForCreateDto solicitudAdopcionCanceladaDto) {
+        public async Task<IActionResult> CancelarAdopcion(SolicitudAdopcionCanceladaForCreateDto solicitudAdopcionCanceladaDto)
+        {
             var solicitudAdopcion = await _adopcionService.GetById(solicitudAdopcionCanceladaDto.SolicitudAdopcionId);
-            if (solicitudAdopcion!=null)
+            if (solicitudAdopcion != null)
             {
                 if (await _adopcionService.CancelarAdopcion(solicitudAdopcionCanceladaDto.SolicitudAdopcionId, solicitudAdopcion.Mascota.Id))
                 {
-                    if (await _adopcionService.CreateSolicitudAdopcionCancelada(solicitudAdopcionCanceladaDto)) {
+                    if (await _adopcionService.CreateSolicitudAdopcionCancelada(solicitudAdopcionCanceladaDto))
+                    {
                         var mapped = _mapper.Map<SolicitudAdopcionReturnDto>(solicitudAdopcion);
                         return Ok(mapped);
                     }

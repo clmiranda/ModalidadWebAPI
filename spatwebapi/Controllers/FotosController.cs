@@ -29,7 +29,7 @@ namespace spatwebapi.Controllers
             var resultado = await _fotoService.AddFotoMascota(idMascota, fotoDto);
             if (resultado.Equals("ErrorCount"))
                 return BadRequest("No se pueden agregar más de 4 fotos.");
-            else if(resultado.Equals("ErrorSave"))
+            else if (resultado.Equals("ErrorSave"))
                 return BadRequest("No se pudo agregar la(s) foto(s).");
             return Json("Foto(s) agregada(s).");
         }
@@ -38,9 +38,9 @@ namespace spatwebapi.Controllers
         {
             if (await _fotoService.SetFotoPrincipalMascota(idMascota, idFoto))
             {
-                var modelo = await _fotoService.GetMascota(idMascota);
-                var mapped = _mapper.Map<MascotaForDetailedDto>(modelo);
-                mapped.Fotos = mapped.Fotos.OrderByDescending(x => x.IsPrincipal == true).ToList();
+                var mascota = await _fotoService.GetMascota(idMascota);
+                var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+                mapped.Fotos = mapped.Fotos.OrderByDescending(x => x.IsPrincipal).ToList();
                 return Ok(mapped);
             }
             return BadRequest(new { mensaje = "Conflicto al asignar la foto principal." });
@@ -48,7 +48,8 @@ namespace spatwebapi.Controllers
         [HttpDelete("Mascota/{idMascota}/DeleteFotoMascota/{idFoto}")]
         public async Task<IActionResult> DeleteFotoMascota(int idMascota, int idFoto)
         {
-            if (await _fotoService.DeleteFotoMascota(idMascota, idFoto)) {
+            if (await _fotoService.DeleteFotoMascota(idMascota, idFoto))
+            {
                 var mascota = await _mascotaService.GetMascotaById(idMascota);
                 var mapped = _mapper.Map<MascotaForReturn>(mascota);
                 return Ok(mapped);

@@ -73,13 +73,15 @@ namespace webapi.business.Services.Imp
                 return solicitudAdopcion;
             return null;
         }
-        public async Task<bool> UpdateFecha(FechaSolicitudAdopcionForUpdateDto fechaSolicitudAdopcionDto) {
+        public async Task<bool> UpdateFecha(FechaSolicitudAdopcionForUpdateDto fechaSolicitudAdopcionDto)
+        {
             var solicitudAdopcion = await _unitOfWork.SolicitudAdopcionRepository.GetById(fechaSolicitudAdopcionDto.Id);
             var mapped = _mapper.Map(fechaSolicitudAdopcionDto, solicitudAdopcion);
             _unitOfWork.SolicitudAdopcionRepository.Update(mapped);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> CreateSolicitudAdopcionRechazada(SolicitudAdopcionRechazadaForCreateDto solicitudAdopcionRechazadaDto) {
+        public async Task<bool> CreateSolicitudAdopcionRechazada(SolicitudAdopcionRechazadaForCreateDto solicitudAdopcionRechazadaDto)
+        {
             var adopcionRechazada = _mapper.Map<AdopcionRechazada>(solicitudAdopcionRechazadaDto);
             _unitOfWork.AdopcionRechazadaRepository.Insert(adopcionRechazada);
             return await _unitOfWork.SaveAll();
@@ -90,7 +92,8 @@ namespace webapi.business.Services.Imp
             _unitOfWork.AdopcionCanceladaRepository.Insert(adopcionCancelada);
             return await _unitOfWork.SaveAll();
         }
-        public async Task<bool> AprobarSolicitudAdopcion(int id) {
+        public async Task<bool> AprobarSolicitudAdopcion(int id)
+        {
             var solicitudAdopcion = await _unitOfWork.SolicitudAdopcionRepository.GetById(id);
             solicitudAdopcion.Estado = "Aprobado";
             solicitudAdopcion.Mascota.Estado = "Adoptada";
@@ -131,9 +134,7 @@ namespace webapi.business.Services.Imp
         {
             var listaSolicitudAdopcion = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.MascotaId == mascotaId).ToListAsync();
             foreach (var solicitudAdopcion in listaSolicitudAdopcion)
-            {
                 _unitOfWork.SolicitudAdopcionRepository.Delete(solicitudAdopcion);
-            }
             return true;
         }
     }

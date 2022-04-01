@@ -35,20 +35,20 @@ namespace webapi.business.Services.Imp
         }
         public async Task<User> FindUser(UserForLoginDto userForLoginDto)
         {
-            var resul = await _unitOfWork.UserRepository.FindByName(userForLoginDto.UsernameEmail);
-            if (resul == null)
+            var resultado = await _unitOfWork.UserRepository.FindByName(userForLoginDto.UsernameEmail);
+            if (resultado == null)
             {
-                resul = await _unitOfWork.UserRepository.FindByEmail(userForLoginDto.UsernameEmail);
-                if (resul == null)
+                resultado = await _unitOfWork.UserRepository.FindByEmail(userForLoginDto.UsernameEmail);
+                if (resultado == null)
                     return null;
             }
-            if (resul == null)
+            if (resultado == null)
                 return null;
-            if (!await _unitOfWork.UserRepository.IsEmailConfirmed(resul))
+            if (!await _unitOfWork.UserRepository.IsEmailConfirmed(resultado))
                 return null;
-            var checkPassword = await _unitOfWork.UserRepository.CheckPassword(resul, userForLoginDto.Password, false);
+            var checkPassword = await _unitOfWork.UserRepository.CheckPassword(resultado, userForLoginDto.Password, false);
             if (checkPassword.Succeeded)
-                return resul;
+                return resultado;
             return null;
         }
         public async Task<object> GenerateJwtToken(User user, string parametroSecurity)
@@ -101,20 +101,20 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IdentityResult> CambiarEstado(int id)
         {
-            var usuario = await _unitOfWork.UserRepository.GetById(id);
-            if (usuario.Estado.Equals("Activo"))
-                usuario.Estado = "Inactivo";
+            var user = await _unitOfWork.UserRepository.GetById(id);
+            if (user.Estado.Equals("Activo"))
+                user.Estado = "Inactivo";
             else
-                usuario.Estado = "Activo";
-            var resultado = await _unitOfWork.UserRepository.UpdateUsuario(usuario);
+                user.Estado = "Activo";
+            var resultado = await _unitOfWork.UserRepository.UpdateUsuario(user);
             return resultado;
         }
         public async Task<IdentityResult> DeleteUser(int id)
         {
-            var usuario = await _unitOfWork.UserRepository.GetById(id);
-            await _seguimientoService.DeleteAllSeguimientoFromUser(usuario.Id);
+            var user = await _unitOfWork.UserRepository.GetById(id);
+            await _seguimientoService.DeleteAllSeguimientoFromUser(user.Id);
 
-            var resultado = await _unitOfWork.UserRepository.DeleteUser(usuario);
+            var resultado = await _unitOfWork.UserRepository.DeleteUser(user);
             return resultado;
         }
         public async Task<IdentityResult> ConfirmEmail(string userId, string token)
@@ -151,18 +151,18 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IdentityResult> ResetPassword(int id, string password)
         {
-            var usuario = await _unitOfWork.UserRepository.GetById(id);
-            string token = await _unitOfWork.UserRepository.GeneratePasswordResetToken(usuario);
-            var result = await _unitOfWork.UserRepository.ResetPassword(usuario, token, password);
-            return result;
+            var user = await _unitOfWork.UserRepository.GetById(id);
+            string token = await _unitOfWork.UserRepository.GeneratePasswordResetToken(user);
+            var resultado = await _unitOfWork.UserRepository.ResetPassword(user, token, password);
+            return resultado;
         }
         public async Task<IdentityResult> ResetPasswordExterno(ResetPasswordDto resetPasswordDto)
         {
-            var usuario = await _unitOfWork.UserRepository.FindByEmail(resetPasswordDto.Email);
+            var user = await _unitOfWork.UserRepository.FindByEmail(resetPasswordDto.Email);
             var codeDecodedBytes = WebEncoders.Base64UrlDecode(resetPasswordDto.Token);
             var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
-            var result = await _unitOfWork.UserRepository.ResetPassword(usuario, codeDecoded, resetPasswordDto.Password);
-            return result;
+            var resultado = await _unitOfWork.UserRepository.ResetPassword(user, codeDecoded, resetPasswordDto.Password);
+            return resultado;
         }
     }
 }

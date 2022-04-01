@@ -38,8 +38,8 @@ namespace spatwebapi.Controllers
         {
             var mascota = await _mascotaService.GetMascotaById(id);
             if (mascota == null) return NotFound(null);
-            var resul = _mapper.Map<MascotaForDetailedDto>(mascota);
-            return Ok(resul);
+            var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+            return Ok(mapped);
         }
         [HttpGet("GetMascotaDenuncia/{id}")]
         public async Task<IActionResult> GetMascotaDenuncia(int id)
@@ -50,7 +50,7 @@ namespace spatwebapi.Controllers
             var mascota = _mascotaService.FindByCondition(x => x.DenunciaId == id).FirstOrDefault();
             if (mascota == null) return Ok(new MascotaForDetailedDto { DenunciaId = id });
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
-            mapped.Fotos = mapped.Fotos.OrderByDescending(x => x.IsPrincipal == true).ToList();
+            mapped.Fotos = mapped.Fotos.OrderByDescending(x => x.IsPrincipal).ToList();
             return Ok(mapped);
         }
         [HttpGet("GetAllMascotaAdopcion")]
@@ -66,29 +66,30 @@ namespace spatwebapi.Controllers
         [HttpGet("GetAllMascotaAdmin")]
         public async Task<ActionResult> GetAllMascotaAdmin([FromQuery] MascotaParametros parametros)
         {
-            var resul = await _mascotaService.GetAllMascotas(parametros);
-            var lista = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(resul);
-            lista = lista.OrderByDescending(x => x.Estado.Equals("Activo") || x.Estado.Equals("Inactivo")).ToList();
-            Response.AddPagination(resul.CurrentPage, resul.PageSize,
-                 resul.TotalCount, resul.TotalPages);
-            return Ok(lista);
+            var lista = await _mascotaService.GetAllMascotas(parametros);
+            var mapped = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
+            mapped = mapped.OrderByDescending(x => x.Estado.Equals("Inactivo")).GroupBy(x => x.Estado)
+                .SelectMany(x => x).ToList();
+            Response.AddPagination(lista.CurrentPage, lista.PageSize,
+                 lista.TotalCount, lista.TotalPages);
+            return Ok(mapped);
         }
         [HttpPost("CreateMascota")]
         public async Task<IActionResult> CreateMascota([FromBody] MascotaForCreateDto mascotaDto)
         {
-            var mascota = await _mascotaService.CreateMascota(mascotaDto);
-            if (mascota.Equals(null))
+            var resultado = await _mascotaService.CreateMascota(mascotaDto);
+            if (resultado.Equals(null))
                 return BadRequest(new { mensaje = "Hubo problemas al crear la Mascota." });
-            var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+            var mapped = _mapper.Map<MascotaForDetailedDto>(resultado);
             return Ok(mapped);
         }
         [HttpPut("UpdateMascota")]
         public async Task<ActionResult> UpdateMascota([FromBody] MascotaForUpdateDto mascotaDto)
         {
-            var mascota = await _mascotaService.UpdateMascota(mascotaDto);
-            if (mascota.Equals(null))
+            var resultado = await _mascotaService.UpdateMascota(mascotaDto);
+            if (resultado.Equals(null))
                 return BadRequest(new { mensaje = "Hubo problemas al actualizar los datos." });
-            var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+            var mapped = _mapper.Map<MascotaForDetailedDto>(resultado);
             return Ok(mapped);
         }
         [HttpPut("ChangeStateSituacion/{id}")]

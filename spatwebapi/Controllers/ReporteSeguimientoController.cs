@@ -54,10 +54,10 @@ namespace spatwebapi.Controllers
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<ActionResult> GetById(int id)
         {
-            var reporte = await _reporteSeguimientoService.GetById(id);
-            if (reporte == null)
+            var reporteSeguimiento = await _reporteSeguimientoService.GetById(id);
+            if (reporteSeguimiento == null)
                 return NotFound(null);
-            var mapped = _mapper.Map<ReporteSeguimientoForReturn>(reporte);
+            var mapped = _mapper.Map<ReporteSeguimientoForReturn>(reporteSeguimiento);
             return Ok(mapped);
         }
         [HttpGet("{id}/GetReportesForVoluntario")]
@@ -84,10 +84,10 @@ namespace spatwebapi.Controllers
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         public async Task<IActionResult> SendReporte([FromForm] ReporteSeguimientoForUpdate reporteSeguimientoDto, IFormFile Foto)
         {
-            var reporte = await _reporteSeguimientoService.GetByIdNotracking(reporteSeguimientoDto.Id);
-            if (reporte == null)
+            var reporteSeguimiento = await _reporteSeguimientoService.GetByIdNotracking(reporteSeguimientoDto.Id);
+            if (reporteSeguimiento == null)
                 return NotFound(new { mensaje = "Reporte no encontrado, Id incorrecto." });
-            if (reporte.Estado.Equals("Enviado"))
+            if (reporteSeguimiento.Estado.Equals("Enviado"))
                 return BadRequest(new { mensaje = "El reporte ya fue enviado anteriormente." });
 
             var resultadoMascota = await _reporteSeguimientoService.SendReporte(reporteSeguimientoDto);
@@ -108,25 +108,25 @@ namespace spatwebapi.Controllers
         [Authorize(Roles = "SuperAdministrador, Administrador")]
         public async Task<IActionResult> UpdateFechaReporte(ReporteSeguimientoForUpdateAdmin reporteSeguimientoDto)
         {
-            var reporte = await _reporteSeguimientoService.GetById(reporteSeguimientoDto.Id);
-            if (reporte.Estado.Equals("Enviado"))
+            var reporteSeguimiento = await _reporteSeguimientoService.GetById(reporteSeguimientoDto.Id);
+            if (reporteSeguimiento.Estado.Equals("Enviado"))
                 return BadRequest(new { mensaje = "El Reporte ya fue enviado." });
-            var verificar = await _reporteSeguimientoService.VerifyDate(reporteSeguimientoDto);
-            if (verificar == 1)
+            var verifyDate = await _reporteSeguimientoService.VerifyDate(reporteSeguimientoDto);
+            if (verifyDate == 1)
             {
                 var resultado = await _reporteSeguimientoService.UpdateFechaReporte(reporteSeguimientoDto);
                 if (resultado)
                 {
-                    var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(reporte.SeguimientoId);
+                    var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(reporteSeguimiento.SeguimientoId);
                     seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
                     var mappeado = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                     return Ok(mappeado);
                 }
                 return BadRequest(new { mensaje = "Hubo problemas al actualizar el reporte" });
             }
-            else if (verificar == 2)
+            else if (verifyDate == 2)
                 return BadRequest(new { mensaje = "La fecha no debe ser la misma que la de otro reporte creado." });
-            else if (verificar == 3)
+            else if (verifyDate == 3)
                 return BadRequest(new { mensaje = "La fecha debe estar en el rango establecido en el seguimiento." });
             else
                 return BadRequest(new { mensaje = "La fecha no puede ser menor a la fecha actual." });

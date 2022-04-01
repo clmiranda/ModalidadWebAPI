@@ -47,18 +47,18 @@ namespace spatwebapi.Controllers
         public async Task<ActionResult> GetAllSeguimientoVoluntario([FromQuery] SeguimientoParametros parametros)
         {
             var idUser = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
-            var listaSeguimiento = await _seguimientoService.GetAllSeguimientoVoluntario(idUser, parametros);
-            var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(listaSeguimiento);
-            Response.AddPagination(listaSeguimiento.CurrentPage, listaSeguimiento.PageSize,
-                 listaSeguimiento.TotalCount, listaSeguimiento.TotalPages);
+            var lista = await _seguimientoService.GetAllSeguimientoVoluntario(idUser, parametros);
+            var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(lista);
+            Response.AddPagination(lista.CurrentPage, lista.PageSize,
+                 lista.TotalCount, lista.TotalPages);
             return Ok(mapped);
         }
         [HttpGet("GetAllVoluntarios")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
         public IEnumerable<UserForDetailedDto> GetAllVoluntarios()
         {
-            var lista = _seguimientoService.GetAllVoluntarios();
-            var mapped = _mapper.Map<IEnumerable<UserForDetailedDto>>(lista);
+            var listaUsers = _seguimientoService.GetAllVoluntarios();
+            var mapped = _mapper.Map<IEnumerable<UserForDetailedDto>>(listaUsers);
             return mapped;
         }
         [HttpGet("GetSeguimiento/{id}")]
@@ -67,7 +67,7 @@ namespace spatwebapi.Controllers
         {
             var seguimiento = await _seguimientoService.GetById(id);
             if (seguimiento == null)
-                return NotFound(null);
+                return Ok(null);
             seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
             var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
             return Ok(mapped);
@@ -104,9 +104,9 @@ namespace spatwebapi.Controllers
             var resultado = await _seguimientoService.QuitarAsignacion(id, idUser);
             if (resultado)
             {
-                var lista = _seguimientoService.GetAllVoluntarios();
-                var mapper = _mapper.Map<IEnumerable<UserForDetailedDto>>(lista);
-                return Ok(mapper);
+                var listaUsers = _seguimientoService.GetAllVoluntarios();
+                var mapped = _mapper.Map<IEnumerable<UserForDetailedDto>>(listaUsers);
+                return Ok(mapped);
             }
             return BadRequest(new { mensaje = "Problemas al guardar los datos." });
         }

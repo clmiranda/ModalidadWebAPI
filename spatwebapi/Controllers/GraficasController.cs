@@ -16,7 +16,7 @@ namespace spatwebapi.Controllers
             _graficaService = graficaService;
         }
         [HttpGet("GetGraficasAdopciones")]
-        public async Task<IActionResult> GetGraficasAdopciones(string filtro= "3 meses")
+        public async Task<IActionResult> GetGraficasAdopciones(string filtro = "3 meses")
         {
             var resultado = await _graficaService.DatosAdopciones(filtro);
             return Ok(resultado);
@@ -34,7 +34,8 @@ namespace spatwebapi.Controllers
             return Ok(resultado);
         }
         [HttpGet("GetDataForDashboard")]
-        public async Task<IActionResult> GetDataForDashboard() {
+        public async Task<IActionResult> GetDataForDashboard()
+        {
             var resultado = await _graficaService.GetDataForDashboard();
             return Ok(resultado);
         }

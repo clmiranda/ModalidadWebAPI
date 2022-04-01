@@ -39,14 +39,14 @@ namespace spatwebapi.Controllers
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string idUser, string token)
         {
-            var result = await _userService.ConfirmEmail(idUser, token);
-            if (result == null)
+            var resultado = await _userService.ConfirmEmail(idUser, token);
+            if (resultado == null)
                 return BadRequest("Ha ocurrido un error, Id o Token inválido.");
 
-            if (result.Succeeded)
+            if (resultado.Succeeded)
                 return Redirect("https://localhost:44363/LoginAccount/ConfirmEmail");
             else
-                return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
+                return BadRequest(new { mensaje = resultado.Errors.FirstOrDefault().Description });
         }
         [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDto email)
@@ -76,10 +76,10 @@ namespace spatwebapi.Controllers
             var user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
             if (user == null)
                 return NotFound(new { mensaje = "El email no se encuentra registrado." });
-            var result = await _userService.ResetPasswordExterno(resetPasswordDto);
-            if (result.Succeeded)
+            var resultado = await _userService.ResetPasswordExterno(resetPasswordDto);
+            if (resultado.Succeeded)
                 return Ok();
-            else return BadRequest(new { mensaje = result.Errors.FirstOrDefault().Description });
+            else return BadRequest(new { mensaje = resultado.Errors.FirstOrDefault().Description });
         }
     }
 }

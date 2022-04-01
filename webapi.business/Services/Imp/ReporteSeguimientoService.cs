@@ -25,8 +25,8 @@ namespace webapi.business.Services.Imp
         }
         public async Task<ReporteSeguimiento> GetById(int id)
         {
-            var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
-            return reporte;
+            var reporteSeguimiento = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
+            return reporteSeguimiento;
         }
         public IEnumerable<ReporteSeguimiento> GetAll()
         {
@@ -45,25 +45,23 @@ namespace webapi.business.Services.Imp
         }
         public async Task<bool> CreateReporteSeguimiento(int id)
         {
-            ReporteSeguimiento reporte = new ReporteSeguimiento
+            ReporteSeguimiento reporteSeguimiento = new ReporteSeguimiento
             {
                 SeguimientoId = id,
                 Estado = "Activo",
                 FechaReporte = DateTime.Now,
                 FechaCreacion = DateTime.Now
             };
-            _unitOfWork.ReporteSeguimientoRepository.Insert(reporte);
+            _unitOfWork.ReporteSeguimientoRepository.Insert(reporteSeguimiento);
             return await _unitOfWork.SaveAll();
         }
         public async Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporteDto)
         {
-            var reporte = await _unitOfWork.SeguimientoRepository.GetById(reporteDto.SeguimientoId);
-            if (reporteDto.FechaReporte.Date >= reporte.FechaInicio.Date && reporteDto.FechaReporte.Date <= reporte.FechaFin.Date)
+            var reporteSeguimiento = await _unitOfWork.SeguimientoRepository.GetById(reporteDto.SeguimientoId);
+            if (reporteDto.FechaReporte.Date >= reporteSeguimiento.FechaInicio.Date && reporteDto.FechaReporte.Date <= reporteSeguimiento.FechaFin.Date)
             {
-                if (reporte.ReporteSeguimientos.Any(x => x.FechaReporte.Date.ToShortDateString() == reporteDto.FechaReporte.Date.ToShortDateString()))
+                if (reporteSeguimiento.ReporteSeguimientos.Any(x => x.FechaReporte.Date.ToShortDateString() == reporteDto.FechaReporte.Date.ToShortDateString()))
                     return 2;
-                //if (reporteDto.FechaReporte.Date < DateTime.Now.Date)
-                //    return 4;
                 else
                     return 1;
             }
@@ -81,28 +79,28 @@ namespace webapi.business.Services.Imp
         }
         public async Task<bool> SendReporte(ReporteSeguimientoForUpdate reporteDto)
         {
-            var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporteDto.Id);
-            var resul = _mapper.Map(reporteDto, reporte);
-            _unitOfWork.ReporteSeguimientoRepository.Update(resul);
+            var reporteSeguimiento = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporteDto.Id);
+            var resultado = _mapper.Map(reporteDto, reporteSeguimiento);
+            _unitOfWork.ReporteSeguimientoRepository.Update(resultado);
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> UpdateFechaReporte(ReporteSeguimientoForUpdateAdmin reporteDto)
         {
-            var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporteDto.Id);
-            reporte.FechaReporte = reporteDto.FechaReporte.Date;
-            reporte.Estado = reporteDto.Estado;
-            _unitOfWork.ReporteSeguimientoRepository.Update(reporte);
+            var reporteSeguimiento = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporteDto.Id);
+            reporteSeguimiento.FechaReporte = reporteDto.FechaReporte.Date;
+            reporteSeguimiento.Estado = reporteDto.Estado;
+            _unitOfWork.ReporteSeguimientoRepository.Update(reporteSeguimiento);
             return await _unitOfWork.SaveAll();
         }
         public async Task<bool> DeleteReporte(int id)
         {
-            var reporte = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
-            if (reporte != null)
+            var reporteSeguimiento = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
+            if (reporteSeguimiento != null)
             {
-                _unitOfWork.ReporteSeguimientoRepository.Delete(reporte);
+                _unitOfWork.ReporteSeguimientoRepository.Delete(reporteSeguimiento);
 
-                if (reporte.Foto != null)
-                    if (await _fotoService.DeleteFotoReporteSeguimiento(reporte.Foto.Id))
+                if (reporteSeguimiento.Foto != null)
+                    if (await _fotoService.DeleteFotoReporteSeguimiento(reporteSeguimiento.Foto.Id))
                         return await _unitOfWork.SaveAll();
                     else
                         return false;
