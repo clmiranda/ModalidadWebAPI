@@ -29,22 +29,22 @@ namespace webapi.business.Services.Imp
         {
             if (string.IsNullOrEmpty(parametros.Filter) || !listaEstado.Contains(parametros.Filter))
                 return null;
-            var listaSeguimiento = _unitOfWork.SeguimientoRepository.GetAll();
-            var listaSegFinalizado = listaSeguimiento.Where(x => DateTime.Now.Date >= x.FechaFin.Date && !x.Estado.Equals("Finalizado"));
-            if (listaSegFinalizado.Count() > 0)
+            var lista = _unitOfWork.SeguimientoRepository.GetAll();
+            var listaSeguimientoFinalizado = lista.Where(x => DateTime.Now.Date > x.FechaFin.Date && !x.Estado.Equals("Finalizado") && x.FechaInicio.Date != x.FechaFin.Date);
+            if (listaSeguimientoFinalizado.Count() > 0)
             {
-                foreach (var seguimiento in listaSegFinalizado)
+                foreach (var seguimiento in listaSeguimientoFinalizado)
                     seguimiento.Estado = "Finalizado";
                 await _unitOfWork.SaveAll();
             }
 
             if (parametros.Filter == "Activo")
-                listaSeguimiento = listaSeguimiento.Where(x => x.Estado.Equals("Activo"));
+                lista = lista.Where(x => x.Estado.Equals("Activo"));
             else if (parametros.Filter == "Asignado")
-                listaSeguimiento = listaSeguimiento.Where(x => x.Estado.Equals("Asignado"));
+                lista = lista.Where(x => x.Estado.Equals("Asignado"));
             else if (parametros.Filter == "Finalizado")
-                listaSeguimiento = _unitOfWork.SeguimientoRepository.FindByCondition(x => x.Estado.Equals("Finalizado"));
-            var pagination = await PaginationList<Seguimiento>.ToPagedList(listaSeguimiento, parametros.PageNumber, parametros.PageSize);
+                lista = _unitOfWork.SeguimientoRepository.FindByCondition(x => x.Estado.Equals("Finalizado"));
+            var pagination = await PaginationList<Seguimiento>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);
             return pagination;
         }
         public async Task<PaginationList<Seguimiento>> GetAllSeguimientoVoluntario(int idUser, SeguimientoParametros parametros)

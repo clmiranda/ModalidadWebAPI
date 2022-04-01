@@ -51,8 +51,8 @@ namespace spatwebapi.Controllers
                     new { idUser = userToCreate.Id, token = userToCreate.Token }, Request.Scheme);
 
                 await _emailService.SendEmailAsync(userForRegisterDto.Email, "Enlace de Confirmacion para la cuenta en el sitio web de S.P.A.T.", "<a href=" + confirmationLink + "><h5>Accede a este enlace para poder confirmar tu correo electrónico en el sitio web de S.P.A.T.</h5></a>");
-                var listaUsers = await _userService.GetAllUsers();
-                var mapped = _mapper.Map<IEnumerable<UserRolesForReturn>>(listaUsers);
+                var lista = await _userService.GetAllUsers();
+                var mapped = _mapper.Map<IEnumerable<UserRolesForReturn>>(lista);
                 return Ok(mapped);
             }
             else
@@ -62,13 +62,14 @@ namespace spatwebapi.Controllers
         [HttpPut("UpdateUser")]
         public async Task<ActionResult> UpdateUser(UserUpdateDto userDto)
         {
-            if (userDto.Id!=int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized(new { mensaje = "El id del usuario no existe." });
-            var usuario = await _userService.GetUsuario(userDto.Id);
-            if (usuario == null)
+            if (userDto.Id != int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized(new { mensaje = "El id del usuario no existe." });
+            var user = await _userService.GetUsuario(userDto.Id);
+            if (user == null)
                 return BadRequest(new { mensaje = "El Usuario no existe." });
             var resul = await _userService.UpdateUsuario(userDto);
-            if (resul.Succeeded) {
-                var mapped = _mapper.Map<UserForDetailedDto>(usuario);
+            if (resul.Succeeded)
+            {
+                var mapped = _mapper.Map<UserForDetailedDto>(user);
                 return Ok(mapped);
             }
             return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
@@ -78,36 +79,37 @@ namespace spatwebapi.Controllers
         public async Task<ActionResult> UpdateEmail(UpdateEmailDto updateEmailDto)
         {
             if (updateEmailDto.Id != int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized(new { mensaje = "El id del usuario no existe." });
-            var usuario = await _userService.GetUsuario(updateEmailDto.Id);
-            if (usuario == null)
+            var user = await _userService.GetUsuario(updateEmailDto.Id);
+            if (user == null)
                 return BadRequest(new { mensaje = "El Usuario no existe." });
-            var resul = await _userService.UpdateEmail(updateEmailDto);
-            if (resul.Succeeded)
+            var resultado = await _userService.UpdateEmail(updateEmailDto);
+            if (resultado.Succeeded)
             {
-                var mapped = _mapper.Map<UserForDetailedDto>(usuario);
+                var mapped = _mapper.Map<UserForDetailedDto>(user);
                 return Ok(mapped);
             }
-            return BadRequest(new { mensaje = resul.Errors.FirstOrDefault().Description });
+            return BadRequest(new { mensaje = resultado.Errors.FirstOrDefault().Description });
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("ResetPassword/{id}")]
-        public async Task<ActionResult> ResetPassword(int id, UpdateUserPassword updateUserdto) {
-                var resultado = await _userService.ResetPassword(id, updateUserdto.Password);
-                if (resultado.Succeeded)
-                    return Ok();
-                return BadRequest(new { mensaje = resultado.Errors.FirstOrDefault().Description });
+        public async Task<ActionResult> ResetPassword(int id, UpdateUserPassword updateUserdto)
+        {
+            var resultado = await _userService.ResetPassword(id, updateUserdto.Password);
+            if (resultado.Succeeded)
+                return Ok();
+            return BadRequest(new { mensaje = resultado.Errors.FirstOrDefault().Description });
         }
         [Authorize(Roles = "SuperAdministrador")]
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
-            var listaUsers = await _userService.GetAllUsers();
-            var mapped = _mapper.Map<IEnumerable<UserRolesForReturn>>(listaUsers);
+            var lista = await _userService.GetAllUsers();
+            var mapped = _mapper.Map<IEnumerable<UserRolesForReturn>>(lista);
             return Ok(mapped);
         }
         [Authorize(Roles = "SuperAdministrador")]
         [HttpPost("AsignarRoles/{id}")]
-        public async Task<IActionResult> AsignarRoles(int id,  string[] RolesUser)
+        public async Task<IActionResult> AsignarRoles(int id, string[] RolesUser)
         {
             var userRoles = await _roleUserService.AsignarRoles(id, RolesUser);
             if (userRoles == null)
@@ -118,8 +120,8 @@ namespace spatwebapi.Controllers
         [HttpPut("CambiarEstado/{id}")]
         public async Task<IActionResult> CambiarEstado(int id)
         {
-            var usuario = await _userService.GetUsuario(id);
-            if (usuario == null)
+            var user = await _userService.GetUsuario(id);
+            if (user == null)
                 return BadRequest(new { mensaje = "El usuario no existe." });
             var resultado = await _userService.CambiarEstado(id);
             if (resultado.Succeeded)
@@ -130,8 +132,8 @@ namespace spatwebapi.Controllers
         [HttpDelete("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var usuario = await _userService.GetUsuario(id);
-            if (usuario == null)
+            var user = await _userService.GetUsuario(id);
+            if (user == null)
                 return BadRequest(new { mensaje = "El usuario no existe." });
             var resultado = await _userService.DeleteUser(id);
             if (resultado.Succeeded)

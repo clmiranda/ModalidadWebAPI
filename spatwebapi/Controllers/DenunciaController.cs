@@ -30,18 +30,19 @@ namespace spatwebapi.Controllers
             return Ok(lista);
         }
         [HttpGet("GetAllDenuncias")]
-        public async Task<ActionResult> GetAllDenuncias([FromQuery]DenunciaParametros parametros) {
-            var resul = await _denunciaService.GetAllDenuncias(parametros);
-            var lista = _mapper.Map<IEnumerable<DenunciaForListDto>>(resul);
-            Response.AddPagination(resul.CurrentPage, resul.PageSize,
-                 resul.TotalCount, resul.TotalPages);
-            return Ok(lista);
+        public async Task<ActionResult> GetAllDenuncias([FromQuery] DenunciaParametros parametros)
+        {
+            var resultado = await _denunciaService.GetAllDenuncias(parametros);
+            var mapped = _mapper.Map<IEnumerable<DenunciaForListDto>>(resultado);
+            Response.AddPagination(resultado.CurrentPage, resultado.PageSize,
+                 resultado.TotalCount, resultado.TotalPages);
+            return Ok(mapped);
 
         }
         [HttpGet("GetDenuncia/{id}")]
         public async Task<IActionResult> GetDenuncia(int id)
         {
-            var denuncia= await _denunciaService.GetDenunciaById(id);
+            var denuncia = await _denunciaService.GetDenunciaById(id);
             if (denuncia == null) return NotFound(null);
             var mapped = _mapper.Map<DenunciaForListDto>(denuncia);
             return Ok(mapped);
@@ -57,7 +58,7 @@ namespace spatwebapi.Controllers
         [HttpPut("UpdateDenuncia")]
         public async Task<IActionResult> UpdateDenuncia(Denuncia denuncia)
         {
-            var resultado=await _denunciaService.UpdateDenuncia(denuncia);
+            var resultado = await _denunciaService.UpdateDenuncia(denuncia);
             if (resultado.Equals(null))
                 return BadRequest(new { mensaje = "Hubo problemas al modificar la denuncia." });
             return Ok();
@@ -65,11 +66,10 @@ namespace spatwebapi.Controllers
         [HttpDelete("DeleteDenuncia/{id}")]
         public async Task<IActionResult> DeleteDenuncia(int id)
         {
-            var denuncia= await _denunciaService.GetDenunciaById(id);
+            var denuncia = await _denunciaService.GetDenunciaById(id);
             if (await _denunciaService.DeleteDenuncia(denuncia))
                 return Ok();
-            else
-                return BadRequest(new { mensaje = "Hubo problemas al eliminar el registro." });
+            return BadRequest(new { mensaje = "Hubo problemas al eliminar el registro." });
         }
     }
 }

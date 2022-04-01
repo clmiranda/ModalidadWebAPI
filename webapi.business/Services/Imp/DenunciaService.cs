@@ -33,11 +33,11 @@ namespace webapi.business.Services.Imp
         }
         public async  Task<PaginationList<Denuncia>> GetAllDenuncias(DenunciaParametros parametros)
         {
-            var resul = _unitOfWork.DenunciaRepository.GetAll();
-            resul = resul.OrderBy(x => x.Id);
+            var resultado = _unitOfWork.DenunciaRepository.GetAll();
+            resultado = resultado.OrderBy(x => x.Id);
             if (!String.IsNullOrEmpty(parametros.Busqueda))
-                resul = resul.Where(x => x.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Descripcion.ToLower().Contains(parametros.Busqueda.ToLower()));
-            var pagination= await PaginationList<Denuncia>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
+                resultado = resultado.Where(x => x.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Descripcion.ToLower().Contains(parametros.Busqueda.ToLower()));
+            var pagination= await PaginationList<Denuncia>.ToPagedList(resultado, parametros.PageNumber, parametros.PageSize);
             return pagination;
         }
         public async Task<Denuncia> GetDenunciaById(int id)
