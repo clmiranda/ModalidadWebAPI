@@ -37,7 +37,7 @@ namespace spatwebapi.Controllers
         public async Task<IActionResult> GetMascota(int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
-            if (mascota == null) return NotFound(null);
+            if (mascota == null) return Ok(null);
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
             return Ok(mapped);
         }
