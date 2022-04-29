@@ -159,3 +159,8 @@ C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spat
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.pdb
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.genruntimeconfig.cache
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.MvcApplicationPartsAssemblyInfo.cs

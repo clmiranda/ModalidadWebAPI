@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using webapi.business.Helpers;
 using webapi.root;
 
@@ -28,11 +30,31 @@ namespace spatwebapi
             CompositionRoot.InjectDependencies(services, Configuration);
             CompositionRoot.otherDependencies(services, Configuration);
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "SPAT Web API",
+                    Version = "v1",
+                    Description = "Api de Proyecto de Modalidad de Grado para la asociacion SPAT",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Cliver Miranda",
+                        Email = "miranda76575@gmail.com",
+                        Url = new Uri("https://twitter.com/mirandaclv_"),
+                    }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(x =>
+            {
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "Spat Web API");
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
