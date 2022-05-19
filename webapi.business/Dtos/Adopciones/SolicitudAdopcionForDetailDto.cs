@@ -20,6 +20,7 @@ namespace webapi.business.Dtos.Adopciones
         public string Respuesta7 { get; set; }
         public string Estado { get; set; }
         public DateTime FechaSolicitudAdopcion { get; set; }
+        public DateTime FechaAdopcion { get; set; }
         public MascotaForReturn Mascota { get; set; }
         public virtual SolicitudAdopcionRechazadaForReturnDto AdopcionRechazada { get; set; }
         public virtual SolicitudAdopcionCanceladaForReturnDto AdopcionCancelada { get; set; }

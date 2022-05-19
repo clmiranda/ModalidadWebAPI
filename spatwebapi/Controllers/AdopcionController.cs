@@ -33,7 +33,7 @@ namespace spatwebapi.Controllers
         {
             var lista = await _adopcionService.GetAllAdopciones(parametros);
             var mapped = _mapper.Map<IEnumerable<SolicitudAdopcionForList>>(lista);
-            mapped = mapped.OrderByDescending(x => x.FechaAdopcion).ToList().ToList();
+            //mapped = mapped.OrderByDescending(x => x.FechaAdopcion).ToList().ToList();
             Response.AddPagination(lista.CurrentPage, lista.PageSize,
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);
@@ -48,28 +48,12 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<SolicitudAdopcionForDetailDto>(solicitudAdopcion);
             return Ok(mapped);
         }
-        [HttpGet("GetAll")]
+        [HttpGet("GetAllAdopcionesForReport")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAllAdopcionesForReport()
         {
-            var lista = await _adopcionService.GetAll();
+            var lista = await _adopcionService.GetAllAdopcionesForReport();
             var mapped = _mapper.Map<IEnumerable<SolicitudAdopcionForDetailDto>>(lista);
-            return Ok(mapped);
-        }
-        [HttpGet("GetAllSolicitudesAdopcionRechazadas")]
-        [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<ActionResult> GetAllSolicitudesAdopcionRechazadas()
-        {
-            var lista = await _adopcionService.GetAllSolicitudesAdopcionRechazadas();
-            var mapped = _mapper.Map<IEnumerable<SolicitudAdopcionRechazadaForReturnDto>>(lista);
-            return Ok(mapped);
-        }
-        [HttpGet("GetAllSolicitudesAdopcionCanceladas")]
-        [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<ActionResult> GetAllSolicitudesAdopcionCanceladas()
-        {
-            var lista = await _adopcionService.GetAllSolicitudesAdopcionCanceladas();
-            var mapped = _mapper.Map<IEnumerable<SolicitudAdopcionCanceladaForReturnDto>>(lista);
             return Ok(mapped);
         }
         [AllowAnonymous]

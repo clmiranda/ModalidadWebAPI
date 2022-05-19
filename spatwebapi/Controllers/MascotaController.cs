@@ -26,11 +26,12 @@ namespace spatwebapi.Controllers
             _denunciaService = denunciaService;
             _mapper = mapper;
         }
-        [HttpGet("GetAll")]
-        public ActionResult GetAll()
+        [HttpGet("GetAllMascotasForReport")]
+        public async Task<IActionResult> GetAllMascotasForReport()
         {
-            var lista = _mascotaService.GetAll();
-            return Ok(lista);
+            var lista = await _mascotaService.GetAllMascotasForReport();
+            var mapped = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
+            return Ok(mapped);
         }
         [HttpGet("GetMascota/{id}")]
         [AllowAnonymous]
@@ -53,23 +54,23 @@ namespace spatwebapi.Controllers
             mapped.Fotos = mapped.Fotos.OrderByDescending(x => x.IsPrincipal).ToList();
             return Ok(mapped);
         }
-        [HttpGet("GetAllMascotaAdopcion")]
+        [HttpGet("GetAllMascotasForAdopcion")]
         [AllowAnonymous]
-        public async Task<ActionResult> GetAllMascotaAdopcion([FromQuery] MascotaParametros parametros)
+        public async Task<ActionResult> GetAllMascotasForAdopcion([FromQuery] MascotaParametros parametros)
         {
-            var lista = await _mascotaService.GetAllMascotas(parametros);
+            var lista = await _mascotaService.GetAllMascotasForAdopcion(parametros);
             var mapped = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(lista);
             Response.AddPagination(lista.CurrentPage, lista.PageSize,
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);
         }
-        [HttpGet("GetAllMascotaAdmin")]
-        public async Task<ActionResult> GetAllMascotaAdmin([FromQuery] MascotaParametros parametros)
+        [HttpGet("GetAllMascotasForAdmin")]
+        public async Task<ActionResult> GetAllMascotasForAdmin([FromQuery] MascotaParametros parametros)
         {
-            var lista = await _mascotaService.GetAllMascotas(parametros);
+            var lista = await _mascotaService.GetAllMascotasForAdopcion(parametros);
             var mapped = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
-            mapped = mapped.OrderByDescending(x => x.Estado.Equals("Inactivo")).GroupBy(x => x.Estado)
-                .SelectMany(x => x).ToList();
+            mapped = mapped.GroupBy(x => x.Estado)
+                .SelectMany(x => x).OrderByDescending(x => x.Estado.Equals("Activo")).ThenByDescending(x=>x.Estado.Equals("Inactivo")).ToList();
             Response.AddPagination(lista.CurrentPage, lista.PageSize,
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);
@@ -92,8 +93,8 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<MascotaForDetailedDto>(resultado);
             return Ok(mapped);
         }
-        [HttpPut("ChangeStateSituacion/{id}")]
-        public async Task<IActionResult> ChangeStateSituacion([FromBody] string estado, int id)
+        [HttpPut("ChangeEstado/{id}")]
+        public async Task<IActionResult> ChangeEstado([FromBody] string estado, int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
             if (mascota == null)

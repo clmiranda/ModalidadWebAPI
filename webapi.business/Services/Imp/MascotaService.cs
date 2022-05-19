@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +28,10 @@ namespace webapi.business.Services.Imp
         {
             return await _unitOfWork.MascotaRepository.GetById(id);
         }
-        public IEnumerable<MascotaForDetailedDto> GetAll()
+        public async Task<IEnumerable<Mascota>> GetAllMascotasForReport()
         {
-            var lista = _unitOfWork.MascotaRepository.GetAll().ToList();
-            var mapped = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
-            return mapped;
+            var lista = await _unitOfWork.MascotaRepository.GetAll().ToListAsync();
+            return lista;
         }
         public async Task<Mascota> CreateMascota(MascotaForCreateDto dto)
         {
@@ -50,7 +50,7 @@ namespace webapi.business.Services.Imp
                 return mapped;
             return null;
         }
-        public async Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros)
+        public async Task<PaginationList<Mascota>> GetAllMascotasForAdopcion(MascotaParametros parametros)
         {
             var resultado = _unitOfWork.MascotaRepository.GetAll();
             resultado = resultado.OrderByDescending(x => x.Id);

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using webapi.business.Dtos.Denuncias;
 using webapi.business.Pagination;
 using webapi.business.Services.Interf;
 using webapi.core.Models;
@@ -15,22 +14,19 @@ namespace webapi.business.Services.Imp
     public class DenunciaService : IDenunciaService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly IFotoService _fotoService;
         private readonly IAdopcionService _adopcionService;
-        public DenunciaService(IUnitOfWork unitOfWork, IMapper mapper,
+        public DenunciaService(IUnitOfWork unitOfWork,
             IFotoService fotoService, IAdopcionService adopcionService)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _fotoService = fotoService;
             _adopcionService = adopcionService;
         }
-        public async Task<IEnumerable<DenunciaForListDto>> GetAll()
+        public async Task<IEnumerable<Denuncia>> GetAllDenunciasForReport()
         {
             var lista = await _unitOfWork.DenunciaRepository.GetAll().ToListAsync();
-            var mapped = _mapper.Map<IEnumerable<DenunciaForListDto>>(lista);
-            return mapped;
+            return lista;
         }
         public async Task<PaginationList<Denuncia>> GetAllDenuncias(DenunciaParametros parametros)
         {
@@ -72,7 +68,7 @@ namespace webapi.business.Services.Imp
 
                 return false;
             }
-            return false;
+            return await _unitOfWork.SaveAll();
         }
     }
 }

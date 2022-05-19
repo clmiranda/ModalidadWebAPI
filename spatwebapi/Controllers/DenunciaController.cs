@@ -24,11 +24,11 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAll")]
-        public async Task<ActionResult> GetAll()
-        {
-            var lista = await _denunciaService.GetAll();
-            return Ok(lista);
-        }
+        //public async Task<ActionResult> GetAll()
+        //{
+        //    var lista = await _denunciaService.GetAll();
+        //    return Ok(lista);
+        //}
         [HttpGet("GetAllDenuncias")]
         public async Task<ActionResult> GetAllDenuncias([FromQuery] DenunciaParametros parametros)
         {
@@ -36,6 +36,14 @@ namespace spatwebapi.Controllers
             var mapped = _mapper.Map<IEnumerable<DenunciaForListDto>>(resultado);
             Response.AddPagination(resultado.CurrentPage, resultado.PageSize,
                  resultado.TotalCount, resultado.TotalPages);
+            return Ok(mapped);
+
+        }
+        [HttpGet("GetAllDenunciasForReport")]
+        public async Task<ActionResult> GetAllDenunciasForReport()
+        {
+            var lista = await _denunciaService.GetAllDenunciasForReport();
+            var mapped = _mapper.Map<IEnumerable<DenunciaForListDto>>(lista);
             return Ok(mapped);
 
         }

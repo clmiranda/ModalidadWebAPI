@@ -24,11 +24,11 @@ namespace spatwebapi.Controllers
             _seguimientoService = seguimientoService;
             _mapper = mapper;
         }
-        [HttpGet("GetAll")]
+        [HttpGet("GetAllSeguimientosForReport")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAllSeguimientosForReport()
         {
-            var lista = _seguimientoService.GetAll();
+            var lista = await _seguimientoService.GetAllSeguimientosForReport();
             var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(lista);
             return Ok(mapped);
         }

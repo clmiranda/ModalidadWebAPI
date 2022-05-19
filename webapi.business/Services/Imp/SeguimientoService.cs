@@ -19,9 +19,9 @@ namespace webapi.business.Services.Imp
             _unitOfWork = unitOfWork;
             listaEstado = new List<string> { "Activo", "Asignado", "Finalizado" };
         }
-        public IEnumerable<Seguimiento> GetAll()
+        public async Task<IEnumerable<Seguimiento>> GetAllSeguimientosForReport()
         {
-            var lista = _unitOfWork.SeguimientoRepository.GetAll().ToList();
+            var lista = await _unitOfWork.SeguimientoRepository.GetAll().ToListAsync();
             return lista;
         }
 
