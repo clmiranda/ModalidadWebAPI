@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.SolicitudAdopcionCancelada;
@@ -28,17 +26,9 @@ namespace webapi.business.Services.Imp
             _mapper = mapper;
             listaEstado = new List<string>() { "Aprobado", "Pendiente", "Rechazado", "Cancelado" };
         }
-        public async Task<IEnumerable<SolicitudAdopcion>> GetAll()
+        public async Task<IEnumerable<SolicitudAdopcion>> GetAllAdopcionesForReport()
         {
             return await _unitOfWork.SolicitudAdopcionRepository.GetAll().ToListAsync();
-        }
-        public async Task<IEnumerable<AdopcionRechazada>> GetAllSolicitudesAdopcionRechazadas()
-        {
-            return await _unitOfWork.AdopcionRechazadaRepository.GetAll().ToListAsync();
-        }
-        public async Task<IEnumerable<AdopcionCancelada>> GetAllSolicitudesAdopcionCanceladas()
-        {
-            return await _unitOfWork.AdopcionCanceladaRepository.GetAll().ToListAsync();
         }
         public async Task<SolicitudAdopcion> GetById(int id)
         {
@@ -46,20 +36,20 @@ namespace webapi.business.Services.Imp
         }
         public async Task<PaginationList<SolicitudAdopcion>> GetAllAdopciones(AdopcionParametros parametros)
         {
-            var resul = _unitOfWork.SolicitudAdopcionRepository.GetAll();
+            var resultado = _unitOfWork.SolicitudAdopcionRepository.GetAll().OrderByDescending(x => x.FechaAdopcion);
 
             if (string.IsNullOrEmpty(parametros.Filter) || !listaEstado.Contains(parametros.Filter))
                 return null;
             if (parametros.Filter == "Aprobado")
-                resul = resul.Where(x => x.Estado.Equals("Aprobado"));
+                resultado = (IOrderedQueryable<SolicitudAdopcion>)resultado.Where(x => x.Estado.Equals("Aprobado"));
             else if (parametros.Filter == "Pendiente")
-                resul = resul.Where(x => x.Estado.Equals("Pendiente"));
+                resultado = (IOrderedQueryable<SolicitudAdopcion>)resultado.Where(x => x.Estado.Equals("Pendiente"));
             else if (parametros.Filter == "Rechazado")
-                resul = resul.Where(x => x.Estado.Equals("Rechazado"));
+                resultado = (IOrderedQueryable<SolicitudAdopcion>)resultado.Where(x => x.Estado.Equals("Rechazado"));
             else if (parametros.Filter == "Cancelado")
-                resul = resul.Where(x => x.Estado.Equals("Cancelado"));
+                resultado = (IOrderedQueryable<SolicitudAdopcion>)resultado.Where(x => x.Estado.Equals("Cancelado"));
 
-            var pagination = await PaginationList<SolicitudAdopcion>.ToPagedList(resul, parametros.PageNumber, parametros.PageSize);
+            var pagination = await PaginationList<SolicitudAdopcion>.ToPagedList(resultado, parametros.PageNumber, parametros.PageSize);
             return pagination;
         }
         public async Task<SolicitudAdopcion> CreateSolicitudAdopcion(SolicitudAdopcionForCreate solicitudAdopcionDto)

@@ -7,7 +7,7 @@ namespace webapi.business.Services.Interf
 {
     public interface ISeguimientoService
     {
-        IEnumerable<Seguimiento> GetAll();
+        Task<IEnumerable<Seguimiento>> GetAllSeguimientosForReport();
         Task<PaginationList<Seguimiento>> GetAllSeguimiento(SeguimientoParametros parametros);
         IEnumerable<User> GetAllVoluntarios();
         Task<PaginationList<Seguimiento>> GetAllSeguimientoVoluntario(int idUser, SeguimientoParametros parametros);

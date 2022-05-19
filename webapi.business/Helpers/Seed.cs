@@ -16,8 +16,7 @@ namespace webapi.business.Helpers
                 {
                     new Role{Name="SuperAdministrador"},
                     new Role{Name="Administrador"},
-                    new Role{Name="Voluntario"},
-                    new Role{Name="Moderador"}
+                    new Role{Name="Voluntario"}
                 };
 
                 foreach (var item in roles)
@@ -26,11 +25,11 @@ namespace webapi.business.Helpers
                 }
 
                 var user = SetUser();
-                var userCreate = userManager.CreateAsync(user, "Admin123").Result;
+                var userCreate = userManager.CreateAsync(user, "*Admin123").Result;
 
                 if (userCreate.Succeeded)
                 {
-                    var admin = userManager.FindByNameAsync("Admin").Result;
+                    var admin = userManager.FindByNameAsync("admin").Result;
                     userManager.AddToRoleAsync(admin, "SuperAdministrador").Wait();
                     userManager.AddToRoleAsync(admin, "Administrador").Wait();
                     userManager.AddToRoleAsync(admin, "Voluntario").Wait();

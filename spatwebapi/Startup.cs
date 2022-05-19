@@ -40,8 +40,7 @@ namespace spatwebapi
                     Contact = new OpenApiContact
                     {
                         Name = "Cliver Miranda",
-                        Email = "miranda76575@gmail.com",
-                        Url = new Uri("https://twitter.com/mirandaclv_"),
+                        Email = "miranda76575@gmail.com"
                     }
                 });
             });

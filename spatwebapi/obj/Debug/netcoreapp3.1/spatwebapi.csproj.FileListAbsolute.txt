@@ -49,6 +49,7 @@ C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Micr
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Core.dll
@@ -64,6 +65,9 @@ C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Npgs
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\System.ComponentModel.Annotations.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\System.Composition.AttributedModel.dll
@@ -150,6 +154,7 @@ C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spat
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.AssemblyInfoInputs.cache
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.AssemblyInfo.cs
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\staticwebassets\spatwebapi.StaticWebAssets.Manifest.cache
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\staticwebassets\spatwebapi.StaticWebAssets.xml
@@ -159,8 +164,3 @@ C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spat
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.dll
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.pdb
 C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.genruntimeconfig.cache
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
-C:\Users\Usuario\source\repos\spatwebapi\spatwebapi\obj\Debug\netcoreapp3.1\spatwebapi.MvcApplicationPartsAssemblyInfo.cs

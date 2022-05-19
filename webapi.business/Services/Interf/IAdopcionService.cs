@@ -13,9 +13,7 @@ namespace webapi.business.Services.Interf
 {
     public interface IAdopcionService
     {
-        Task<IEnumerable<SolicitudAdopcion>> GetAll();
-        Task<IEnumerable<AdopcionRechazada>> GetAllSolicitudesAdopcionRechazadas();
-        Task<IEnumerable<AdopcionCancelada>> GetAllSolicitudesAdopcionCanceladas();
+        Task<IEnumerable<SolicitudAdopcion>> GetAllAdopcionesForReport();
         Task<PaginationList<SolicitudAdopcion>> GetAllAdopciones(AdopcionParametros parametros);
         Task<SolicitudAdopcion> GetById(int id);
         Task<SolicitudAdopcion> CreateSolicitudAdopcion(SolicitudAdopcionForCreate solicitudAdopcionDto);
