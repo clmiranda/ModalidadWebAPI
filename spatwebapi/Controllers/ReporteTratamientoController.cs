@@ -23,7 +23,7 @@ namespace spatwebapi.Controllers
             _mapper = mapper;
         }
         [HttpGet("GetAllReporteTratamiento/{id}")]
-        public async Task<ActionResult> GetAllReporteTratamiento(int id)
+        public async Task<IActionResult> GetAllReporteTratamiento(int id)
         {
             var mascota = await _reporteTratamientoService.GetAllReporteTratamiento(id);
             if (mascota == null)

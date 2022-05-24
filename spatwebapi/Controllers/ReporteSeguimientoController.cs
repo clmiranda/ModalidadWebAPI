@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -27,11 +26,11 @@ namespace spatwebapi.Controllers
             _fotoService = fotoService;
             _mapper = mapper;
         }
-        [HttpGet("GetAll")]
+        [HttpGet("GetAllReporteSeguimientosForReport")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public ActionResult GetAll()
+        public async Task<IActionResult> GetAllReporteSeguimientosForReport()
         {
-            var lista = _reporteSeguimientoService.GetAll();
+            var lista = await _reporteSeguimientoService.GetAllReporteSeguimientosForReport();
             var mapped = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(lista);
             return Ok(mapped);
         }
@@ -43,7 +42,7 @@ namespace spatwebapi.Controllers
                 var resultado = await _reporteSeguimientoService.UpdateRangoFechasSeguimiento(rangoFechaSeguimientoDto);
                 if (resultado != null) {
                     var mapped = _mapper.Map<SeguimientoForReturnDto>(resultado);
-                    mapped.ReporteSeguimientos = mapped.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
+                    mapped.ReporteSeguimientos = mapped.ReporteSeguimientos.OrderBy(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
                     return Ok(mapped);
                 }
                 return BadRequest(new { mensaje = "Problemas al actualizar los datos." });
@@ -52,20 +51,13 @@ namespace spatwebapi.Controllers
         }
         [HttpGet("GetById/{id}")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public async Task<ActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var reporteSeguimiento = await _reporteSeguimientoService.GetById(id);
             if (reporteSeguimiento == null)
                 return NotFound(null);
             var mapped = _mapper.Map<ReporteSeguimientoForReturn>(reporteSeguimiento);
             return Ok(mapped);
-        }
-        [HttpGet("{id}/GetReportesForVoluntario")]
-        [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id)
-        {
-            var lista = _reporteSeguimientoService.GetReportesForVoluntario(id);
-            return lista;
         }
         [HttpPost("CreateReporteSeguimiento/{id}")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
@@ -118,7 +110,7 @@ namespace spatwebapi.Controllers
                 if (resultado)
                 {
                     var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(reporteSeguimiento.SeguimientoId);
-                    seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
+                    seguimiento.ReporteSeguimientos=seguimiento.ReporteSeguimientos.OrderBy(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
                     var mappeado = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                     return Ok(mappeado);
                 }

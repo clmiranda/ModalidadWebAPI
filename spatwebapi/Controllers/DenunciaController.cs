@@ -18,19 +18,14 @@ namespace spatwebapi.Controllers
     {
         private readonly IDenunciaService _denunciaService;
         private readonly IMapper _mapper;
-        public DenunciaController(IDenunciaService denunciaService, IMapper mapper)
+        public DenunciaController(IDenunciaService denunciaService,
+                                  IMapper mapper)
         {
             _denunciaService = denunciaService;
             _mapper = mapper;
         }
-        [HttpGet("GetAll")]
-        //public async Task<ActionResult> GetAll()
-        //{
-        //    var lista = await _denunciaService.GetAll();
-        //    return Ok(lista);
-        //}
         [HttpGet("GetAllDenuncias")]
-        public async Task<ActionResult> GetAllDenuncias([FromQuery] DenunciaParametros parametros)
+        public async Task<IActionResult> GetAllDenuncias([FromQuery] DenunciaParametros parametros)
         {
             var resultado = await _denunciaService.GetAllDenuncias(parametros);
             var mapped = _mapper.Map<IEnumerable<DenunciaForListDto>>(resultado);
@@ -40,7 +35,7 @@ namespace spatwebapi.Controllers
 
         }
         [HttpGet("GetAllDenunciasForReport")]
-        public async Task<ActionResult> GetAllDenunciasForReport()
+        public async Task<IActionResult> GetAllDenunciasForReport()
         {
             var lista = await _denunciaService.GetAllDenunciasForReport();
             var mapped = _mapper.Map<IEnumerable<DenunciaForListDto>>(lista);

@@ -34,7 +34,7 @@ namespace spatwebapi.Controllers
         }
         [HttpGet("GetAllSeguimiento")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public async Task<ActionResult> GetAllSeguimiento([FromQuery] SeguimientoParametros parametros)
+        public async Task<IActionResult> GetAllSeguimiento([FromQuery] SeguimientoParametros parametros)
         {
             var lista = await _seguimientoService.GetAllSeguimiento(parametros);
             var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(lista.ToList());
@@ -44,7 +44,7 @@ namespace spatwebapi.Controllers
         }
         [HttpGet("GetAllSeguimientoVoluntario")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public async Task<ActionResult> GetAllSeguimientoVoluntario([FromQuery] SeguimientoParametros parametros)
+        public async Task<IActionResult> GetAllSeguimientoVoluntario([FromQuery] SeguimientoParametros parametros)
         {
             var idUser = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
             var lista = await _seguimientoService.GetAllSeguimientoVoluntario(idUser, parametros);
@@ -55,26 +55,26 @@ namespace spatwebapi.Controllers
         }
         [HttpGet("GetAllVoluntarios")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public IEnumerable<UserForDetailedDto> GetAllVoluntarios()
+        public async Task<IActionResult> GetAllVoluntarios()
         {
-            var listaUsers = _seguimientoService.GetAllVoluntarios();
+            var listaUsers = await _seguimientoService.GetAllVoluntarios();
             var mapped = _mapper.Map<IEnumerable<UserForDetailedDto>>(listaUsers);
-            return mapped;
+            return Ok(mapped);
         }
         [HttpGet("GetSeguimiento/{id}")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public async Task<ActionResult> GetSeguimiento(int id)
+        public async Task<IActionResult> GetSeguimiento(int id)
         {
             var seguimiento = await _seguimientoService.GetById(id);
             if (seguimiento == null)
                 return Ok(null);
-            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
+            seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderBy(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
             var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
             return Ok(mapped);
         }
-        [HttpGet("GetSeguimientoVoluntario/{id}")]
+        [HttpGet("GetSeguimientoForVoluntario/{id}")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public async Task<ActionResult> GetSeguimientoVoluntario(int id)
+        public async Task<IActionResult> GetSeguimientoForVoluntario(int id)
         {
             var seguimiento = await _seguimientoService.GetById(id);
             if (seguimiento == null)
@@ -82,7 +82,7 @@ namespace spatwebapi.Controllers
             var idUser = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
             if (seguimiento.UserId == idUser)
             {
-                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderByDescending(x => x.FechaReporte.Date).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
+                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderBy(x => x.FechaReporte.Date).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
                 var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                 return Ok(mapped);
             }
@@ -104,7 +104,7 @@ namespace spatwebapi.Controllers
             var resultado = await _seguimientoService.QuitarAsignacion(id, idUser);
             if (resultado)
             {
-                var listaUsers = _seguimientoService.GetAllVoluntarios();
+                var listaUsers = await _seguimientoService.GetAllVoluntarios();
                 var mapped = _mapper.Map<IEnumerable<UserForDetailedDto>>(listaUsers);
                 return Ok(mapped);
             }
