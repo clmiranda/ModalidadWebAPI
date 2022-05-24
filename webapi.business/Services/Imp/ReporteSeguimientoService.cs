@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,20 +29,15 @@ namespace webapi.business.Services.Imp
             var reporteSeguimiento = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
             return reporteSeguimiento;
         }
-        public IEnumerable<ReporteSeguimiento> GetAll()
+        public async Task<IEnumerable<ReporteSeguimiento>> GetAllReporteSeguimientosForReport()
         {
-            var lista = _unitOfWork.ReporteSeguimientoRepository.GetAll().ToList();
+            var lista = await _unitOfWork.ReporteSeguimientoRepository.GetAll().ToListAsync();
             return lista;
         }
         public async Task<Seguimiento> GetReportesForAdmin(int id)
         {
             var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(id);
             return seguimiento;
-        }
-        public IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id)
-        {
-            var lista = _mapper.Map<IEnumerable<ReporteSeguimientoForReturn>>(_unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.SeguimientoId == id && x.Estado.Equals("Asignado")).ToList().OrderBy(y => y.FechaReporte.Date));
-            return lista;
         }
         public async Task<bool> CreateReporteSeguimiento(int id)
         {

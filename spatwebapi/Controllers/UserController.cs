@@ -31,7 +31,7 @@ namespace spatwebapi.Controllers
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpGet("GetUser/{id}")]
-        public async Task<ActionResult> GetUser(int id)
+        public async Task<IActionResult> GetUser(int id)
         {
             var user = await _userService.GetUsuario(id);
             if (user == null)
@@ -60,7 +60,7 @@ namespace spatwebapi.Controllers
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("UpdateUser")]
-        public async Task<ActionResult> UpdateUser(UserUpdateDto userDto)
+        public async Task<IActionResult> UpdateUser(UserUpdateDto userDto)
         {
             if (userDto.Id != int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized(new { mensaje = "El id del usuario no existe." });
             var user = await _userService.GetUsuario(userDto.Id);
@@ -76,7 +76,7 @@ namespace spatwebapi.Controllers
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("UpdateEmail")]
-        public async Task<ActionResult> UpdateEmail(UpdateEmailDto updateEmailDto)
+        public async Task<IActionResult> UpdateEmail(UpdateEmailDto updateEmailDto)
         {
             if (updateEmailDto.Id != int.Parse(_httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized(new { mensaje = "El id del usuario no existe." });
             var user = await _userService.GetUsuario(updateEmailDto.Id);
@@ -92,7 +92,7 @@ namespace spatwebapi.Controllers
         }
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
         [HttpPut("ResetPassword/{id}")]
-        public async Task<ActionResult> ResetPassword(int id, UpdateUserPassword updateUserdto)
+        public async Task<IActionResult> ResetPassword(int id, UpdateUserPassword updateUserdto)
         {
             var resultado = await _userService.ResetPassword(id, updateUserdto.Password);
             if (resultado.Succeeded)

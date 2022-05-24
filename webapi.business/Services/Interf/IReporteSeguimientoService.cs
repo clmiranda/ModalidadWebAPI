@@ -10,9 +10,8 @@ namespace webapi.business.Services.Interf
     {
         Task<ReporteSeguimiento> GetById(int id);
         Task<ReporteSeguimiento> GetByIdNotracking(int id);
-        IEnumerable<ReporteSeguimiento> GetAll();
+        Task<IEnumerable<ReporteSeguimiento>> GetAllReporteSeguimientosForReport();
         Task<Seguimiento> GetReportesForAdmin(int id);
-        IEnumerable<ReporteSeguimientoForReturn> GetReportesForVoluntario(int id);
         Task<int> VerifyDate(ReporteSeguimientoForUpdateAdmin reporteDto);
         Task<Seguimiento> UpdateRangoFechasSeguimiento(RangoFechaSeguimientoDto rangoFechaSeguimiento);
         Task<bool> CreateReporteSeguimiento(int id);

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +28,7 @@ namespace spatwebapi.Controllers
         }
         [HttpGet("GetAllAdopciones")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<ActionResult> GetAllAdopciones([FromQuery] AdopcionParametros parametros)
+        public async Task<IActionResult> GetAllAdopciones([FromQuery] AdopcionParametros parametros)
         {
             var lista = await _adopcionService.GetAllAdopciones(parametros);
             var mapped = _mapper.Map<IEnumerable<SolicitudAdopcionForList>>(lista);
@@ -40,7 +39,7 @@ namespace spatwebapi.Controllers
         }
         [HttpGet("GetById/{id}")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public async Task<ActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var solicitudAdopcion = await _adopcionService.GetById(id);
             if (solicitudAdopcion == null)
@@ -50,7 +49,7 @@ namespace spatwebapi.Controllers
         }
         [HttpGet("GetAllAdopcionesForReport")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<ActionResult> GetAllAdopcionesForReport()
+        public async Task<IActionResult> GetAllAdopcionesForReport()
         {
             var lista = await _adopcionService.GetAllAdopcionesForReport();
             var mapped = _mapper.Map<IEnumerable<SolicitudAdopcionForDetailDto>>(lista);
@@ -58,7 +57,7 @@ namespace spatwebapi.Controllers
         }
         [AllowAnonymous]
         [HttpGet("GetSolicitudAdopcionByIdMascota/{id}")]
-        public async Task<ActionResult<SolicitudAdopcionReturnDto>> GetSolicitudAdopcionByIdMascota(int id)
+        public async Task<IActionResult> GetSolicitudAdopcionByIdMascota(int id)
         {
             var mascota = await _mascotaService.GetMascotaById(id);
             if (mascota == null)
@@ -78,12 +77,13 @@ namespace spatwebapi.Controllers
         }
         [HttpPut("UpdateFecha")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
-        public async Task<IActionResult> UpdateFecha([FromForm] FechaSolicitudAdopcionForUpdateDto fechaSolicitudDto)
+        public async Task<IActionResult> UpdateFecha([FromForm] FechaSolicitudAdopcionForUpdateDto fechaSolicitudAdopcionDto)
         {
-            var solicitudAdopcion = await _adopcionService.GetById(fechaSolicitudDto.Id);
+            var solicitudAdopcion = await _adopcionService.GetById(fechaSolicitudAdopcionDto.Id);
             if (solicitudAdopcion != null)
             {
-                if (await _adopcionService.UpdateFecha(fechaSolicitudDto))
+                var respuesta = await _adopcionService.UpdateFecha(fechaSolicitudAdopcionDto);
+                if (respuesta)
                     return Ok();
                 return BadRequest(new { mensaje = "Ha ocurrido un error actualizando los datos." });
             }

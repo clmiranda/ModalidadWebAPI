@@ -9,7 +9,7 @@ namespace webapi.business.Services.Interf
     {
         Task<IEnumerable<Seguimiento>> GetAllSeguimientosForReport();
         Task<PaginationList<Seguimiento>> GetAllSeguimiento(SeguimientoParametros parametros);
-        IEnumerable<User> GetAllVoluntarios();
+        Task<IEnumerable<User>> GetAllVoluntarios();
         Task<PaginationList<Seguimiento>> GetAllSeguimientoVoluntario(int idUser, SeguimientoParametros parametros);
         Task<Seguimiento> GetById(int id);
         void CreateSeguimiento(int idAdopcion);

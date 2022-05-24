@@ -56,7 +56,7 @@ namespace spatwebapi.Controllers
         }
         [HttpGet("GetAllMascotasForAdopcion")]
         [AllowAnonymous]
-        public async Task<ActionResult> GetAllMascotasForAdopcion([FromQuery] MascotaParametros parametros)
+        public async Task<IActionResult> GetAllMascotasForAdopcion([FromQuery] MascotaParametros parametros)
         {
             var lista = await _mascotaService.GetAllMascotasForAdopcion(parametros);
             var mapped = _mapper.Map<IEnumerable<MascotaForAdopcionDto>>(lista);
@@ -65,7 +65,7 @@ namespace spatwebapi.Controllers
             return Ok(mapped);
         }
         [HttpGet("GetAllMascotasForAdmin")]
-        public async Task<ActionResult> GetAllMascotasForAdmin([FromQuery] MascotaParametros parametros)
+        public async Task<IActionResult> GetAllMascotasForAdmin([FromQuery] MascotaParametros parametros)
         {
             var lista = await _mascotaService.GetAllMascotasForAdopcion(parametros);
             var mapped = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
@@ -85,7 +85,7 @@ namespace spatwebapi.Controllers
             return Ok(mapped);
         }
         [HttpPut("UpdateMascota")]
-        public async Task<ActionResult> UpdateMascota([FromBody] MascotaForUpdateDto mascotaDto)
+        public async Task<IActionResult> UpdateMascota([FromBody] MascotaForUpdateDto mascotaDto)
         {
             var resultado = await _mascotaService.UpdateMascota(mascotaDto);
             if (resultado.Equals(null))
