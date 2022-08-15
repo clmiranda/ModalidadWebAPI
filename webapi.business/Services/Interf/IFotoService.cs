@@ -11,7 +11,7 @@ namespace webapi.business.Services.Interf
         Task<bool> SetFotoPrincipalMascota(int id, int idfoto);
         Task<string> AddFotoMascota(int idMascota, FotoForCreationDto fotoMascota);
         Task<bool> DeleteFotoMascota(int id, int idfoto);
-        Task<bool> AgregarFotoReporte(int id, IFormFile fotoReporte);
+        Task<bool> AddFotoReporte(int id, IFormFile fotoReporte);
         bool DeleteAllFotoMascota(Mascota mascota);
         Task<bool> DeleteFotoReporteSeguimiento(int idFoto);
     }

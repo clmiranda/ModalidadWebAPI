@@ -6,9 +6,9 @@ namespace webapi.business.Services.Interf
 {
     public interface IGraficaService
     {
-        Task<List<DataGraficaDto>> DatosAdopciones(string filtro);
-        Task<List<DataGraficaDto>> DatosMascotas(string filtro);
-        Task<List<DataGraficaDto>> DatosReporteSeguimientos(string filtro);
+        Task<List<DataGraficaDto>> DatosAdopciones(string[] fechas);
+        Task<List<DataGraficaDto>> DatosMascotas(string[] fechas);
+        Task<List<DataGraficaDto>> DatosReporteSeguimientos(string[] fechas);
         Task<DataForDashboardDto> GetDataForDashboard();
     }
 }

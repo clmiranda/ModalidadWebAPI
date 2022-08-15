@@ -46,14 +46,10 @@ namespace webapi.business.Helpers
             CreateMap<SolicitudAdopcionReturnDto, SolicitudAdopcion>();
             CreateMap<SolicitudAdopcion, SolicitudAdopcionReturnDto>();
             CreateMap<SolicitudAdopcionForCreate, SolicitudAdopcion>();
+            CreateMap<SolicitudAdopcion, SolicitudAdopcionForList>();
             CreateMap<FechaSolicitudAdopcionForUpdateDto, SolicitudAdopcion>();
             CreateMap<Seguimiento, SeguimientoForReturnDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForList>();
-            CreateMap<SolicitudAdopcion, SolicitudAdopcionForList>()
-                .ForMember(d => d.RazonAdopcion, options =>
-                {
-                    options.MapFrom(s => s.Respuesta1);
-                });
             CreateMap<SolicitudAdopcion, SolicitudAdopcionForDetailDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForReturn>();
             CreateMap<ReporteSeguimientoForUpdate, ReporteSeguimiento>();
@@ -65,6 +61,7 @@ namespace webapi.business.Helpers
             CreateMap<ReporteTratamientoForUpdateDto, ReporteTratamiento>();
             CreateMap<AdopcionRechazada, SolicitudAdopcionRechazadaForReturnDto>();
             CreateMap<AdopcionCancelada, SolicitudAdopcionCanceladaForReturnDto>();
+            CreateMap<AdopcionPresencialForCreateDto, SolicitudAdopcion>();
             CreateMap<SolicitudAdopcionRechazadaForCreateDto, AdopcionRechazada>();
             CreateMap<SolicitudAdopcionCanceladaForCreateDto, AdopcionCancelada>();
             CreateMap<FechaReporteTratamientoForUpdateDto, ReporteTratamiento>();

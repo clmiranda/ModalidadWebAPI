@@ -15,22 +15,22 @@ namespace spatwebapi.Controllers
         {
             _graficaService = graficaService;
         }
-        [HttpGet("GetGraficasAdopciones")]
-        public async Task<IActionResult> GetGraficasAdopciones(string filtro = "3 meses")
+        [HttpPost("GetGraficasAdopciones")]
+        public async Task<IActionResult> GetGraficasAdopciones(string[] fechas)
         {
-            var resultado = await _graficaService.DatosAdopciones(filtro);
+            var resultado = await _graficaService.DatosAdopciones(fechas);
             return Ok(resultado);
         }
-        [HttpGet("GetGraficasMascotas")]
-        public async Task<IActionResult> GetGraficasMascotas(string filtro = "3 meses")
+        [HttpPost("GetGraficasMascotas")]
+        public async Task<IActionResult> GetGraficasMascotas(string[] fechas)
         {
-            var resultado = await _graficaService.DatosMascotas(filtro);
+            var resultado = await _graficaService.DatosMascotas(fechas);
             return Ok(resultado);
         }
-        [HttpGet("GetGraficasReporteSeguimientos")]
-        public async Task<IActionResult> GetGraficasReporteSeguimientos(string filtro = "3 meses")
+        [HttpPost("GetGraficasReporteSeguimientos")]
+        public async Task<IActionResult> GetGraficasReporteSeguimientos(string[] fechas)
         {
-            var resultado = await _graficaService.DatosReporteSeguimientos(filtro);
+            var resultado = await _graficaService.DatosReporteSeguimientos(fechas);
             return Ok(resultado);
         }
         [HttpGet("GetDataForDashboard")]

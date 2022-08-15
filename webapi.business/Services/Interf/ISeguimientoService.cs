@@ -15,6 +15,6 @@ namespace webapi.business.Services.Interf
         void CreateSeguimiento(int idAdopcion);
         Task<bool> AsignarSeguimiento(int id, int idUser);
         Task<bool> QuitarAsignacion(int id, int idUser);
-        Task<bool> DeleteAllSeguimientoFromUser(int idUser);
+        Task<bool> DesasignarSeguimientoFromUser(int idUser);
     }
 }

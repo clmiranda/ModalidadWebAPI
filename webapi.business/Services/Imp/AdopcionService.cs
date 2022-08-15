@@ -36,7 +36,7 @@ namespace webapi.business.Services.Imp
         }
         public async Task<PaginationList<SolicitudAdopcion>> GetAllAdopciones(AdopcionParametros parametros)
         {
-            var resultado = _unitOfWork.SolicitudAdopcionRepository.GetAll().OrderByDescending(x => x.FechaAdopcion);
+            var resultado = _unitOfWork.SolicitudAdopcionRepository.GetAll().OrderBy(x => x.FechaAdopcion);
 
             if (string.IsNullOrEmpty(parametros.Filter) || !listaEstado.Contains(parametros.Filter))
                 return null;
@@ -62,6 +62,18 @@ namespace webapi.business.Services.Imp
             if (await _unitOfWork.SaveAll())
                 return solicitudAdopcion;
             return null;
+        }
+        public async Task<bool> CreateAdopcionPresencial(AdopcionPresencialForCreateDto adopcionPresencial)
+        {
+            var adopcion = _mapper.Map<SolicitudAdopcion>(adopcionPresencial);
+            var mascota = await _unitOfWork.MascotaRepository.GetById(adopcionPresencial.MascotaId);
+            mascota.Estado = "Adoptada";
+            _unitOfWork.SolicitudAdopcionRepository.Insert(adopcion);
+            if (!await _unitOfWork.SaveAll())
+                return false;
+
+            _seguimientoService.CreateSeguimiento(adopcion.Id);
+            return await _unitOfWork.SaveAll();
         }
         public async Task<bool> UpdateFecha(FechaSolicitudAdopcionForUpdateDto fechaSolicitudAdopcionDto)
         {
@@ -108,6 +120,11 @@ namespace webapi.business.Services.Imp
         {
             var solicitudAdopcion = await _unitOfWork.SolicitudAdopcionRepository.GetById(id);
 
+            foreach (var reporteSeguimiento in solicitudAdopcion.Seguimiento.ReporteSeguimientos)
+            {
+                if (reporteSeguimiento.Foto != null)
+                    _unitOfWork.FotoRepository.Delete(reporteSeguimiento.Foto);
+            }
             _unitOfWork.SeguimientoRepository.Delete(solicitudAdopcion.Seguimiento);
 
             solicitudAdopcion.Mascota = null;

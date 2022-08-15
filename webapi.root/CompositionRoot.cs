@@ -30,7 +30,7 @@ namespace webapi.root
             {
                 x.UseLazyLoadingProxies();
                 x.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
-        });
+            });
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 

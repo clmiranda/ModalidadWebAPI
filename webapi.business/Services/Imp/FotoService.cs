@@ -86,7 +86,7 @@ namespace webapi.business.Services.Imp
                             var parametros = new ImageUploadParams()
                             {
                                 File = new FileDescription(imagen.Name, stream),
-                                //Transformation = new Transformation().Width(1000).Height(1000).Crop("fill").Gravity("face")
+                                Transformation = new Transformation().Quality(40)
                             };
                             resultUpload = _cloudinary.Upload(parametros);
                         }
@@ -145,7 +145,7 @@ namespace webapi.business.Services.Imp
             }
             return true;
         }
-        public async Task<bool> AgregarFotoReporte(int id, IFormFile archivo)
+        public async Task<bool> AddFotoReporte(int id, IFormFile archivo)
         {
             var reporteRepo = await _unitOfWork.ReporteSeguimientoRepository.GetById(id);
             Foto foto = new Foto();
@@ -158,7 +158,7 @@ namespace webapi.business.Services.Imp
                     var parametros = new ImageUploadParams()
                     {
                         File = new FileDescription(archivo.Name, stream),
-                        //Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
+                        Transformation = new Transformation().Quality(40)
                     };
                     resultUpload = _cloudinary.Upload(parametros);
                 }

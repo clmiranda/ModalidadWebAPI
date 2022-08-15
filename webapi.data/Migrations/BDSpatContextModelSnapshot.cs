@@ -365,11 +365,6 @@ namespace webapi.data.Migrations
                     b.Property<int>("MascotaId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MascotaId");
@@ -469,41 +464,6 @@ namespace webapi.data.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("NombreCompleto")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("Respuesta1")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("Respuesta2")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("Respuesta3")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("Respuesta4")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("Respuesta5")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("Respuesta6")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("Respuesta7")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
