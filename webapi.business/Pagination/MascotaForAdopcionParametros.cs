@@ -1,10 +1,10 @@
 ﻿namespace webapi.business.Pagination
 {
-    public class MascotaParametros
+    public class MascotaForAdopcionParametros
     {
-        private const int MaxPageSize = 50;
+        private const int MaxPageSize = 36;
         public int PageNumber { get; set; } = 1;
-        private int pageSize = 5;
+        private int pageSize = 9;
         public int PageSize
         {
             get { return pageSize; }

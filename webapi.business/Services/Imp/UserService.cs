@@ -112,7 +112,7 @@ namespace webapi.business.Services.Imp
         public async Task<IdentityResult> DeleteUser(int id)
         {
             var user = await _unitOfWork.UserRepository.GetById(id);
-            await _seguimientoService.DeleteAllSeguimientoFromUser(user.Id);
+            await _seguimientoService.DesasignarSeguimientoFromUser(user.Id);
 
             var resultado = await _unitOfWork.UserRepository.DeleteUser(user);
             return resultado;

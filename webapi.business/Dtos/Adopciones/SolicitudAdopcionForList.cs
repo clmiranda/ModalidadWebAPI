@@ -11,8 +11,6 @@ namespace webapi.business.Dtos.Adopciones
         public string NombreCompleto { get; set; }
         public string Domicilio { get; set; }
         public string Telefono { get; set; }
-        public string RazonAdopcion { get; set; }
-        public string Respuesta1 { get; set; }
         public DateTime FechaSolicitudAdopcion { get; set; }
         public DateTime FechaAdopcion { get; set; }
         public string Estado { get; set; }

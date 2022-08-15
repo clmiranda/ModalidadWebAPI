@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using webapi.data;
@@ -9,9 +10,10 @@ using webapi.data;
 namespace webapi.data.Migrations
 {
     [DbContext(typeof(BDSpatContext))]
-    partial class BDSpatContextModelSnapshot : ModelSnapshot
+    [Migration("20220615022131_Tables_ReporteTratamiento_SolicitudAdopcion_updated")]
+    partial class Tables_ReporteTratamiento_SolicitudAdopcion_updated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

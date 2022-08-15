@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -32,7 +33,7 @@ namespace spatwebapi.Controllers
         {
             var lista = await _adopcionService.GetAllAdopciones(parametros);
             var mapped = _mapper.Map<IEnumerable<SolicitudAdopcionForList>>(lista);
-            //mapped = mapped.OrderByDescending(x => x.FechaAdopcion).ToList().ToList();
+            mapped = mapped.OrderByDescending(x => x.Id).ToList();
             Response.AddPagination(lista.CurrentPage, lista.PageSize,
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);
@@ -72,6 +73,15 @@ namespace spatwebapi.Controllers
         {
             var resultado = await _adopcionService.CreateSolicitudAdopcion(solicitudAdopcionDto);
             if (resultado != null)
+                return Ok(null);
+            return BadRequest(new { mensaje = "Ha ocurrido un error guardando los datos." });
+        }
+        [HttpPost("CreateAdopcionPresencial")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
+        public async Task<IActionResult> CreateAdopcionPresencial([FromBody] AdopcionPresencialForCreateDto adopcionPresencial)
+        {
+            var resultado = await _adopcionService.CreateAdopcionPresencial(adopcionPresencial);
+            if (resultado)
                 return Ok(null);
             return BadRequest(new { mensaje = "Ha ocurrido un error guardando los datos." });
         }

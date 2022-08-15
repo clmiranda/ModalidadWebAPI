@@ -14,27 +14,6 @@ namespace webapi.core.Models
         [Required]
         [MaxLength(20)]
         public string Telefono { get; set; }
-        [Required]
-        [MaxLength(300)]
-        public string Respuesta1 { get; set; }
-        [Required]
-        [MaxLength(300)]
-        public string Respuesta2 { get; set; }
-        [Required]
-        [MaxLength(300)]
-        public string Respuesta3 { get; set; }
-        [Required]
-        [MaxLength(300)]
-        public string Respuesta4 { get; set; }
-        [Required]
-        [MaxLength(300)]
-        public string Respuesta5 { get; set; }
-        [Required]
-        [MaxLength(300)]
-        public string Respuesta6 { get; set; }
-        [Required]
-        [MaxLength(300)]
-        public string Respuesta7 { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaSolicitudAdopcion { get; set; }
         public DateTime FechaAdopcion { get; set; }

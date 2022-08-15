@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace webapi.business.Services.Imp
         public async Task<PaginationList<Denuncia>> GetAllDenuncias(DenunciaParametros parametros)
         {
             var lista = _unitOfWork.DenunciaRepository.GetAll();
-            lista = lista.OrderBy(x => x.Id);
+            lista = lista.OrderByDescending(x => x.Id);
             if (!String.IsNullOrEmpty(parametros.Busqueda))
                 lista = lista.Where(x => x.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Descripcion.ToLower().Contains(parametros.Busqueda.ToLower()));
             var pagination = await PaginationList<Denuncia>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);

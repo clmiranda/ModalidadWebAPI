@@ -2,7 +2,7 @@
 
 namespace webapi.business.Dtos.Adopciones
 {
-    public class SolicitudAdopcionForCreate
+    public class AdopcionPresencialForCreateDto
     {
         public string NombreCompleto { get; set; }
         public string Domicilio { get; set; }
@@ -12,12 +12,12 @@ namespace webapi.business.Dtos.Adopciones
         public DateTime FechaCreacion { get; }
         public string Estado { get; }
         public int MascotaId { get; set; }
-        public SolicitudAdopcionForCreate()
+        public AdopcionPresencialForCreateDto()
         {
             FechaSolicitudAdopcion = DateTime.Now;
             FechaAdopcion = DateTime.Now;
             FechaCreacion = DateTime.Now;
-            Estado = "Pendiente";
+            Estado = "Aprobado";
         }
     }
 }

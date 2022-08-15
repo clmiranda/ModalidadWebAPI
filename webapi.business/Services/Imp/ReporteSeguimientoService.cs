@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -68,17 +69,25 @@ namespace webapi.business.Services.Imp
             var seguimiento = await _unitOfWork.SeguimientoRepository.GetById(rangoFechaSeguimiento.Id);
             seguimiento.FechaInicio = Convert.ToDateTime(rangoFechaSeguimiento.RangoFechas[0]);
             seguimiento.FechaFin = Convert.ToDateTime(rangoFechaSeguimiento.RangoFechas[1]);
+            foreach (var reporteSeguimiento in seguimiento.ReporteSeguimientos)
+            {
+                if (reporteSeguimiento.Estado.Equals("Asignado") &&
+                    (reporteSeguimiento.FechaReporte.Date < seguimiento.FechaInicio.Date || reporteSeguimiento.FechaReporte.Date > seguimiento.FechaFin.Date))
+                    reporteSeguimiento.Estado = "Activo";
+            }
             _unitOfWork.SeguimientoRepository.Update(seguimiento);
             if (await _unitOfWork.SaveAll())
                 return seguimiento;
             return null;
         }
-        public async Task<bool> SendReporte(ReporteSeguimientoForUpdate reporteDto)
+        public async Task<bool> SendReporte(ReporteSeguimientoForUpdate reporteDto, IFormFile Foto)
         {
             var reporteSeguimiento = await _unitOfWork.ReporteSeguimientoRepository.GetById(reporteDto.Id);
             var resultado = _mapper.Map(reporteDto, reporteSeguimiento);
             _unitOfWork.ReporteSeguimientoRepository.Update(resultado);
-            return await _unitOfWork.SaveAll();
+
+            return await _fotoService.AddFotoReporte(reporteDto.Id, Foto);
+            //return await _unitOfWork.SaveAll();
         }
         public async Task<bool> UpdateFechaReporte(ReporteSeguimientoForUpdateAdmin reporteDto)
         {

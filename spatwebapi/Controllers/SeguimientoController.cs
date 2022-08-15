@@ -19,10 +19,13 @@ namespace spatwebapi.Controllers
     {
         private readonly ISeguimientoService _seguimientoService;
         private readonly IMapper _mapper;
-        public SeguimientoController(ISeguimientoService seguimientoService, IMapper mapper)
+        private readonly IEmailService _emailService;
+        public SeguimientoController(ISeguimientoService seguimientoService, IMapper mapper,
+            IEmailService emailService)
         {
             _seguimientoService = seguimientoService;
             _mapper = mapper;
+            _emailService = emailService;
         }
         [HttpGet("GetAllSeguimientosForReport")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
@@ -38,6 +41,7 @@ namespace spatwebapi.Controllers
         {
             var lista = await _seguimientoService.GetAllSeguimiento(parametros);
             var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(lista.ToList());
+            mapped = mapped.OrderByDescending(x => x.Id).ToList();
             Response.AddPagination(lista.CurrentPage, lista.PageSize,
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);
@@ -93,9 +97,20 @@ namespace spatwebapi.Controllers
         public async Task<IActionResult> AsignarSeguimiento(int id, int idUser)
         {
             var resultado = await _seguimientoService.AsignarSeguimiento(id, idUser);
-            if (resultado)
+            if (resultado) {
+                var seguimiento = await _seguimientoService.GetById(id);
+                var linkSeguimiento = Url.Action("SeguimientoAsignado", "Seguimiento",
+                        new { id }, Request.Scheme);
+                await _emailService.SendEmailAsync(seguimiento.User.Email, $"Hola {seguimiento.User.Persona.Nombres}, has sido asignado(a) al seguimiento de la mascota {seguimiento.SolicitudAdopcion.Mascota.Nombre}.", "<a href=" + linkSeguimiento + "><h3>Accede a este enlace para ver la información del seguimiento.</h3></a>");
                 return Ok();
+            }
             return BadRequest(new { mensaje = "Problemas al guardar los datos." });
+        }
+        [AllowAnonymous]
+        [HttpGet("SeguimientoAsignado")]
+        public RedirectResult SeguimientoAsignado(int id)
+        {
+            return Redirect("https://localhost:44363/SeguimientoAsignado/ListaReportes/" + id);
         }
         [HttpPut("{id}/QuitarAsignacion/{idUser}")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]

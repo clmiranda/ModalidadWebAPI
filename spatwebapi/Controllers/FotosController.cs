@@ -28,10 +28,12 @@ namespace spatwebapi.Controllers
         {
             var resultado = await _fotoService.AddFotoMascota(idMascota, fotoDto);
             if (resultado.Equals("ErrorCount"))
-                return BadRequest("No se pueden agregar más de 4 fotos.");
+                return BadRequest(new { mensaje = "No se pueden agregar más de 4 fotos." });
             else if (resultado.Equals("ErrorSave"))
-                return BadRequest("No se pudo agregar la(s) foto(s).");
-            return Json("Foto(s) agregada(s).");
+                return BadRequest(new { mensaje = "No se pudo agregar la(s) foto(s)." });
+            var mascota = await _mascotaService.GetMascotaById(idMascota);
+            var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+            return Ok(mapped);
         }
         [HttpPost("Mascota/{idMascota}/SetFotoPrincipalMascota/{idFoto}")]
         public async Task<IActionResult> SetFotoPrincipalMascota(int idMascota, int idFoto)
