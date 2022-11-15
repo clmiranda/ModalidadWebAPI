@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using webapi.business.Dtos.ReportesSeguimientos;
 using webapi.business.Dtos.Seguimientos;
@@ -13,18 +13,19 @@ namespace spatwebapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReporteSeguimientoController : Controller
+    public class ReporteSeguimientoController : ControllerBase
     {
         private readonly ISeguimientoService _seguimientoService;
         private readonly IReporteSeguimientoService _reporteSeguimientoService;
-        private readonly IFotoService _fotoService;
         private readonly IMapper _mapper;
-        public ReporteSeguimientoController(ISeguimientoService seguimientoService, IReporteSeguimientoService reporteSeguimientoService, IFotoService fotoService, IMapper mapper)
+        private readonly IEmailService _emailService;
+        public ReporteSeguimientoController(ISeguimientoService seguimientoService, IReporteSeguimientoService reporteSeguimientoService, IMapper mapper,
+          IEmailService emailService)
         {
             _seguimientoService = seguimientoService;
             _reporteSeguimientoService = reporteSeguimientoService;
-            _fotoService = fotoService;
             _mapper = mapper;
+            _emailService = emailService;
         }
         [HttpGet("GetAllReporteSeguimientosForReport")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
@@ -77,7 +78,7 @@ namespace spatwebapi.Controllers
         }
         [HttpPut("SendReporte")]
         [Authorize(Roles = "SuperAdministrador, Administrador, Voluntario")]
-        public async Task<IActionResult> SendReporte([FromForm] ReporteSeguimientoForUpdate reporteSeguimientoDto, IFormFile Foto)
+        public async Task<IActionResult> SendReporte([FromForm] ReporteSeguimientoForUpdate reporteSeguimientoDto, Microsoft.AspNetCore.Http.IFormFile Foto)
         {
             var reporteSeguimiento = await _reporteSeguimientoService.GetByIdNotracking(reporteSeguimientoDto.Id);
             if (reporteSeguimiento == null)
@@ -110,8 +111,8 @@ namespace spatwebapi.Controllers
                 {
                     var seguimiento = await _reporteSeguimientoService.GetReportesForAdmin(reporteSeguimiento.SeguimientoId);
                     seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderBy(x => x.FechaReporte).ToList().OrderBy(x => x.Estado).ToList();
-                    var mappeado = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
-                    return Ok(mappeado);
+                    var mapeado = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
+                    return Ok(mapeado);
                 }
                 return BadRequest(new { mensaje = "Hubo problemas al actualizar el reporte" });
             }
@@ -134,6 +135,36 @@ namespace spatwebapi.Controllers
                 return Ok(mapped);
             }
             return BadRequest(new { mensaje = "Hubo un problema al eliminar el Reporte." });
+        }
+        [HttpGet("ScheduleHangfire")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ScheduleHangfire()
+        {
+            var listaReporte = await _reporteSeguimientoService.GetAllReporteSeguimientosForReport();
+            foreach (var reporte in listaReporte)
+            {
+                if (reporte.FechaReporte.ToShortDateString().Equals(DateTime.Now.ToShortDateString()))
+                {
+                    var seguimiento = await _seguimientoService.GetById(reporte.SeguimientoId);
+                    var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
+                    await SendMailHangfire(mapped);
+                }
+            }
+            return Ok();
+        }
+        [HttpGet("SendMailHangfire")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SendMailHangfire(SeguimientoForReturnDto mapeado)
+        {
+            var linkReporteSeguimiento = "https://localhost:44398/api/ReporteSeguimiento/ReporteSeguimientoPendiente/" + mapeado.Id;
+            await _emailService.SendEmailAsync(mapeado.User.Email, $"Hola {mapeado.User.Persona.Nombres}, tienes un reporte a realizar hoy de la mascota {mapeado.SolicitudAdopcion.Mascota.Nombre}.", "<a href=" + linkReporteSeguimiento + "><h3>Accede a este enlace para ver la información del seguimiento.</h3></a>");
+            return Ok();
+        }
+        [HttpGet("ReporteSeguimientoPendiente/{id}")]
+        [AllowAnonymous]
+        public RedirectResult ReporteSeguimientoPendiente(int id)
+        {
+            return Redirect("https://localhost:44363/SeguimientoAsignado/ListaReportes/" + id);
         }
     }
 }

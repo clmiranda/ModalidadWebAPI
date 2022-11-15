@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -86,7 +87,7 @@ namespace spatwebapi.Controllers
             var idUser = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
             if (seguimiento.UserId == idUser)
             {
-                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderBy(x => x.FechaReporte.Date).ToList().OrderBy(x => x.Estado).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
+                seguimiento.ReporteSeguimientos = seguimiento.ReporteSeguimientos.OrderBy(x => x.FechaReporte.Date).ToList().OrderByDescending(x => x.FechaReporte.ToShortDateString().Equals(DateTime.Now.ToShortDateString())).ToList().FindAll(x => !x.Estado.Equals("Activo")).ToList();
                 var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
                 return Ok(mapped);
             }
@@ -98,7 +99,7 @@ namespace spatwebapi.Controllers
         {
             var resultado = await _seguimientoService.AsignarSeguimiento(id, idUser);
             if (resultado) {
-                var seguimiento = await _seguimientoService.GetById(id);
+                var seguimiento = _mapper.Map<SeguimientoForReturnDto>(await _seguimientoService.GetById(id));
                 var linkSeguimiento = Url.Action("SeguimientoAsignado", "Seguimiento",
                         new { id }, Request.Scheme);
                 await _emailService.SendEmailAsync(seguimiento.User.Email, $"Hola {seguimiento.User.Persona.Nombres}, has sido asignado(a) al seguimiento de la mascota {seguimiento.SolicitudAdopcion.Mascota.Nombre}.", "<a href=" + linkSeguimiento + "><h3>Accede a este enlace para ver la información del seguimiento.</h3></a>");
