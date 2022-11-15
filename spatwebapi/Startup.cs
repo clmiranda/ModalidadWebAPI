@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using spatwebapi.Controllers;
 using webapi.business.Helpers;
 using webapi.root;
 
@@ -28,7 +30,8 @@ namespace spatwebapi
         public void ConfigureServices(IServiceCollection services)
         {
             CompositionRoot.InjectDependencies(services, Configuration);
-            CompositionRoot.otherDependencies(services, Configuration);
+            CompositionRoot.OtherDependencies(services, Configuration);
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -81,6 +84,8 @@ namespace spatwebapi
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseHangfireDashboard();
+            RecurringJob.AddOrUpdate<ReporteSeguimientoController>("ScheduleHangfire", servicio => servicio.ScheduleHangfire(), Cron.Daily, TimeZoneInfo.Local);
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseDefaultFiles();

@@ -12,7 +12,7 @@ namespace spatwebapi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "SuperAdministrador, Administrador")]
-    public class ReporteTratamientoController : Controller
+    public class ReporteTratamientoController : ControllerBase
     {
         private readonly IReporteTratamientoService _reporteTratamientoService;
         private readonly IMapper _mapper;

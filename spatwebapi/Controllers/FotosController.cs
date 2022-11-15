@@ -12,7 +12,7 @@ namespace spatwebapi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "SuperAdministrador, Administrador")]
-    public class FotosController : Controller
+    public class FotosController : ControllerBase
     {
         private readonly IFotoService _fotoService;
         private readonly IMascotaService _mascotaService;

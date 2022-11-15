@@ -13,7 +13,7 @@ namespace spatwebapi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;

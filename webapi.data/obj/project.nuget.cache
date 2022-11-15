@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "E4A0lT7w2md527Bc4YbLzalF7dg5Wq7XP9yh7qPDk2Z6bcqWMgRwfx9FCywOxD7ti+MbD9ecsllyHMZxsaM+aA==",
+  "dgSpecHash": "DgkYzy/supkumysDTJkYUTN/2WXeZnOIIT7TlygjXCMA+uHaBbdbMmAbiccikoNueW9UTrzFdcvfhJY/TR6CEg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.data\\webapi.data.csproj",
   "expectedPackageFiles": [
@@ -55,7 +55,7 @@
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",
-    "C:\\Users\\Usuario\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\npgsql\\5.0.0\\npgsql.5.0.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\5.0.0\\npgsql.entityframeworkcore.postgresql.5.0.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",

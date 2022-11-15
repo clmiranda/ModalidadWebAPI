@@ -8,7 +8,7 @@ namespace spatwebapi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "SuperAdministrador, Administrador")]
-    public class GraficasController : Controller
+    public class GraficasController : ControllerBase
     {
         private readonly IGraficaService _graficaService;
         public GraficasController(IGraficaService graficaService)

@@ -14,6 +14,8 @@ using webapi.data.Repositories.Imp;
 using webapi.data.Repositories.Interf;
 using AutoMapper;
 using webapi.business.Helpers;
+using Hangfire;
+using Hangfire.PostgreSql;
 
 namespace webapi.root
 {
@@ -31,6 +33,13 @@ namespace webapi.root
                 x.UseLazyLoadingProxies();
                 x.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddHangfire(config => config.
+SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+.UseSimpleAssemblyNameTypeSerializer()
+.UseRecommendedSerializerSettings()
+.UsePostgreSqlStorage(configuration.GetConnectionString("DefaultConnection")));
+            services.AddHangfireServer();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
@@ -63,7 +72,7 @@ namespace webapi.root
             services.Configure<ConfigurationCloudinary>(configuration.GetSection("CloudinarySettings"));
         }
 
-        public static void otherDependencies(IServiceCollection services, IConfiguration configuration)
+        public static void OtherDependencies(IServiceCollection services, IConfiguration configuration)
         {
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {

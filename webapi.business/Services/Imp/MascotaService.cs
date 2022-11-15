@@ -56,7 +56,7 @@ namespace webapi.business.Services.Imp
             resultado = resultado.OrderByDescending(x => x.Id);
 
             if (!String.IsNullOrEmpty(parametros.Busqueda))
-                resultado = resultado.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Denuncia.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()));
+                resultado = resultado.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
             if (parametros.Filter == "Adopcion")
                     resultado = resultado.Where(x => x.Nombre != null && (x.SolicitudAdopcion.Estado.Equals("Rechazado") || x.SolicitudAdopcion.Estado.Equals("Cancelado") || x.SolicitudAdopcion == null) && x.Estado == "Activo");
 
