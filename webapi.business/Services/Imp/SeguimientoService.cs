@@ -44,6 +44,8 @@ namespace webapi.business.Services.Imp
                 lista = lista.Where(x => x.Estado.Equals("Asignado"));
             else if (parametros.Filter == "Finalizado")
                 lista = _unitOfWork.SeguimientoRepository.FindByCondition(x => x.Estado.Equals("Finalizado"));
+
+            lista = lista.OrderByDescending(x => x.Id);
             var pagination = await PaginationList<Seguimiento>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);
             return pagination;
         }
@@ -51,6 +53,7 @@ namespace webapi.business.Services.Imp
         {
             var lista = _unitOfWork.SeguimientoRepository.GetAll();
             lista = lista.Where(x => x.UserId == idUser && x.Estado.Equals("Asignado"));
+            lista = lista.OrderByDescending(x => x.Id);
             var pagination = await PaginationList<Seguimiento>.ToPagedList(lista, parametros.PageNumber, parametros.PageSize);
             return pagination;
         }

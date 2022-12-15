@@ -42,7 +42,6 @@ namespace spatwebapi.Controllers
         {
             var lista = await _seguimientoService.GetAllSeguimiento(parametros);
             var mapped = _mapper.Map<IEnumerable<SeguimientoForReturnDto>>(lista.ToList());
-            mapped = mapped.OrderByDescending(x => x.Id).ToList();
             Response.AddPagination(lista.CurrentPage, lista.PageSize,
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);

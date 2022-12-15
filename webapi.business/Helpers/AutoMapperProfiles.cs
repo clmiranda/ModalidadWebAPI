@@ -47,6 +47,8 @@ namespace webapi.business.Helpers
             CreateMap<SolicitudAdopcion, SolicitudAdopcionReturnDto>();
             CreateMap<SolicitudAdopcionForCreate, SolicitudAdopcion>();
             CreateMap<SolicitudAdopcion, SolicitudAdopcionForList>();
+            CreateMap<ContratoAdopcionDto, ContratoAdopcion>();
+            CreateMap<ContratoAdopcion, ContratoAdopcionForReturnDto>();
             CreateMap<FechaSolicitudAdopcionForUpdateDto, SolicitudAdopcion>();
             CreateMap<Seguimiento, SeguimientoForReturnDto>();
             CreateMap<ReporteSeguimiento, ReporteSeguimientoForList>();

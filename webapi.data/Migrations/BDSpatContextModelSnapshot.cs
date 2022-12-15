@@ -157,6 +157,30 @@ namespace webapi.data.Migrations
                     b.ToTable("AdopcionRechazada");
                 });
 
+            modelBuilder.Entity("webapi.core.Models.ContratoAdopcion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("IdPublico")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("SolicitudAdopcionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SolicitudAdopcionId")
+                        .IsUnique();
+
+                    b.ToTable("ContratoAdopcion");
+                });
+
             modelBuilder.Entity("webapi.core.Models.Denuncia", b =>
                 {
                     b.Property<int>("Id")
@@ -613,6 +637,15 @@ namespace webapi.data.Migrations
                     b.Navigation("SolicitudAdopcion");
                 });
 
+            modelBuilder.Entity("webapi.core.Models.ContratoAdopcion", b =>
+                {
+                    b.HasOne("webapi.core.Models.SolicitudAdopcion", "SolicitudAdopcion")
+                        .WithOne("ContratoAdopcion")
+                        .HasForeignKey("webapi.core.Models.ContratoAdopcion", "SolicitudAdopcionId");
+
+                    b.Navigation("SolicitudAdopcion");
+                });
+
             modelBuilder.Entity("webapi.core.Models.Foto", b =>
                 {
                     b.HasOne("webapi.core.Models.Mascota", "Mascota")
@@ -751,6 +784,8 @@ namespace webapi.data.Migrations
                     b.Navigation("AdopcionCancelada");
 
                     b.Navigation("AdopcionRechazada");
+
+                    b.Navigation("ContratoAdopcion");
 
                     b.Navigation("Seguimiento");
                 });

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace webapi.core.Models
@@ -23,6 +24,7 @@ namespace webapi.core.Models
         public virtual Mascota Mascota { get; set; }
         public int? MascotaId { get; set; }
         public virtual Seguimiento Seguimiento { get; set; }
+        public virtual ContratoAdopcion ContratoAdopcion { get; set; }
         public virtual AdopcionRechazada AdopcionRechazada { get; set; }
         public virtual AdopcionCancelada AdopcionCancelada { get; set; }
     }

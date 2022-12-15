@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.SolicitudAdopcionCancelada;
 using webapi.business.Dtos.SolicitudAdopcionRechazada;
@@ -33,7 +34,6 @@ namespace spatwebapi.Controllers
         {
             var lista = await _adopcionService.GetAllAdopciones(parametros);
             var mapped = _mapper.Map<IEnumerable<SolicitudAdopcionForList>>(lista);
-            mapped = mapped.OrderByDescending(x => x.Id).ToList();
             Response.AddPagination(lista.CurrentPage, lista.PageSize,
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);
@@ -47,6 +47,25 @@ namespace spatwebapi.Controllers
                 return Ok(null);
             var mapped = _mapper.Map<SolicitudAdopcionForDetailDto>(solicitudAdopcion);
             return Ok(mapped);
+        }
+        [HttpGet("GetAntecedenteSolicitudAdopcion/{id}")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
+        public async Task<IActionResult> GetAntecedenteSolicitudAdopcion(int id)
+        {
+            var solicitudAdopcion = await _adopcionService.GetById(id);
+            if (solicitudAdopcion != null)
+            {
+                var listaRechazadas = await _adopcionService.FindByConditionAdopcionRechazada(x => x.SolicitudAdopcion.NombreCompleto.ToLower().Equals(solicitudAdopcion.NombreCompleto.ToLower()) || x.SolicitudAdopcion.Telefono.Equals(solicitudAdopcion.Telefono)).ToListAsync();
+
+                var listaCanceladas = await _adopcionService.FindByConditionAdopcionCancelada(x => x.SolicitudAdopcion.NombreCompleto.ToLower().Equals(solicitudAdopcion.NombreCompleto.ToLower()) || x.SolicitudAdopcion.Telefono.Equals(solicitudAdopcion.Telefono)).ToListAsync();
+
+                var mappedListaRechazadas = _mapper.Map<IEnumerable<SolicitudAdopcionRechazadaForReturnDto>>(listaRechazadas);
+
+                var mappedListaCanceladas = _mapper.Map<IEnumerable<SolicitudAdopcionCanceladaForReturnDto>>(listaCanceladas);
+
+                return Ok(new { ListaAdopcionRechazada = mappedListaRechazadas, ListaAdopcionCancelada = mappedListaCanceladas });
+            }
+            return Ok(null);
         }
         [HttpGet("GetAllAdopcionesForReport")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]
@@ -98,6 +117,15 @@ namespace spatwebapi.Controllers
                 return BadRequest(new { mensaje = "Ha ocurrido un error actualizando los datos." });
             }
             return BadRequest(new { mensaje = "No se pudo encontrar la solicitud de adopción." });
+        }
+        [HttpPost("{id}/UploadContratoAdopcion")]
+        [Authorize(Roles = "SuperAdministrador, Administrador")]
+        public async Task<IActionResult> UploadContratoAdopcion(int id, [FromForm] ContratoAdopcionDto contratoAdopcion)
+        {
+            var resultado = await _adopcionService.UploadContratoAdopcion(id, contratoAdopcion);
+            if (!resultado)
+                return BadRequest(new { mensaje = "Problemas al subir el documento." });
+            return Ok();
         }
         [HttpPut("{id}/AprobarSolicitudAdopcion")]
         [Authorize(Roles = "SuperAdministrador, Administrador")]

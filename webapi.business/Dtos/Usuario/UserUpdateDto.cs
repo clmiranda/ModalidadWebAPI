@@ -1,5 +1,4 @@
-﻿using System;
-using webapi.business.Dtos.Persona;
+﻿using webapi.business.Dtos.Persona;
 
 namespace webapi.business.Dtos.Usuario
 {
