@@ -146,8 +146,11 @@ namespace spatwebapi.Controllers
                 if (reporte.FechaReporte.ToShortDateString().Equals(DateTime.Now.ToShortDateString()))
                 {
                     var seguimiento = await _seguimientoService.GetById(reporte.SeguimientoId);
-                    var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
-                    await SendMailHangfire(mapped);
+                    if (seguimiento.User != null)
+                    {
+                        var mapped = _mapper.Map<SeguimientoForReturnDto>(seguimiento);
+                        await SendMailHangfire(mapped);
+                    }
                 }
             }
             return Ok();

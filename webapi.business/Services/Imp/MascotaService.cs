@@ -53,26 +53,26 @@ namespace webapi.business.Services.Imp
         public async Task<PaginationList<Mascota>> GetAllMascotasForAdopcion(MascotaForAdopcionParametros parametros)
         {
             var resultado = _unitOfWork.MascotaRepository.GetAll();
-            resultado = resultado.OrderByDescending(x => x.Id);
 
             if (!String.IsNullOrEmpty(parametros.Busqueda))
                 resultado = resultado.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()));
             if (parametros.Filter == "Adopcion")
                     resultado = resultado.Where(x => x.Nombre != null && (x.SolicitudAdopcion.Estado.Equals("Rechazado") || x.SolicitudAdopcion.Estado.Equals("Cancelado") || x.SolicitudAdopcion == null) && x.Estado == "Activo");
 
+            resultado = resultado.OrderByDescending(x => x.Id);
             var pagination = await PaginationList<Mascota>.ToPagedList(resultado, parametros.PageNumber, parametros.PageSize);
             return pagination;
         }
         public async Task<PaginationList<Mascota>> GetAllMascotas(MascotaParametros parametros)
         {
             var resultado = _unitOfWork.MascotaRepository.GetAll();
-            resultado = resultado.OrderByDescending(x => x.Id);
-
+            
             if (!String.IsNullOrEmpty(parametros.Busqueda))
                 resultado = resultado.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Denuncia.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()));
             if (parametros.Filter == "Adopcion")
                 resultado = resultado.Where(x => x.Nombre != null && (x.SolicitudAdopcion.Estado.Equals("Rechazado") || x.SolicitudAdopcion.Estado.Equals("Cancelado") || x.SolicitudAdopcion == null) && x.Estado == "Activo");
 
+            resultado = resultado.OrderByDescending(x => x.Id);
             var pagination = await PaginationList<Mascota>.ToPagedList(resultado, parametros.PageNumber, parametros.PageSize);
             return pagination;
         }

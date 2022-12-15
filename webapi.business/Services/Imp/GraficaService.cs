@@ -13,16 +13,12 @@ namespace webapi.business.Services.Imp
     public class GraficaService : IGraficaService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly List<string> listaFiltro;
         public GraficaService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            listaFiltro = new List<string> { "3 meses", "6 meses", "9 meses", "12 meses" };
         }
         public async Task<List<DataGraficaDto>> DatosAdopciones(string[] fechas)
         {
-            //if (string.IsNullOrEmpty(fechas) || !listaFiltro.Contains(fechas))
-            //    return null;
             var datos = new List<SolicitudAdopcion>();
             datos = await _unitOfWork.SolicitudAdopcionRepository.FindByCondition(x => x.FechaSolicitudAdopcion.Date >= Convert.ToDateTime(fechas[0]) && x.FechaSolicitudAdopcion.Date <= Convert.ToDateTime(fechas[1])).ToListAsync();
 
@@ -37,24 +33,6 @@ namespace webapi.business.Services.Imp
         }
         public async Task<List<DataGraficaDto>> DatosMascotas(string[] fechas)
         {
-            //if (string.IsNullOrEmpty(filtro) || !listaFiltro.Contains(filtro))
-            //    return null;
-            //var datos = new List<Mascota>();
-            //switch (filtro)
-            //{
-            //    case "3 meses":
-            //        datos = await _unitOfWork.MascotaRepository.FindByCondition(x => x.FechaCreacion.Date >= DateTime.Today.AddMonths(-3) && x.FechaCreacion.Date <= DateTime.Now.Date).ToListAsync();
-            //        break;
-            //    case "6 meses":
-            //        datos = await _unitOfWork.MascotaRepository.FindByCondition(x => x.FechaCreacion.Date >= DateTime.Today.AddMonths(-6) && x.FechaCreacion.Date <= DateTime.Now.Date).ToListAsync();
-            //        break;
-            //    case "9 meses":
-            //        datos = await _unitOfWork.MascotaRepository.FindByCondition(x => x.FechaCreacion.Date >= DateTime.Today.AddMonths(-9) && x.FechaCreacion.Date <= DateTime.Now.Date).ToListAsync();
-            //        break;
-            //    case "12 meses":
-            //        datos = await _unitOfWork.MascotaRepository.FindByCondition(x => x.FechaCreacion.Date >= DateTime.Today.AddMonths(-12) && x.FechaCreacion.Date <= DateTime.Now.Date).ToListAsync();
-            //        break;
-            //}
             var datos = new List<Mascota>();
             datos = await _unitOfWork.MascotaRepository.FindByCondition(x => x.FechaCreacion.Date >= Convert.ToDateTime(fechas[0]) && x.FechaCreacion.Date <= Convert.ToDateTime(fechas[1])).ToListAsync();
             var lista = datos.OrderBy(x => x.FechaCreacion.Date)
@@ -68,24 +46,6 @@ namespace webapi.business.Services.Imp
         }
         public async Task<List<DataGraficaDto>> DatosReporteSeguimientos(string[] fechas)
         {
-            //if (string.IsNullOrEmpty(filtro) || !listaFiltro.Contains(filtro))
-            //    return null;
-            //var datos = new List<ReporteSeguimiento>();
-            //switch (filtro)
-            //{
-            //    case "3 meses":
-            //        datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.FechaReporte.Date >= DateTime.Today.AddMonths(-3) && x.FechaReporte.Date <= DateTime.Now.Date).ToListAsync();
-            //        break;
-            //    case "6 meses":
-            //        datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.FechaReporte.Date >= DateTime.Today.AddMonths(-6) && x.FechaReporte.Date <= DateTime.Now.Date).ToListAsync();
-            //        break;
-            //    case "9 meses":
-            //        datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.FechaReporte.Date >= DateTime.Today.AddMonths(-9) && x.FechaReporte.Date <= DateTime.Now.Date).ToListAsync();
-            //        break;
-            //    case "12 meses":
-            //        datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.FechaReporte.Date >= DateTime.Today.AddMonths(-12) && x.FechaReporte.Date <= DateTime.Now.Date).ToListAsync();
-            //        break;
-            //}
             var datos = new List<ReporteSeguimiento>();
             datos = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.FechaCreacion.Date >= Convert.ToDateTime(fechas[0]) && x.FechaCreacion.Date <= Convert.ToDateTime(fechas[1])).ToListAsync();
             var lista = datos.Where(x => x.Estado.Equals("Enviado"))

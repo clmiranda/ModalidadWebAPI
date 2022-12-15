@@ -26,15 +26,16 @@ namespace webapi.data
         public virtual DbSet<Denuncia> Denuncia { get; set; }
         public virtual DbSet<Foto> Foto { get; set; }
         public virtual DbSet<Persona> Persona { get; set; }
+        public virtual DbSet<ContratoAdopcion> ContratoAdopcion { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=DatabaseSpat;Username=postgres;Password=dV91ut3F");
-//            }
-//        }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+        //                optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=DatabaseSpat;Username=postgres;Password=dV91ut3F");
+        //            }
+        //        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

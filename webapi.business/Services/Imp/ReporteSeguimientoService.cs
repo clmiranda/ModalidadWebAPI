@@ -87,7 +87,6 @@ namespace webapi.business.Services.Imp
             _unitOfWork.ReporteSeguimientoRepository.Update(resultado);
 
             return await _fotoService.AddFotoReporte(reporteDto.Id, Foto);
-            //return await _unitOfWork.SaveAll();
         }
         public async Task<bool> UpdateFechaReporte(ReporteSeguimientoForUpdateAdmin reporteDto)
         {

@@ -40,6 +40,7 @@ namespace spatwebapi.Controllers
             var mascota = await _mascotaService.GetMascotaById(id);
             if (mascota == null) return Ok(null);
             var mapped = _mapper.Map<MascotaForDetailedDto>(mascota);
+            mapped.ReporteTratamientos = mapped.ReporteTratamientos.OrderBy(x => x.FechaCreacion).ToList();
             return Ok(mapped);
         }
         [HttpGet("GetMascotaDenuncia/{id}")]
@@ -78,8 +79,6 @@ namespace spatwebapi.Controllers
         {
             var lista = await _mascotaService.GetAllMascotas(parametros);
             var mapped = _mapper.Map<IEnumerable<MascotaForDetailedDto>>(lista);
-            mapped = mapped.GroupBy(x => x.Estado)
-                .SelectMany(x => x).OrderByDescending(x => x.Estado.Equals("Activo")).ThenByDescending(x=>x.Estado.Equals("Inactivo")).ToList();
             Response.AddPagination(lista.CurrentPage, lista.PageSize,
                  lista.TotalCount, lista.TotalPages);
             return Ok(mapped);

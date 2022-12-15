@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Linq;
 using System.Threading.Tasks;
 using webapi.business.Dtos.Adopciones;
 using webapi.business.Dtos.SolicitudAdopcionCancelada;
@@ -22,5 +25,8 @@ namespace webapi.business.Services.Interf
         Task<bool> RechazarSolicitudAdopcion(int id, int mascotaId);
         Task<bool> CancelarAdopcion(int id, int mascotaId);
         Task<bool> DeleteAllSolicitudAdopcion(int mascotaId);
+        IQueryable<AdopcionRechazada> FindByConditionAdopcionRechazada(Expression<Func<AdopcionRechazada, bool>> expression);
+        IQueryable<AdopcionCancelada> FindByConditionAdopcionCancelada(Expression<Func<AdopcionCancelada, bool>> expression);
+        Task<bool> UploadContratoAdopcion(int idAdopcion, ContratoAdopcionDto contratoAdopcion);
     }
 }

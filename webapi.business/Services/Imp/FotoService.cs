@@ -72,7 +72,6 @@ namespace webapi.business.Services.Imp
                 return "ErrorCount";
             else
             {
-                //mascotaRepo.Fotos = new List<Foto>();
                 Foto fotoMap = new Foto();
                 foreach (var item in fotoMascota.Archivo)
                 {
