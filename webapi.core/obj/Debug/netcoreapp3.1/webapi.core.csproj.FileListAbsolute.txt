@@ -8,3 +8,13 @@ C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\web
 C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.csproj.CoreCompileInputs.cache
 C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.dll
 C:\Users\Usuario\source\repos\spatwebapi\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.pdb
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\bin\Debug\netcoreapp3.1\webapi.core.deps.json
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\bin\Debug\netcoreapp3.1\webapi.core.dll
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\bin\Debug\netcoreapp3.1\webapi.core.pdb
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.csproj.AssemblyReference.cache
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.AssemblyInfoInputs.cache
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.AssemblyInfo.cs
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.csproj.CoreCompileInputs.cache
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.dll
+C:\Users\miran\source\repos\ModalidadWebAPI\webapi.core\obj\Debug\netcoreapp3.1\webapi.core.pdb

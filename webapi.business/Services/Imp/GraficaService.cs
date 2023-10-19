@@ -72,7 +72,7 @@ namespace webapi.business.Services.Imp
 
                 ContadorSeguimientosActuales = await _unitOfWork.SeguimientoRepository.GetAll().CountAsync(),
 
-                ContadorVoluntariosRegistrados = await _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.Any(y => y.Role.Name.Equals("Voluntario"))).CountAsync(),
+                ContadorVoluntariosRegistrados = await _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.All(y => y.Role.Name.Equals("Voluntario"))).CountAsync(),
 
                 ContadorReportesSemana = await _unitOfWork.ReporteSeguimientoRepository.FindByCondition(x => x.Estado.Equals("Enviado") && x.FechaReporte.Date >= DateTime.Today.AddDays(-(int)DayOfWeek.Monday) && x.FechaReporte.Date <= DateTime.Today.AddDays((int)DayOfWeek.Sunday)).CountAsync(),
 

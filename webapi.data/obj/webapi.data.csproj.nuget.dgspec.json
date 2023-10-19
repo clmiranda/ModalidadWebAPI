@@ -1,32 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.data\\webapi.data.csproj": {}
+    "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.data\\webapi.data.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.core\\webapi.core.csproj": {
+    "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.core\\webapi.core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.core\\webapi.core.csproj",
+        "projectUniqueName": "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.core\\webapi.core.csproj",
         "projectName": "webapi.core",
-        "projectPath": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.core\\webapi.core.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.core\\obj\\",
+        "projectPath": "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.core\\webapi.core.csproj",
+        "packagesPath": "C:\\Users\\miran\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\miran\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.1"
+          "net7.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
+          "net7.0": {
+            "targetAlias": "net7.0",
             "projectReferences": {}
           }
         },
@@ -37,12 +37,12 @@
         }
       },
       "frameworks": {
-        "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
+        "net7.0": {
+          "targetAlias": "net7.0",
           "dependencies": {
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
-              "version": "[7.0.0, )"
+              "version": "[12.0.1, )"
             },
             "Microsoft.AspNetCore.Http": {
               "target": "Package",
@@ -80,36 +80,36 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.data\\webapi.data.csproj": {
+    "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.data\\webapi.data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.data\\webapi.data.csproj",
+        "projectUniqueName": "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.data\\webapi.data.csproj",
         "projectName": "webapi.data",
-        "projectPath": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.data\\webapi.data.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.data\\obj\\",
+        "projectPath": "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.data\\webapi.data.csproj",
+        "packagesPath": "C:\\Users\\miran\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\miran\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.1"
+          "net7.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
+          "net7.0": {
+            "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.core\\webapi.core.csproj": {
-                "projectPath": "C:\\Users\\Usuario\\source\\repos\\spatwebapi\\webapi.core\\webapi.core.csproj"
+              "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.core\\webapi.core.csproj": {
+                "projectPath": "C:\\Users\\miran\\source\\repos\\ModalidadWebAPI\\webapi.core\\webapi.core.csproj"
               }
             }
           }
@@ -121,8 +121,8 @@
         }
       },
       "frameworks": {
-        "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
+        "net7.0": {
+          "targetAlias": "net7.0",
           "dependencies": {
             "Microsoft.AspNetCore.Identity": {
               "target": "Package",
@@ -172,7 +172,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
