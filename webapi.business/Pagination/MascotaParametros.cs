@@ -11,6 +11,6 @@
             set { pageSize = (value > MaxPageSize) ? MaxPageSize : value; }
         }
         public string Busqueda { get; set; } = "";
-        public string Filter { get; set; } = "All";
+        public string Filter { get; set; } = "Activo";
     }
 }

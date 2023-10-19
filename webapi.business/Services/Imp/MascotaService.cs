@@ -69,8 +69,10 @@ namespace webapi.business.Services.Imp
             
             if (!String.IsNullOrEmpty(parametros.Busqueda))
                 resultado = resultado.Where(x => x.Nombre.ToLower().Contains(parametros.Busqueda.ToLower()) || x.Denuncia.Titulo.ToLower().Contains(parametros.Busqueda.ToLower()));
-            if (parametros.Filter == "Adopcion")
-                resultado = resultado.Where(x => x.Nombre != null && (x.SolicitudAdopcion.Estado.Equals("Rechazado") || x.SolicitudAdopcion.Estado.Equals("Cancelado") || x.SolicitudAdopcion == null) && x.Estado == "Activo");
+            if (parametros.Filter.Equals("Activo"))
+                resultado = resultado.Where(x => x.Denuncia != null);
+            else
+                resultado = resultado.Where(x => x.Denuncia == null);
 
             resultado = resultado.OrderByDescending(x => x.Id);
             var pagination = await PaginationList<Mascota>.ToPagedList(resultado, parametros.PageNumber, parametros.PageSize);

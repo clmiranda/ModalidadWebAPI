@@ -31,7 +31,7 @@ namespace webapi.core.Models
         public DateTime FechaCreacion { get; set; }
         [MaxLength(20)]
         public string Estado { get; set; }
-        [Required]
+        //[Required]
         public virtual Denuncia Denuncia { get; set; }
         public int? DenunciaId { get; set; }
         public virtual List<Foto> Fotos { get; set; }

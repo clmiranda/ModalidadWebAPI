@@ -254,7 +254,6 @@ namespace webapi.data.Migrations
                         .HasColumnType("character varying(300)");
 
                     b.Property<int?>("DenunciaId")
-                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("Edad")
@@ -665,9 +664,7 @@ namespace webapi.data.Migrations
                 {
                     b.HasOne("webapi.core.Models.Denuncia", "Denuncia")
                         .WithOne("Mascota")
-                        .HasForeignKey("webapi.core.Models.Mascota", "DenunciaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("webapi.core.Models.Mascota", "DenunciaId");
 
                     b.Navigation("Denuncia");
                 });

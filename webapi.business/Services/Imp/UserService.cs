@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace webapi.business.Services.Imp
         }
         public async Task<IEnumerable<User>> GetAllUsers()
         {
-            var users = await _unitOfWork.UserRepository.GetAll().ToListAsync();
+            var users = await _unitOfWork.UserRepository.FindByCondition(x => x.UserRoles.All(y => !y.Role.Name.Equals("SuperAdministrador"))).ToListAsync();
             return users;
         }
         public async Task<User> FindUser(UserForLoginDto userForLoginDto)
