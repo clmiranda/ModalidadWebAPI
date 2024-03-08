@@ -30,7 +30,7 @@ namespace webapi.data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FechaCreacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Estado = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Estado = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     UserName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -51,8 +51,8 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Titulo = table.Column<string>(type: "text", nullable: true),
-                    Descripcion = table.Column<string>(type: "text", nullable: true)
+                    Titulo = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Descripcion = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -170,12 +170,12 @@ namespace webapi.data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Nombres = table.Column<string>(type: "text", nullable: true),
-                    Apellidos = table.Column<string>(type: "text", nullable: true),
-                    Domicilio = table.Column<string>(type: "text", nullable: true),
-                    Telefono = table.Column<string>(type: "text", nullable: true),
+                    Nombres = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Apellidos = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Domicilio = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Telefono = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     FechaNacimiento = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Genero = table.Column<string>(type: "text", nullable: true)
+                    Genero = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,16 +194,16 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nombre = table.Column<string>(type: "text", nullable: true),
-                    Sexo = table.Column<string>(type: "text", nullable: true),
-                    Especie = table.Column<string>(type: "text", nullable: true),
-                    Caracteristicas = table.Column<string>(type: "text", nullable: true),
-                    RasgosParticulares = table.Column<string>(type: "text", nullable: true),
-                    Tamano = table.Column<string>(type: "text", nullable: true),
-                    Esterilizado = table.Column<bool>(type: "boolean", nullable: true),
-                    Edad = table.Column<string>(type: "text", nullable: true),
+                    Nombre = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Sexo = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Especie = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Caracteristicas = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
+                    RasgosParticulares = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
+                    Tamano = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Esterilizado = table.Column<bool>(type: "boolean", nullable: false),
+                    Edad = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     FechaCreacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Estado = table.Column<string>(type: "text", nullable: true),
+                    Estado = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     DenunciaId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -223,8 +223,7 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Titulo = table.Column<string>(type: "text", nullable: true),
-                    Descripcion = table.Column<string>(type: "text", nullable: true),
+                    Descripcion = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     FechaCreacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     MascotaId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -245,20 +244,13 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    NombreCompleto = table.Column<string>(type: "text", nullable: true),
-                    Domicilio = table.Column<string>(type: "text", nullable: true),
-                    Telefono = table.Column<string>(type: "text", nullable: true),
-                    Respuesta1 = table.Column<string>(type: "text", nullable: true),
-                    Respuesta2 = table.Column<string>(type: "text", nullable: true),
-                    Respuesta3 = table.Column<string>(type: "text", nullable: true),
-                    Respuesta4 = table.Column<string>(type: "text", nullable: true),
-                    Respuesta5 = table.Column<string>(type: "text", nullable: true),
-                    Respuesta6 = table.Column<string>(type: "text", nullable: true),
-                    Respuesta7 = table.Column<string>(type: "text", nullable: true),
+                    NombreCompleto = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                    Domicilio = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Telefono = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     FechaCreacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     FechaSolicitudAdopcion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     FechaAdopcion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Estado = table.Column<string>(type: "text", nullable: true),
+                    Estado = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     MascotaId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -278,7 +270,7 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Razon = table.Column<string>(type: "text", nullable: true),
+                    Razon = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     FechaCreacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     SolicitudAdopcionId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -299,7 +291,7 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Razon = table.Column<string>(type: "text", nullable: true),
+                    Razon = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     FechaCreacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     SolicitudAdopcionId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -315,6 +307,27 @@ namespace webapi.data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ContratoAdopcion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Url = table.Column<string>(type: "text", nullable: true),
+                    IdPublico = table.Column<string>(type: "text", nullable: true),
+                    SolicitudAdopcionId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContratoAdopcion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ContratoAdopcion_SolicitudAdopcion_SolicitudAdopcionId",
+                        column: x => x.SolicitudAdopcionId,
+                        principalTable: "SolicitudAdopcion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Seguimiento",
                 columns: table => new
                 {
@@ -322,7 +335,7 @@ namespace webapi.data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FechaInicio = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     FechaFin = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Estado = table.Column<string>(type: "text", nullable: true),
+                    Estado = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: true),
                     SolicitudAdopcionId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -349,10 +362,10 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Observaciones = table.Column<string>(type: "text", nullable: true),
-                    Fecha = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Observaciones = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
+                    FechaReporte = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     FechaCreacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Estado = table.Column<string>(type: "text", nullable: true),
+                    Estado = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     SeguimientoId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -372,10 +385,10 @@ namespace webapi.data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Url = table.Column<string>(type: "text", nullable: true),
+                    Url = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     IsPrincipal = table.Column<bool>(type: "boolean", nullable: false),
-                    IdPublico = table.Column<string>(type: "text", nullable: true),
-                    FechaAgregado = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    IdPublico = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                    FechaCreacion = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     MascotaId = table.Column<int>(type: "integer", nullable: true),
                     ReporteSeguimientoId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -452,6 +465,12 @@ namespace webapi.data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ContratoAdopcion_SolicitudAdopcionId",
+                table: "ContratoAdopcion",
+                column: "SolicitudAdopcionId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Foto_MascotaId",
                 table: "Foto",
                 column: "MascotaId");
@@ -518,6 +537,9 @@ namespace webapi.data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ContratoAdopcion");
 
             migrationBuilder.DropTable(
                 name: "Foto");

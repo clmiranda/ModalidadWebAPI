@@ -15,9 +15,9 @@ namespace webapi.business.Helpers
             {
                 var roles = new List<Role>
                 {
-                    new Role{Name="SuperAdministrador"},
-                    new Role{Name="Administrador"},
-                    new Role{Name="Voluntario"}
+                    new() {Name="SuperAdministrador"},
+                    new() {Name="Administrador"},
+                    new() {Name="Voluntario"}
                 };
 
                 foreach (var item in roles)

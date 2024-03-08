@@ -37,8 +37,12 @@ namespace webapi.root
             services.AddHangfire(config => config.
 SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
 .UseSimpleAssemblyNameTypeSerializer()
-.UseRecommendedSerializerSettings()
-.UsePostgreSqlStorage(configuration.GetConnectionString("DefaultConnection")));
+.UseRecommendedSerializerSettings());
+
+            services.AddHangfire(config =>
+config.UsePostgreSqlStorage(c =>
+c.UseNpgsqlConnection(configuration.GetConnectionString("DefaultConnection"))));
+
             services.AddHangfireServer();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

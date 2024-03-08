@@ -10,8 +10,8 @@ using webapi.data;
 namespace webapi.data.Migrations
 {
     [DbContext(typeof(BDSpatContext))]
-    [Migration("20230706220832_Denuncia_not_required")]
-    partial class Denuncia_not_required
+    [Migration("20240220002932_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

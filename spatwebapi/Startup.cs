@@ -85,7 +85,10 @@ namespace spatwebapi
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseHangfireDashboard();
-            RecurringJob.AddOrUpdate<ReporteSeguimientoController>("ScheduleHangfire", servicio => servicio.ScheduleHangfire(), Cron.Daily, TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<ReporteSeguimientoController>("ScheduleHangfire", servicio => servicio.ScheduleHangfire(), Cron.Daily, new RecurringJobOptions()
+            {
+                TimeZone = TimeZoneInfo.Local
+            });
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseDefaultFiles();
