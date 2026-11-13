@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -23,8 +24,9 @@ namespace spatwebapi
                     var context = services.GetRequiredService<webapi.data.BDSpatContext>();
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
+                    var adminPassword = services.GetRequiredService<IConfiguration>()["Seed:AdminPassword"];
                     context.Database.Migrate();
-                    Seed.SeedUsers(userManager, roleManager);
+                    Seed.SeedUsers(userManager, roleManager, adminPassword);
                 }
                 catch (Exception ex)
                 {

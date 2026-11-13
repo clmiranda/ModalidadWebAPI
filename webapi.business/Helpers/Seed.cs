@@ -9,10 +9,13 @@ namespace webapi.business.Helpers
 {
     public class Seed
     {
-        public static void SeedUsers(UserManager<User> userManager, RoleManager<Role> roleManager)
+        public static void SeedUsers(UserManager<User> userManager, RoleManager<Role> roleManager, string adminPassword)
         {
             if (!userManager.Users.Any())
             {
+                if (string.IsNullOrWhiteSpace(adminPassword))
+                    throw new InvalidOperationException("Falta la configuración 'Seed:AdminPassword' necesaria para crear el usuario administrador inicial.");
+
                 var roles = new List<Role>
                 {
                     new() {Name="SuperAdministrador"},
@@ -26,7 +29,7 @@ namespace webapi.business.Helpers
                 }
 
                 var user = SetUser();
-                var userCreate = userManager.CreateAsync(user, "*Admin123").Result;
+                var userCreate = userManager.CreateAsync(user, adminPassword).Result;
 
                 if (userCreate.Succeeded)
                 {
